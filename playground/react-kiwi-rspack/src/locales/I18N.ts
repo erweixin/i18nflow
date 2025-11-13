@@ -1,5 +1,4 @@
 import KiwiIntl from 'kiwi-intl';
-import { createKiwiProxy } from '@i18nflow/kiwi';
 import zhCN from './zh-CN';
 import enUS from './en-US';
 
@@ -12,10 +11,7 @@ const kiwiIntl = KiwiIntl.init<typeof zhCN>(
   }
 );
 
-// 🔥 使用 Proxy 包装，开发环境自动添加 data-i18n-key
-const I18N = createKiwiProxy(kiwiIntl);
-
-export default I18N;
+export default kiwiIntl;
 
 // 导出类型，方便 TypeScript 类型推导
 export type LangType = typeof zhCN;
