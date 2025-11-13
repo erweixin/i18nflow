@@ -3,7 +3,7 @@ const rspack = require('@rspack/core');
 const ReactRefreshPlugin = require('@rspack/plugin-react-refresh');
 const { KiwiRspackPlugin } = require('@i18nflow/kiwi/plugin-rspack');
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = true;
 
 /**
  * @type {import('@rspack/core').Configuration}
