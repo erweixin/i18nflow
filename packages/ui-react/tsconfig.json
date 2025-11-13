@@ -5,15 +5,10 @@
     "rootDir": "./src",
     "jsx": "react-jsx",
     "lib": ["ES2020", "DOM"],
-    "composite": true
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["src/**/*"],
-  "references": [
-    {
-      "path": "../core"
-    },
-    {
-      "path": "../shared"
-    }
-  ]
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 }

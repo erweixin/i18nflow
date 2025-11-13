@@ -2,18 +2,11 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["src/**/*"],
-  "references": [
-    {
-      "path": "../core"
-    },
-    {
-      "path": "../shared"
-    },
-    {
-      "path": "../ui-react"
-    }
-  ]
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts", "**/*-backup.js"]
 }
