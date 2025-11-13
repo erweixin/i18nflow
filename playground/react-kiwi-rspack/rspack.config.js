@@ -67,6 +67,12 @@ module.exports = {
     }),
     new rspack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.REACT_APP_ENABLE_DEBUG': JSON.stringify(
+        process.env.REACT_APP_ENABLE_DEBUG || 'false'
+      ),
+      'process.env.REACT_APP_USE_LOCAL_STORAGE': JSON.stringify(
+        process.env.REACT_APP_USE_LOCAL_STORAGE || 'false'
+      ),
     }),
     isDev && new ReactRefreshPlugin(),
     // 🔥 使用 @i18nflow/kiwi 插件
