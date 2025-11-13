@@ -5,7 +5,7 @@
 ## 📋 前置要求
 
 - Node.js >= 18.0.0
-- pnpm >= 8.0.0
+- pnpm >= 9.0.0
 
 ## 🛠️ 安装
 
@@ -292,7 +292,7 @@ pnpm build --force
 
 ### Q: pnpm install 失败？
 
-A: 确保 Node.js >= 18，pnpm >= 8
+A: 确保 Node.js >= 18，pnpm >= 9
 
 ### Q: 构建失败？
 
