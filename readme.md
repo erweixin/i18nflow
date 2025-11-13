@@ -1,5 +1,7 @@
 # i18nflow - 通用化 I18N 可视化调试工具
 
+> 📚 **[查看完整文档中心](./doc/README.md)** | 📦 **[快速开始](./doc/QUICK_START.md)** | 🚀 **[自动 Proxy 包装](./packages/kiwi/AUTO_PROXY.md)** | 📄 **[License](./LICENSE)**
+
 ## 📋 项目概述
 
 **项目名称：** i18nflow
