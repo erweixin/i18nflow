@@ -1,19 +1,32 @@
 /**
  * Kiwi Babel 插件：在开发环境下处理 I18N 调用
  *
- * 支持的模式：
- * 1. JSX 子元素: <div>{I18N.components.startCountdown}</div> → <div>{String(I18N.components.startCountdown)}</div>
- * 2. JSX 字符串属性: <Input placeholder={I18N.system.login} /> → <Input placeholder={String(I18N.system.login)} />
- * 3. JSX 模板调用: <div>{I18N.template(I18N.system.welcome, {...})}</div> → <div>{String(I18N.template(...))}</div>
- * 4. JSX 变量引用: const items = [{ label: I18N.xxx }]; <div>{item.label}</div> → <div>{String(item.label)}</div>
- * 5. 对象属性值: { name: I18N.chart.title } → 保持不变（Proxy 会自动处理类型转换）
- * 6. 箭头函数返回: formatter: () => I18N.template(...) → formatter: () => String(I18N.template(...))
- * 7. 显式返回: return I18N.xxx → return String(I18N.xxx)
+ * 转换规则：
+ * 1. JSX 子元素 - 直接 I18N 调用:
+ *    <div>{I18N.components.title}</div> → <div>{String(I18N.components.title)}</div>
  *
- * 说明：
- * - 在 JSX 子元素中转换为 String() 避免嵌套 span 节点
- * - 在 JSX 属性中转换为 String() 确保传递的是字符串值
- * - 在对象属性中不添加 String()，允许 Proxy 返回的 React 元素通过 props 传递
+ * 2. JSX 子元素 - 变量引用:
+ *    const items = [{ label: I18N.xxx }]; <div>{item.label}</div> → <div>{item.label}</div>
+ *    (保持不变，渲染 Proxy 返回的 span 元素)
+ *
+ * 3. 原生 HTML 标签的字符串属性:
+ *    <input placeholder={I18N.xxx} /> → <input placeholder={String(I18N.xxx)} />
+ *    (只转换原生标签：input, div, span 等)
+ *
+ * 4. 自定义组件的属性:
+ *    <Card title={I18N.xxx} /> → <Card title={I18N.xxx} />
+ *    (保持不变，允许 Proxy 返回的 React 元素通过 props 传递)
+ *
+ * 5. 对象属性值:
+ *    { name: I18N.chart.title } → { name: I18N.chart.title }
+ *    (保持不变，Proxy 会自动处理类型转换)
+ *
+ * 6. 箭头函数返回:
+ *    formatter: () => I18N.template(...) → formatter: () => String(I18N.template(...))
+ *
+ * 关键设计：
+ * - 原生 HTML 标签（小写开头）的属性需要字符串，添加 String()
+ * - 自定义组件（大写开头）可以接收 React Node，保留 Proxy 返回的 span 元素
  * - Proxy 实现了 toString/valueOf/Symbol.toPrimitive，在需要时自动转换为字符串
  * - 同时在父元素上添加 data-i18n-key 属性用于调试
  */
@@ -61,17 +74,20 @@ export function createKiwiBabelPlugin(
               collectI18nReferences(path, state, i18nIdentifier);
             },
           });
-
-          // 调试输出
-          if (state.i18nReferences.size > 0) {
-            console.log('🔍 Found I18N references:', Array.from(state.i18nReferences.entries()));
-          }
         },
       },
 
       // 处理 JSX 表达式容器（JSX 子元素中的表达式）
       JSXExpressionContainer(path, state) {
         const expression = path.node.expression;
+
+        // 检查这个表达式容器是否在 JSXAttribute 中
+        const isInJSXAttribute = path.findParent(p => p.isJSXAttribute());
+
+        // 如果在 JSXAttribute 中，应该由 JSXAttribute 处理器来处理，这里跳过
+        if (isInJSXAttribute) {
+          return;
+        }
 
         // 跳过 JSXEmptyExpression
         if (t.isJSXEmptyExpression(expression)) {
@@ -134,6 +150,11 @@ export function createKiwiBabelPlugin(
 
       // 处理 JSX 属性中的 I18N 调用
       JSXAttribute(path, state) {
+        // 如果是 data-i18n-key 属性，跳过
+        if (t.isJSXIdentifier(path.node.name) && path.node.name.name === 'data-i18n-key') {
+          return;
+        }
+
         if (t.isJSXExpressionContainer(path.node.value)) {
           const expression = path.node.value.expression;
 
@@ -141,15 +162,72 @@ export function createKiwiBabelPlugin(
           if (t.isJSXEmptyExpression(expression)) {
             return;
           }
+
+          // 获取属性名称
           const attrName = t.isJSXIdentifier(path.node.name) ? path.node.name.name : '';
 
-          // 字符串属性列表
+          // 获取 JSX 元素（父节点）
+          const jsxOpeningElement = path.findParent(
+            p => p.isJSXOpeningElement() || p.isJSXElement()
+          );
+
+          // 检查父元素是否已经有 data-i18n-key 属性
+          // 如果有，说明已经处理过了，跳过（避免因为添加属性触发重新遍历）
+          if (jsxOpeningElement) {
+            const openingElement = jsxOpeningElement.isJSXOpeningElement()
+              ? jsxOpeningElement.node
+              : (jsxOpeningElement.node as t.JSXElement).openingElement;
+
+            if (openingElement && t.isJSXOpeningElement(openingElement)) {
+              const hasDataKey = openingElement.attributes.some(
+                attr =>
+                  t.isJSXAttribute(attr) &&
+                  t.isJSXIdentifier(attr.name) &&
+                  attr.name.name === 'data-i18n-key'
+              );
+              if (hasDataKey) {
+                return;
+              }
+            }
+          }
+
+          let isNativeHTMLElement = false;
+          let tagName = '';
+          if (jsxOpeningElement) {
+            const openingElement = jsxOpeningElement.isJSXOpeningElement()
+              ? jsxOpeningElement.node
+              : (jsxOpeningElement.node as t.JSXElement).openingElement;
+
+            if (openingElement && t.isJSXOpeningElement(openingElement)) {
+              tagName = t.isJSXIdentifier(openingElement.name) ? openingElement.name.name : '';
+              // 原生 HTML 标签是小写开头，自定义组件是大写开头
+              isNativeHTMLElement = tagName.length > 0 && tagName[0] === tagName[0].toLowerCase();
+            }
+          }
+
+          // 检查表达式是否已经被 String() 包裹
+          if (
+            t.isCallExpression(expression) &&
+            t.isIdentifier(expression.callee, { name: 'String' })
+          ) {
+            return;
+          }
+
+          // 先检查是否是 I18N 相关的表达式
+          const isI18N = isI18NExpression(expression, i18nIdentifier);
+          const isI18NRef = isI18NValueReference(expression, state, path);
+
+          if (!isI18N && !isI18NRef) {
+            // 不是 I18N 相关的表达式，不处理
+            return;
+          }
+
+          // 只在原生 HTML 标签的字符串属性中转换为 String()
           const stringAttributes = [
             'placeholder',
             'title',
             'aria-label',
             'alt',
-            'label',
             'value',
             'defaultValue',
             'name',
@@ -157,21 +235,16 @@ export function createKiwiBabelPlugin(
             'htmlFor',
           ];
 
-          if (stringAttributes.includes(attrName)) {
+          if (isNativeHTMLElement && stringAttributes.includes(attrName)) {
             // 如果是 I18N 调用，转换为字符串
-            if (isI18NExpression(expression, i18nIdentifier)) {
+            if (isI18N) {
               const i18nKey = extractI18nKey(expression, i18nIdentifier);
-              if (i18nKey) {
-                const jsxOpeningElement = path.findParent(
-                  p => p.isJSXOpeningElement() || p.isJSXElement()
-                );
-                if (jsxOpeningElement) {
-                  const openingElement = jsxOpeningElement.isJSXOpeningElement()
-                    ? jsxOpeningElement.node
-                    : (jsxOpeningElement.node as t.JSXElement).openingElement;
-                  if (openingElement && t.isJSXOpeningElement(openingElement)) {
-                    addDataI18nKeyAttribute(openingElement, i18nKey);
-                  }
+              if (i18nKey && jsxOpeningElement) {
+                const openingElement = jsxOpeningElement.isJSXOpeningElement()
+                  ? jsxOpeningElement.node
+                  : (jsxOpeningElement.node as t.JSXElement).openingElement;
+                if (openingElement && t.isJSXOpeningElement(openingElement)) {
+                  addDataI18nKeyAttribute(openingElement, i18nKey);
                 }
               }
               path.node.value.expression = t.callExpression(t.identifier('String'), [expression]);
@@ -179,22 +252,48 @@ export function createKiwiBabelPlugin(
             }
 
             // 如果是变量引用，也转换为字符串
-            if (isI18NValueReference(expression, state, path)) {
+            if (isI18NRef) {
               const refKey = extractI18nFromReference(expression, state, path);
-              if (refKey) {
-                const jsxOpeningElement = path.findParent(
-                  p => p.isJSXOpeningElement() || p.isJSXElement()
-                );
-                if (jsxOpeningElement) {
-                  const openingElement = jsxOpeningElement.isJSXOpeningElement()
-                    ? jsxOpeningElement.node
-                    : (jsxOpeningElement.node as t.JSXElement).openingElement;
-                  if (openingElement && t.isJSXOpeningElement(openingElement)) {
-                    addDataI18nKeyAttribute(openingElement, refKey);
-                  }
+              if (refKey && jsxOpeningElement) {
+                const openingElement = jsxOpeningElement.isJSXOpeningElement()
+                  ? jsxOpeningElement.node
+                  : (jsxOpeningElement.node as t.JSXElement).openingElement;
+                if (openingElement && t.isJSXOpeningElement(openingElement)) {
+                  addDataI18nKeyAttribute(openingElement, refKey);
                 }
               }
               path.node.value.expression = t.callExpression(t.identifier('String'), [expression]);
+              return;
+            }
+          }
+
+          // 对于自定义组件的属性，不添加 String()，只添加 data-i18n-key 到父元素
+          if (!isNativeHTMLElement) {
+            if (isI18N) {
+              const i18nKey = extractI18nKey(expression, i18nIdentifier);
+              if (i18nKey && jsxOpeningElement) {
+                const openingElement = jsxOpeningElement.isJSXOpeningElement()
+                  ? jsxOpeningElement.node
+                  : (jsxOpeningElement.node as t.JSXElement).openingElement;
+                if (openingElement && t.isJSXOpeningElement(openingElement)) {
+                  addDataI18nKeyAttribute(openingElement, i18nKey);
+                }
+              }
+              // 不添加 String()，保持原样
+              return;
+            }
+
+            if (isI18NRef) {
+              const refKey = extractI18nFromReference(expression, state, path);
+              if (refKey && jsxOpeningElement) {
+                const openingElement = jsxOpeningElement.isJSXOpeningElement()
+                  ? jsxOpeningElement.node
+                  : (jsxOpeningElement.node as t.JSXElement).openingElement;
+                if (openingElement && t.isJSXOpeningElement(openingElement)) {
+                  addDataI18nKeyAttribute(openingElement, refKey);
+                }
+              }
+              // 不添加 String()，保持原样
               return;
             }
           }

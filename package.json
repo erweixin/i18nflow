@@ -24,6 +24,8 @@
     "dev:playground": "turbo run dev --filter=react-kiwi-rspack-demo...",
     "build": "turbo run build",
     "test": "turbo run test",
+    "test:run": "turbo run test:run",
+    "test:ui": "turbo run test:ui",
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "type-check": "turbo run type-check",

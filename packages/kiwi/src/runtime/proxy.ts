@@ -83,11 +83,14 @@ function createI18NProxy<T extends object>(target: T, keyPath: string[] = []): T
   const isDev = process.env.NODE_ENV === 'development';
 
   return new Proxy(target, {
-    get(_, prop: string | symbol) {
+    get(proxyTarget, prop: string | symbol) {
       const propStr = String(prop);
 
-      // 处理 template 方法
-      if (propStr === 'template') {
+      // 先获取原始值
+      const originalValue = Reflect.get(proxyTarget, propStr);
+
+      // 处理 template 方法（只有当原始值是函数时才处理）
+      if (propStr === 'template' && typeof originalValue === 'function') {
         return (str: string | React.ReactElement, args: object) => {
           // 如果传入的是 React 元素，提取其 key 和 value
           let templateKey = '';
@@ -110,11 +113,7 @@ function createI18NProxy<T extends object>(target: T, keyPath: string[] = []): T
           }
 
           // 调用原始的 template 方法
-          const originalTemplate = (target as any).template;
-          const result =
-            typeof originalTemplate === 'function'
-              ? originalTemplate.call(target, templateValue, args)
-              : templateValue;
+          const result = originalValue.call(proxyTarget, templateValue, args);
 
           // 开发环境返回 React 元素，生产环境返回字符串
           if (isDev) {
@@ -127,10 +126,8 @@ function createI18NProxy<T extends object>(target: T, keyPath: string[] = []): T
       }
 
       // 处理其他方法（如 get、setLocale 等）
-      const originalValue = (target as any)[propStr];
-
       if (typeof originalValue === 'function') {
-        return originalValue.bind(target);
+        return originalValue.bind(proxyTarget);
       }
 
       // 处理属性访问
