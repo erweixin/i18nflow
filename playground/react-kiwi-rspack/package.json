@@ -1,6 +1,7 @@
 {
   "name": "react-kiwi-rspack-demo",
   "version": "1.0.0",
+  "private": true,
   "description": "React demo using kiwi-intl and rspack with @i18nflow/kiwi",
   "scripts": {
     "dev": "rspack dev",

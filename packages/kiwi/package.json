@@ -1,6 +1,6 @@
 {
   "name": "@i18nflow/kiwi",
-  "version": "0.1.0",
+  "version": "0.2.0-beta.0",
   "description": "Complete Kiwi-Intl solution for i18nflow",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -36,6 +36,19 @@
   ],
   "author": "erweixin",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erweixin/i18nflow.git",
+    "directory": "packages/kiwi"
+  },
+  "homepage": "https://github.com/erweixin/i18nflow#readme",
+  "bugs": {
+    "url": "https://github.com/erweixin/i18nflow/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "@i18nflow/core": "workspace:*",
     "@i18nflow/shared": "workspace:*",
