@@ -1,0 +1,24 @@
+{
+  "name": "react-kiwi-rspack-demo",
+  "version": "1.0.0",
+  "description": "React demo using kiwi-intl and rspack",
+  "scripts": {
+    "dev": "rspack dev",
+    "build": "rspack build",
+    "preview": "rspack preview",
+    "clean": "rm -rf dist .rspack node_modules"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "kiwi-intl": "^1.2.1"
+  },
+  "devDependencies": {
+    "@rspack/cli": "^1.1.0",
+    "@rspack/core": "^1.1.0",
+    "@rspack/plugin-react-refresh": "^1.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.3.0"
+  }
+}

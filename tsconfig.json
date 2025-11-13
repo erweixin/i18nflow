@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@i18nflow/core": ["./packages/core/src"],
+      "@i18nflow/adapters-transform": ["./packages/adapters-transform/src"],
+      "@i18nflow/adapters-runtime": ["./packages/adapters-runtime/src"],
+      "@i18nflow/adapters-file": ["./packages/adapters-file/src"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    ".turbo"
+  ]
+}
+

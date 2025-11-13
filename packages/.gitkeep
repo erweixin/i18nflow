@@ -1,0 +1,13 @@
+# 保持 packages 目录存在
+# 后续会在这里添加更多包：
+# - @i18nflow/adapters-transform
+# - @i18nflow/adapters-runtime
+# - @i18nflow/adapters-file
+# - @i18nflow/plugin-webpack
+# - @i18nflow/plugin-vite
+# - @i18nflow/plugin-rspack
+# - @i18nflow/plugin-rsbuild
+# - @i18nflow/runtime-react
+# - @i18nflow/runtime-vue
+# - @i18nflow/server
+

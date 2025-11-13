@@ -1,0 +1,8 @@
+# pnpm workspace 配置
+# 定义 monorepo 中的包位置
+
+packages:
+  # 所有核心包和插件
+  - 'packages/*'
+  # 所有示例项目
+  - 'playground/*'

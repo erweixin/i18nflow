@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+
+# Production
+dist
+build
+lib
+.next
+
+# Turbo
+.turbo
+
+# Cache
+.cache
+coverage
+
+# Lockfiles
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Changesets
+.changeset/*.md
+!.changeset/README.md
+

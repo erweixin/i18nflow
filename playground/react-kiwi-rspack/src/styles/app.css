@@ -1,0 +1,477 @@
+/* 全局样式重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #333;
+}
+
+code {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #f4f4f4;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* 应用容器 */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 头部 */
+.app-header {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.app-header h1 {
+  color: #667eea;
+  font-size: 2.5em;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.app-header p {
+  color: #666;
+  font-size: 1.1em;
+  margin-bottom: 25px;
+}
+
+/* 主内容区 */
+.app-main {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* 欢迎区域 */
+.welcome-section {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-section h2 {
+  color: #667eea;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.welcome-section p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  color: #555;
+}
+
+/* 示例区域 */
+.example-section {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.example-section h3 {
+  color: #667eea;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.example-content {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* Demo 盒子 */
+.demo-box {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  border-left: 4px solid #667eea;
+}
+
+.demo-box h4 {
+  color: #333;
+  font-size: 1.3em;
+  margin-bottom: 15px;
+}
+
+/* 输入控件 */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1em;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+input[type="text"].error,
+input[type="email"].error,
+input[type="password"].error {
+  border-color: #e74c3c;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.input-group input {
+  flex: 1;
+}
+
+/* 按钮 */
+button {
+  cursor: pointer;
+  font-size: 1em;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 30px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+  padding: 12px 30px;
+  font-weight: 600;
+}
+
+.btn-secondary:hover {
+  background: #e0e0e0;
+}
+
+/* 计数器控件 */
+.counter-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.counter-controls button {
+  width: 40px;
+  height: 40px;
+  background: #667eea;
+  color: white;
+  font-size: 1.5em;
+  font-weight: bold;
+  border-radius: 50%;
+}
+
+.counter-controls button:hover {
+  background: #5568d3;
+  transform: scale(1.1);
+}
+
+.counter-value {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #667eea;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* 结果显示 */
+.result {
+  background: white;
+  padding: 15px;
+  border-radius: 6px;
+  font-size: 1.1em;
+  color: #333;
+  border: 2px solid #e0e0e0;
+  margin: 15px 0;
+}
+
+.highlight {
+  background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+  padding: 15px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 代码块 */
+.code-block {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 15px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
+.code-block code {
+  background: transparent;
+  color: #f8f8f2;
+  padding: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* 特性列表 */
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feature-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: white;
+  border-radius: 6px;
+}
+
+.feature-item strong {
+  color: #667eea;
+  min-width: 100px;
+}
+
+/* API 说明 */
+.api-note {
+  background: #fff9e6;
+  border: 2px solid #ffd966;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.api-note h4 {
+  color: #cc8800;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
+.api-note p {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.api-note ul {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.api-note li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+/* 表单样式 */
+.demo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-field label {
+  font-weight: 600;
+  color: #333;
+  font-size: 1em;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.9em;
+  margin-top: -5px;
+}
+
+/* 通知消息 */
+.notification {
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.notification-success {
+  background: #d4edda;
+  color: #155724;
+  border: 2px solid #c3e6cb;
+}
+
+.notification-error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 2px solid #f5c6cb;
+}
+
+.notification-warning {
+  background: #fff3cd;
+  color: #856404;
+  border: 2px solid #ffeaa7;
+}
+
+.notification-info {
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 2px solid #bee5eb;
+}
+
+/* 状态盒子 */
+.status-box {
+  background: #e8f4fd;
+  border-left-color: #2196f3;
+}
+
+.status-box ul {
+  list-style: none;
+}
+
+.status-box li {
+  padding: 8px 0;
+  border-bottom: 1px solid #d0e8f7;
+}
+
+.status-box li:last-child {
+  border-bottom: none;
+}
+
+/* 对比表格 */
+.comparison-box {
+  background: white;
+  border-left-color: #4caf50;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.comparison-table th {
+  background: #f5f5f5;
+  font-weight: 600;
+  color: #333;
+}
+
+.comparison-table tr:hover {
+  background: #f9f9f9;
+}
+
+/* 页脚 */
+.app-footer {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 30px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.app-footer p {
+  color: #666;
+  font-size: 1em;
+}
+
+.app-footer a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.app-footer a:hover {
+  color: #5568d3;
+  text-decoration: underline;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 10px;
+  }
+
+  .app-header {
+    padding: 25px;
+  }
+
+  .app-header h1 {
+    font-size: 1.8em;
+  }
+
+  .example-section {
+    padding: 20px;
+  }
+
+  .input-group {
+    flex-direction: column;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
+
