@@ -23,13 +23,11 @@ const App: React.FC = () => {
 
   // 在生产环境也启用调试功能（用于 Vercel 演示）
   // 使用环境变量 REACT_APP_ENABLE_DEBUG 来控制
-  const isDebugEnabled =
-    process.env.NODE_ENV === 'development' || process.env.REACT_APP_ENABLE_DEBUG === 'true';
+  const isDebugEnabled = true;
 
   // 判断是否使用 localStorage 模式
   // 在生产环境或设置了 REACT_APP_USE_LOCAL_STORAGE=true 时使用
-  const useLocalStorage =
-    process.env.NODE_ENV === 'production' || process.env.REACT_APP_USE_LOCAL_STORAGE === 'true';
+  const useLocalStorage = true;
 
   // 选择合适的 Provider
   const DebugProvider = useLocalStorage ? I18nLocalDebugProvider : I18nDebugProvider;
