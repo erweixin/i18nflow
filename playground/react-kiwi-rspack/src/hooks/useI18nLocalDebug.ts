@@ -6,7 +6,8 @@
 import { useState, useCallback, useEffect } from 'react';
 import { mockUpdateI18n, mockTranslateText } from '../utils/i18nLocalDebug';
 import { readI18nValue } from '../utils/i18nStorage';
-import I18N from '../locales/I18N';
+import zhCN from '../locales/zh-CN';
+import enUS from '../locales/en-US';
 
 interface I18nValues {
   'zh-CN': string;
@@ -28,33 +29,52 @@ interface UseI18nLocalDebugReturn {
   translateText: (text: string, candidateCount?: number) => Promise<TranslationCandidate[] | null>;
 }
 
+// Locale 映射
+const localeMap = {
+  'zh-CN': zhCN,
+  'en-US': enUS,
+};
+
 /**
- * 从 key 路径获取当前运行时的值
- * 例如: "app.title" => I18N.app.title
+ * 从 key 路径获取指定 locale 的值
+ * 例如: "app.title" => localeMap['zh-CN'].app.title
  */
-function getValueFromI18N(key: string): Record<string, string> {
+function getValueFromLocale(key: string, locale: string): string {
   const parts = key.split('.');
-  let current: any = I18N;
+  const localeData = localeMap[locale as keyof typeof localeMap];
+
+  if (!localeData) {
+    return '';
+  }
+
+  let current: any = localeData;
 
   for (const part of parts) {
     if (current && typeof current === 'object' && part in current) {
       current = current[part];
     } else {
-      return {};
+      return '';
     }
   }
 
-  // 如果找到了值，返回当前语言的值
-  // 注意：这里我们需要获取所有语言的值，但 kiwi-intl 运行时只有当前语言
-  // 所以我们返回当前值作为所有语言的默认值
-  if (typeof current === 'string') {
-    return {
-      'zh-CN': current,
-      'en-US': current,
-    };
+  return typeof current === 'string' ? current : '';
+}
+
+/**
+ * 从 key 路径获取所有语言的值
+ * 例如: "app.title" => { 'zh-CN': '...', 'en-US': '...' }
+ */
+function getAllLocaleValues(key: string): Record<string, string> {
+  const result: Record<string, string> = {};
+
+  for (const locale of Object.keys(localeMap)) {
+    const value = getValueFromLocale(key, locale);
+    if (value) {
+      result[locale] = value;
+    }
   }
 
-  return {};
+  return result;
 }
 
 /**
@@ -94,20 +114,20 @@ export function useI18nLocalDebug(): UseI18nLocalDebugReturn {
     setError(null);
 
     try {
-      // 首先尝试从 localStorage 读取
+      // 首先尝试从 localStorage 读取（用户自定义的修改）
       const storedValue = readI18nValue(key);
 
       if (storedValue && Object.keys(storedValue).length > 0) {
-        console.log('✅ Found in localStorage:', storedValue);
+        console.log('✅ Found in localStorage (custom):', storedValue);
         return storedValue as I18nValues;
       }
 
-      // 如果 localStorage 中没有，获取运行时的当前值
-      const currentValues = getValueFromI18N(key);
+      // 如果 localStorage 中没有，从源 locale 文件读取
+      const localeValues = getAllLocaleValues(key);
 
-      if (Object.keys(currentValues).length > 0) {
-        console.log('📖 Using current runtime values:', currentValues);
-        return currentValues as I18nValues;
+      if (Object.keys(localeValues).length > 0) {
+        console.log('📖 Reading from source locale files:', localeValues);
+        return localeValues as I18nValues;
       }
 
       // 如果都没有，返回空值

@@ -5,7 +5,7 @@
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "framework": null,
   "env": {
-    "NODE_ENV": "production",
+    "NODE_ENV": "development",
     "REACT_APP_ENABLE_DEBUG": "true",
     "REACT_APP_USE_LOCAL_STORAGE": "true"
   },
