@@ -6,6 +6,7 @@ import BasicExample from './components/BasicExample';
 import TemplateExample from './components/TemplateExample';
 import PluralExample from './components/PluralExample';
 import FormExample from './components/FormExample';
+import PropsExample from './components/PropsExample';
 import './styles/app.css';
 
 const App: React.FC = () => {
@@ -52,6 +53,9 @@ const App: React.FC = () => {
 
           {/* 3. 复数处理示例 */}
           <PluralExample />
+
+          {/* 4. Props 传递示例 - 复杂场景 */}
+          <PropsExample />
 
           {/* 5. 表单示例 - 综合应用 */}
           <FormExample />

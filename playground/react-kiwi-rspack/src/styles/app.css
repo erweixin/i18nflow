@@ -444,6 +444,167 @@ button {
   text-decoration: underline;
 }
 
+/* Props 示例样式 */
+.example-subsection {
+  margin-top: 25px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.example-subsection h4 {
+  color: #667eea;
+  font-size: 1.3em;
+  margin-bottom: 15px;
+}
+
+/* Card 组件样式 */
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.card h4 {
+  color: #333;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.card p {
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.card button {
+  background: #667eea;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.card button:hover {
+  background: #5568d3;
+}
+
+/* List Item 样式 */
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.list-item .label {
+  font-weight: 600;
+  color: #667eea;
+}
+
+.list-item .value {
+  color: #333;
+}
+
+/* Info Card 样式 */
+.info-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #4caf50;
+}
+
+.info-card h4 {
+  color: #333;
+  font-size: 1.3em;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.info-card p {
+  color: #666;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+/* Menu 样式 */
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s;
+}
+
+.menu-item:hover {
+  background: #f5f5f5;
+  border-color: #667eea;
+  transform: translateX(5px);
+}
+
+.menu-item span:first-child {
+  font-size: 1.2em;
+}
+
+.menu-item span:last-child {
+  color: #333;
+  font-weight: 500;
+}
+
+/* Nested Component 样式 */
+.nested-parent {
+  background: #f0f7ff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 15px;
+  border: 2px dashed #667eea;
+}
+
+.nested-child {
+  background: white;
+  border-radius: 6px;
+  padding: 15px;
+  border-left: 4px solid #667eea;
+}
+
+.nested-child h5 {
+  color: #667eea;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.nested-child p {
+  color: #666;
+  line-height: 1.6;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .app-container {
