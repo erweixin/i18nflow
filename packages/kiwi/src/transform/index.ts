@@ -3,3 +3,4 @@
  */
 
 export { createKiwiBabelPlugin } from './babel-plugin';
+export { createAutoProxyPlugin } from './auto-proxy-plugin';

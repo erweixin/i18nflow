@@ -4,6 +4,7 @@
  */
 
 import { createKiwiBabelPlugin } from '../transform/babel-plugin';
+import { createAutoProxyPlugin } from '../transform/auto-proxy-plugin';
 import { createKiwiMiddleware, type KiwiMiddlewareConfig } from '../server/middleware';
 
 /**
@@ -23,6 +24,8 @@ export interface KiwiRspackPluginOptions extends KiwiMiddlewareConfig {
   enabled?: boolean;
   /** i18n 对象名称 */
   i18nIdentifier?: string;
+  /** 是否自动包装 kiwiIntl（默认：true），设为 false 则需要手动调用 createKiwiProxy */
+  autoProxy?: boolean;
 }
 
 /**
@@ -38,6 +41,7 @@ export class KiwiRspackPlugin implements RspackPluginInstance {
       localeDir: 'src/lang',
       locales: ['zh-CN', 'en-US'],
       fileExtension: '.ts',
+      autoProxy: true,
       ...options,
     };
   }
@@ -54,9 +58,19 @@ export class KiwiRspackPlugin implements RspackPluginInstance {
     compiler.options.module = compiler.options.module || {};
     compiler.options.module.rules = compiler.options.module.rules || [];
 
+    // 准备 Babel 插件列表
+    const babelPlugins: any[] = [
+      createKiwiBabelPlugin({ i18nIdentifier: this.options.i18nIdentifier }),
+    ];
+
+    // 如果启用了自动包装，添加 auto-proxy 插件
+    if (this.options.autoProxy) {
+      babelPlugins.push(createAutoProxyPlugin({ enabled: true }));
+    }
+
     // 添加 Babel loader 规则
     const babelRule = {
-      test: /\.(tsx|jsx)$/,
+      test: /\.(tsx|jsx|ts|js)$/,
       exclude: /node_modules/,
       enforce: 'pre' as const,
       use: [
@@ -66,7 +80,7 @@ export class KiwiRspackPlugin implements RspackPluginInstance {
             babelrc: false,
             configFile: false,
             compact: false,
-            plugins: [createKiwiBabelPlugin({ i18nIdentifier: this.options.i18nIdentifier })],
+            plugins: babelPlugins,
             presets: [],
             sourceType: 'unambiguous' as const,
             parserOpts: {
