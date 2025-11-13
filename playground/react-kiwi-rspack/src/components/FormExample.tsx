@@ -103,9 +103,7 @@ const FormExample: React.FC = () => {
   };
 
   // 处理输入变化
-  const handleChange = (field: keyof FormData) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChange = (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [field]: e.target.value,
@@ -123,7 +121,6 @@ const FormExample: React.FC = () => {
     <section className="example-section">
       <h3>表单综合示例</h3>
       <div className="example-content">
-
         <div className="demo-box">
           <h4>用户注册表单</h4>
 
@@ -146,9 +143,7 @@ const FormExample: React.FC = () => {
                 placeholder={I18N.form.placeholder.username}
                 className={errors.username ? 'error' : ''}
               />
-              {errors.username && (
-                <span className="error-message">{errors.username}</span>
-              )}
+              {errors.username && <span className="error-message">{errors.username}</span>}
             </div>
 
             {/* 密码 */}
@@ -162,9 +157,7 @@ const FormExample: React.FC = () => {
                 placeholder={I18N.form.placeholder.password}
                 className={errors.password ? 'error' : ''}
               />
-              {errors.password && (
-                <span className="error-message">{errors.password}</span>
-              )}
+              {errors.password && <span className="error-message">{errors.password}</span>}
             </div>
 
             {/* 邮箱 */}
@@ -178,9 +171,7 @@ const FormExample: React.FC = () => {
                 placeholder={I18N.form.placeholder.email}
                 className={errors.email ? 'error' : ''}
               />
-              {errors.email && (
-                <span className="error-message">{errors.email}</span>
-              )}
+              {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
 
             {/* 按钮 */}
@@ -205,7 +196,7 @@ const FormExample: React.FC = () => {
           {/* 代码示例 */}
           <div className="code-block">
             <code>
-{`// 表单验证中使用 I18N.template
+              {`// 表单验证中使用 I18N.template
 const validateForm = () => {
   if (!username) {
     error = I18N.template?.(I18N.form.validation.required, {
@@ -248,4 +239,3 @@ const validateForm = () => {
 };
 
 export default FormExample;
-

@@ -24,7 +24,6 @@ const PluralExample: React.FC = () => {
     <section className="example-section">
       <h3>{I18N.examples.plural.title}</h3>
       <div className="example-content">
-
         {/* 示例 1: 简单计数 */}
         <div className="demo-box">
           <h4>1. 基础计数</h4>
@@ -37,9 +36,7 @@ const PluralExample: React.FC = () => {
             {I18N.template?.(I18N.examples.plural.itemCount, { count: itemCount })}
           </p>
           <div className="code-block">
-            <code>
-              {`I18N.template(I18N.examples.plural.itemCount, { count: ${itemCount} })`}
-            </code>
+            <code>{`I18N.template(I18N.examples.plural.itemCount, { count: ${itemCount} })`}</code>
           </div>
         </div>
 
@@ -51,12 +48,10 @@ const PluralExample: React.FC = () => {
             <span className="counter-value">{messageCount}</span>
             <button onClick={() => setMessageCount(messageCount + 1)}>+</button>
           </div>
-          <p className="result">
-            {getPluralMessage(messageCount)}
-          </p>
+          <p className="result">{getPluralMessage(messageCount)}</p>
           <div className="code-block">
             <code>
-{`// 根据数量选择不同的文案
+              {`// 根据数量选择不同的文案
 const getPluralMessage = (count: number) => {
   if (count === 0) return I18N.examples.plural.messageCount_zero;
   if (count === 1) return I18N.examples.plural.messageCount_one;
@@ -88,11 +83,19 @@ const getPluralMessage = (count: number) => {
           <h4>📘 复数处理说明</h4>
           <p>Kiwi-Intl 支持多种复数形式的处理：</p>
           <ul>
-            <li><strong>zero:</strong> 数量为 0 时的特殊文案</li>
-            <li><strong>one:</strong> 数量为 1 时的文案</li>
-            <li><strong>other:</strong> 其他数量的文案（通常使用 template 插值）</li>
+            <li>
+              <strong>zero:</strong> 数量为 0 时的特殊文案
+            </li>
+            <li>
+              <strong>one:</strong> 数量为 1 时的文案
+            </li>
+            <li>
+              <strong>other:</strong> 其他数量的文案（通常使用 template 插值）
+            </li>
           </ul>
-          <p>通过在语言包中定义不同后缀的 key（如 messageCount_zero），可以实现复数形式的本地化。</p>
+          <p>
+            通过在语言包中定义不同后缀的 key（如 messageCount_zero），可以实现复数形式的本地化。
+          </p>
         </div>
       </div>
     </section>
@@ -100,4 +103,3 @@ const getPluralMessage = (count: number) => {
 };
 
 export default PluralExample;
-

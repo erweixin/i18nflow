@@ -46,6 +46,7 @@ git commit -m "docs: update README"
 ```
 
 类型：
+
 - `feat`: 新功能
 - `fix`: Bug 修复
 - `docs`: 文档更新
@@ -95,4 +96,3 @@ git push origin feature/your-feature-name
 ---
 
 再次感谢你的贡献！❤️
-

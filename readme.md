@@ -13,6 +13,7 @@
 ## 🎯 核心价值
 
 ### 当前实现的优势
+
 1. **编译时注入** - Babel 插件自动识别 I18N 调用并注入 `data-i18n-key` 标记
 2. **运行时交互** - 按住快捷键点击文案即可编辑，无需查找代码
 3. **即时生效** - 修改后自动写入源文件并触发热更新
@@ -20,6 +21,7 @@
 5. **零侵入** - 只在开发环境启用，不影响生产代码
 
 ### 通用化目标
+
 - 支持 **5+ 主流 i18n 库**
 - 支持 **3+ 主流构建工具**
 - 支持 **多框架**（React/Vue/Svelte/Solid）
@@ -38,14 +40,14 @@
 // 当前项目的核心实现：Proxy + React Element
 function createI18NReactElement(value: string, key: string) {
   const isDev = process.env.NODE_ENV === 'development';
-  
+
   if (!isDev) {
     return value; // 生产环境直接返回字符串
   }
-  
+
   // 开发环境：创建带 data-i18n-key 的 span 元素
   const element = React.createElement('span', { 'data-i18n-key': key }, value);
-  
+
   // 🔑 关键：使用 Proxy 包装，添加字符串转换方法
   return new Proxy(element, {
     get(target, prop) {
@@ -53,7 +55,7 @@ function createI18NReactElement(value: string, key: string) {
       if (prop === 'valueOf') return () => value;
       if (prop === Symbol.toPrimitive) return () => value;
       return target[prop];
-    }
+    },
   });
 }
 
@@ -66,6 +68,7 @@ const I18N = createI18NProxy(kiwiIntl);
 **核心优化：** 通过 Babel 插件自动注入 Proxy 包装，无需修改项目源码！
 
 **当前实现（需要手动修改源码）：**
+
 ```typescript
 // src/lang/I18N.ts - 需要开发者手动添加 Proxy 包装
 import { createI18NProxy } from 'i18nflow-runtime-react/proxy';
@@ -76,6 +79,7 @@ export default wrappedI18N;
 ```
 
 **Babel 自动注入方案（零侵入）：**
+
 ```typescript
 // 开发者的原始代码（无需修改）
 const kiwiIntl = KiwiIntl.init(initLocale, {...});
@@ -92,11 +96,11 @@ export default __i18nflow_createProxy(kiwiIntl, {
 
 **实现方案对比：**
 
-| 方案 | 优点 | 缺点 | 推荐度 |
-|---|---|---|---|
-| **方案 A: 在导出处包装** | ✅ 只包装一次，性能好<br>✅ 类型推导准确 | ⚠️ 需要配置文件路径 | ⭐⭐⭐⭐⭐ 推荐 |
-| **方案 B: 在导入处包装** | ✅ 无需配置文件路径<br>✅ 适用范围广 | ❌ 每次导入都包装<br>❌ 可能重复包装 | ⭐⭐⭐ 备选 |
-| **方案 C: 手动包装** | ✅ 最直接，可控性强 | ❌ 需要修改源码<br>❌ 侵入性强 | ⭐⭐ 不推荐 |
+| 方案                     | 优点                                     | 缺点                                 | 推荐度          |
+| ------------------------ | ---------------------------------------- | ------------------------------------ | --------------- |
+| **方案 A: 在导出处包装** | ✅ 只包装一次，性能好<br>✅ 类型推导准确 | ⚠️ 需要配置文件路径                  | ⭐⭐⭐⭐⭐ 推荐 |
+| **方案 B: 在导入处包装** | ✅ 无需配置文件路径<br>✅ 适用范围广     | ❌ 每次导入都包装<br>❌ 可能重复包装 | ⭐⭐⭐ 备选     |
+| **方案 C: 手动包装**     | ✅ 最直接，可控性强                      | ❌ 需要修改源码<br>❌ 侵入性强       | ⭐⭐ 不推荐     |
 
 **推荐实现：方案 A（配置 + Babel 自动注入）**
 
@@ -155,25 +159,26 @@ const element = I18N.system.welcome;
 // 实际是：<span data-i18n-key="system.welcome">欢迎</span>
 
 // ✅ 在 JSX 中直接渲染，自然带上 data-i18n-key
-<div>{I18N.system.welcome}</div>
+<div>{I18N.system.welcome}</div>;
 // 渲染为：<div><span data-i18n-key="system.welcome">欢迎</span></div>
 
 // ✅ 在字符串上下文中，自动转换为字符串
-console.log(I18N.system.welcome);  // "欢迎" (调用 toString())
-<Input placeholder={I18N.system.welcome} />  // placeholder="欢迎"
+console.log(I18N.system.welcome); // "欢迎" (调用 toString())
+<Input placeholder={I18N.system.welcome} />; // placeholder="欢迎"
 ```
 
 #### 双重策略的配合
 
-| 场景 | 编译时处理 | 运行时处理 | 最终效果 |
-|---|---|---|---|
-| **简单引用** | ✅ 注入 `String()` 包裹 | ✅ React 元素自带标记 | 双保险 |
-| **Props 多层传递** | ❌ 无法追踪 | ✅ React 元素自带标记 | 运行时兜底 |
-| **对象存储** | ❌ 无法追踪 | ✅ React 元素自带标记 | 运行时兜底 |
-| **字符串属性** | ✅ 注入 `String()` 转换 | ✅ Proxy 提供 `toString()` | 配合工作 |
-| **条件表达式** | ⚠️ 部分支持 | ✅ React 元素自带标记 | 运行时兜底 |
+| 场景               | 编译时处理              | 运行时处理                 | 最终效果   |
+| ------------------ | ----------------------- | -------------------------- | ---------- |
+| **简单引用**       | ✅ 注入 `String()` 包裹 | ✅ React 元素自带标记      | 双保险     |
+| **Props 多层传递** | ❌ 无法追踪             | ✅ React 元素自带标记      | 运行时兜底 |
+| **对象存储**       | ❌ 无法追踪             | ✅ React 元素自带标记      | 运行时兜底 |
+| **字符串属性**     | ✅ 注入 `String()` 转换 | ✅ Proxy 提供 `toString()` | 配合工作   |
+| **条件表达式**     | ⚠️ 部分支持             | ✅ React 元素自带标记      | 运行时兜底 |
 
 **核心优势：**
+
 1. **编译时优化：** 减少运行时的 span 嵌套（直接转字符串）
 2. **运行时兜底：** 覆盖所有编译时无法处理的场景
 3. **零额外成本：** React 本身就会渲染这些元素，没有性能损失
@@ -215,6 +220,7 @@ console.log(I18N.system.welcome);  // "欢迎" (调用 toString())
 ### 核心模块划分
 
 #### 1. **i18nflow-core** - 核心抽象层
+
 ```typescript
 // 编译时核心接口
 interface ITransformAdapter {
@@ -232,17 +238,17 @@ interface ITransformAdapter {
 // 运行时核心接口（支持两种标记策略）
 interface IRuntimeAdapter {
   name: string;
-  
+
   // 策略 1: Proxy 包装策略（推荐，用于自定义 i18n 对象）
   // 返回值自带 data-i18n-key 标记，无需编译时处理
   enableProxyWrapper?: boolean;
   wrapI18nObject?: (target: any) => any;
-  
+
   // 策略 2: 纯编译时策略（用于第三方库）
   // 依赖编译时注入标记，运行时只负责读写
   readTranslation(key: string, locale: string): Promise<string>;
   updateTranslation(key: string, locale: string, value: string): Promise<boolean>;
-  
+
   // 通用方法
   getSupportedLocales(): string[];
   getCurrentLocale(): string;
@@ -260,7 +266,7 @@ interface IFileAdapter {
 }
 ```
 
-#### 2. **i18nflow-adapters-***  - 适配器插件
+#### 2. **i18nflow-adapters-\*** - 适配器插件
 
 ```
 i18nflow-adapters-transform/
@@ -291,8 +297,8 @@ i18nflow-adapters-file/
 // 实现当前项目的 Proxy 包装策略
 export class CustomProxyRuntimeAdapter implements IRuntimeAdapter {
   name = 'custom-proxy';
-  enableProxyWrapper = true;  // 启用 Proxy 策略
-  
+  enableProxyWrapper = true; // 启用 Proxy 策略
+
   // 核心：包装 i18n 对象，使返回值自带 data-i18n-key
   wrapI18nObject(target: any, framework: 'react' | 'vue' | 'svelte') {
     if (framework === 'react') {
@@ -300,26 +306,26 @@ export class CustomProxyRuntimeAdapter implements IRuntimeAdapter {
     }
     // 其他框架的实现...
   }
-  
+
   private createReactProxy(target: any, keyPath: string[] = []) {
     return new Proxy(target, {
       get(_, prop: string) {
         const currentKeyPath = [...keyPath, prop];
         const value = target[prop];
-        
+
         if (typeof value === 'string') {
           return createI18NReactElement(value, currentKeyPath.join('.'));
         }
-        
+
         if (isPlainObject(value)) {
           return this.createReactProxy(value, currentKeyPath);
         }
-        
+
         return value;
-      }
+      },
     });
   }
-  
+
   // ... 其他方法
 }
 
@@ -327,61 +333,53 @@ export class CustomProxyRuntimeAdapter implements IRuntimeAdapter {
 // Babel 转换插件：自动注入 Proxy 包装
 export class CustomProxyTransformAdapter implements ITransformAdapter {
   name = 'custom-proxy-transform';
-  
+
   // 检测是否是 i18n 初始化调用
   isI18nInitExpression(node: ASTNode, config: AdapterConfig): boolean {
     const { detectRules } = config.proxyStrategy?.autoWrap || {};
-    
+
     // 规则 1: 检测特定函数调用
     if (t.isCallExpression(node)) {
       const callee = node.callee;
       if (t.isMemberExpression(callee)) {
         const key = buildKeyFromMemberExpression(callee);
         // 例如：KiwiIntl.init()
-        return detectRules?.some(rule => 
-          rule.type === 'call' && key.includes(rule.name)
-        );
+        return detectRules?.some(rule => rule.type === 'call' && key.includes(rule.name));
       }
     }
-    
+
     return false;
   }
-  
+
   // 转换导出语句，自动注入 Proxy 包装
   transformExport(path: NodePath, state: PluginState) {
     const { node } = path;
-    
+
     // 处理 export default xxx
     if (t.isExportDefaultDeclaration(node)) {
       const declaration = node.declaration;
-      
+
       // 检查导出的变量是否是 i18n 对象
       if (t.isIdentifier(declaration)) {
         const binding = path.scope.getBinding(declaration.name);
         if (binding && this.isI18nInitExpression(binding.path.node.init, state)) {
           // 🔑 关键转换：自动注入 Proxy 包装
-          
+
           // 1. 添加导入语句
           this.addProxyImport(path);
-          
+
           // 2. 包装导出值
-          node.declaration = t.callExpression(
-            t.identifier('__i18nflow_createProxy'),
-            [
-              declaration,
-              t.objectExpression([
-                t.objectProperty(
-                  t.identifier('framework'),
-                  t.stringLiteral('react')
-                ),
-              ])
-            ]
-          );
+          node.declaration = t.callExpression(t.identifier('__i18nflow_createProxy'), [
+            declaration,
+            t.objectExpression([
+              t.objectProperty(t.identifier('framework'), t.stringLiteral('react')),
+            ]),
+          ]);
         }
       }
     }
   }
-  
+
   // 添加 Proxy 工具函数的导入
   private addProxyImport(path: NodePath) {
     const program = path.findParent(p => p.isProgram());
@@ -392,18 +390,18 @@ export class CustomProxyTransformAdapter implements ITransformAdapter {
           t.importSpecifier(
             t.identifier('__i18nflow_createProxy'),
             t.identifier('__i18nflow_createProxy')
-          )
+          ),
         ],
         t.stringLiteral('i18nflow-runtime-react/auto')
       );
-      
+
       program.node.body.unshift(importDeclaration);
     }
   }
 }
 ```
 
-#### 3. **i18nflow-plugin-***  - 构建工具插件
+#### 3. **i18nflow-plugin-\*** - 构建工具插件
 
 ```
 i18nflow-plugin-webpack/
@@ -419,7 +417,7 @@ i18nflow-plugin-rsbuild/
   └── index.ts           # Rsbuild 插件（当前实现）
 ```
 
-#### 4. **i18nflow-runtime-***  - 框架运行时组件
+#### 4. **i18nflow-runtime-\*** - 框架运行时组件
 
 ```
 i18nflow-runtime-react/
@@ -462,27 +460,29 @@ function createI18nMiddleware(options: ServerMiddlewareOptions) {
 ### 1. 编译时转换的可行性 ✅
 
 **Babel 生态的优势：**
+
 - Babel 是语言无关的 AST 转换工具
 - 支持 JSX、TypeScript、Vue SFC
 - 可以集成到任何构建工具中
 
 **双重策略的互补性：**
+
 - **Proxy 策略（推荐）：** 运行时自带标记，覆盖所有场景，包括编译时无法追踪的引用
 - **编译时策略：** 优化性能，减少运行时的 DOM 节点嵌套
 - **结合使用：** 取长补短，达到最佳效果
 
 **各 i18n 库的模式识别：**
 
-| 库 | 调用模式 | AST 节点类型 | 提取难度 | 推荐策略 |
-|---|---|---|---|---|
-| react-intl | `<FormattedMessage id="key" />` | JSXElement | 简单 | 编译时 |
-| react-intl | `intl.formatMessage({ id: 'key' })` | CallExpression | 中等 | 编译时 |
-| react-i18next | `<Trans i18nKey="key" />` | JSXElement | 简单 | 编译时 |
-| react-i18next | `t('key')` | CallExpression | 简单 | 编译时 |
-| i18next | `i18next.t('key')` | MemberExpression | 简单 | 编译时 |
-| vue-i18n | `$t('key')` | CallExpression | 简单 | 编译时 |
-| vue-i18n | `<i18n-t keypath="key" />` | JSXElement | 简单 | 编译时 |
-| 自定义（当前） | `I18N.category.key` | MemberExpression | 中等 | **Proxy（运行时）** ⭐ |
+| 库             | 调用模式                            | AST 节点类型     | 提取难度 | 推荐策略               |
+| -------------- | ----------------------------------- | ---------------- | -------- | ---------------------- |
+| react-intl     | `<FormattedMessage id="key" />`     | JSXElement       | 简单     | 编译时                 |
+| react-intl     | `intl.formatMessage({ id: 'key' })` | CallExpression   | 中等     | 编译时                 |
+| react-i18next  | `<Trans i18nKey="key" />`           | JSXElement       | 简单     | 编译时                 |
+| react-i18next  | `t('key')`                          | CallExpression   | 简单     | 编译时                 |
+| i18next        | `i18next.t('key')`                  | MemberExpression | 简单     | 编译时                 |
+| vue-i18n       | `$t('key')`                         | CallExpression   | 简单     | 编译时                 |
+| vue-i18n       | `<i18n-t keypath="key" />`          | JSXElement       | 简单     | 编译时                 |
+| 自定义（当前） | `I18N.category.key`                 | MemberExpression | 中等     | **Proxy（运行时）** ⭐ |
 
 **结论：** ✅ 所有主流库的模式都可以通过 Babel AST 识别并转换
 
@@ -495,6 +495,7 @@ function createI18nMiddleware(options: ServerMiddlewareOptions) {
 **DOM 标记方案（两种策略）：**
 
 **策略 1: Proxy 包装 - 运行时自带标记 ⭐**
+
 ```typescript
 // I18N.system.welcome 返回的就是：
 // <span data-i18n-key="system.welcome">欢迎</span>
@@ -506,6 +507,7 @@ function createI18nMiddleware(options: ServerMiddlewareOptions) {
 ```
 
 **策略 2: 编译时注入 - Babel 添加标记**
+
 ```typescript
 // 编译前：<div>{I18N.system.welcome}</div>
 // 编译后：<div data-i18n-key="system.welcome">{String(I18N.system.welcome)}</div>
@@ -516,6 +518,7 @@ function createI18nMiddleware(options: ServerMiddlewareOptions) {
 ```
 
 **事件监听方案：**
+
 - React: 使用 Context + Portal
 - Vue: 使用 Plugin + Teleport
 - Svelte: 使用 Context + Slot
@@ -529,14 +532,15 @@ function createI18nMiddleware(options: ServerMiddlewareOptions) {
 
 **文件格式支持：**
 
-| 格式 | 操作方式 | 难度 | 现有工具 |
-|---|---|---|---|
-| TypeScript (.ts) | AST 解析修改 | 中 | @babel/parser + generator |
-| JSON (.json) | JSON.parse/stringify | 简单 | 原生 |
-| YAML (.yaml) | yaml.parse/stringify | 简单 | js-yaml |
-| Gettext (.po) | PO 解析器 | 中 | node-gettext |
+| 格式             | 操作方式             | 难度 | 现有工具                  |
+| ---------------- | -------------------- | ---- | ------------------------- |
+| TypeScript (.ts) | AST 解析修改         | 中   | @babel/parser + generator |
+| JSON (.json)     | JSON.parse/stringify | 简单 | 原生                      |
+| YAML (.yaml)     | yaml.parse/stringify | 简单 | js-yaml                   |
+| Gettext (.po)    | PO 解析器            | 中   | node-gettext              |
 
 **键路径解析：**
+
 - 嵌套对象: `user.profile.name` → `{ user: { profile: { name: '...' } } }`
 - 数组: `errors[0]` → `{ errors: ['...'] }`
 - 命名空间: `namespace:key` → 不同文件或前缀
@@ -549,14 +553,15 @@ function createI18nMiddleware(options: ServerMiddlewareOptions) {
 
 **各构建工具的插件系统：**
 
-| 工具 | Babel 集成 | 中间件支持 | HMR API |
-|---|---|---|---|
-| Webpack | ✅ babel-loader | ✅ devServer.setupMiddlewares | ✅ hot.accept() |
-| Rspack | ✅ babel-loader | ✅ devServer.setupMiddlewares | ✅ hot.accept() |
-| Vite | ✅ @vitejs/plugin-react | ✅ configureServer | ✅ import.meta.hot |
-| Rsbuild | ✅ api.modifyRspackConfig | ✅ setupMiddlewares | ✅ module.hot |
+| 工具    | Babel 集成                | 中间件支持                    | HMR API            |
+| ------- | ------------------------- | ----------------------------- | ------------------ |
+| Webpack | ✅ babel-loader           | ✅ devServer.setupMiddlewares | ✅ hot.accept()    |
+| Rspack  | ✅ babel-loader           | ✅ devServer.setupMiddlewares | ✅ hot.accept()    |
+| Vite    | ✅ @vitejs/plugin-react   | ✅ configureServer            | ✅ import.meta.hot |
+| Rsbuild | ✅ api.modifyRspackConfig | ✅ setupMiddlewares           | ✅ module.hot      |
 
 **插件钩子统一：**
+
 ```typescript
 interface BuildToolPlugin {
   // 注入 Babel 转换
@@ -579,6 +584,7 @@ interface BuildToolPlugin {
 **目标：** 建立插件化架构基础
 
 #### Week 1: 核心接口设计
+
 - [ ] 定义 `ITransformAdapter` 接口（包含自动注入能力）
 - [ ] 定义 `IRuntimeAdapter` 接口（支持 Proxy 策略）
 - [ ] 定义 `IFileAdapter` 接口
@@ -586,6 +592,7 @@ interface BuildToolPlugin {
 - [ ] 实现配置系统（支持 autoWrap 配置）
 
 **交付物：**
+
 ```typescript
 // packages/core/src/index.ts
 export { TransformCore, RuntimeCore, FileCore };
@@ -597,6 +604,7 @@ export { AutoWrapDetector, ProxyInjector };
 ```
 
 #### Week 2: 重构当前实现 + Babel 自动注入
+
 - [ ] 将当前 Babel 插件重构为 `CustomTransformAdapter`
 - [ ] **实现 Babel 自动注入 Proxy 包装逻辑** ⭐
 - [ ] 实现检测规则引擎（识别 i18n 初始化代码）
@@ -606,12 +614,13 @@ export { AutoWrapDetector, ProxyInjector };
 - [ ] 编写单元测试（重点测试自动注入）
 
 **交付物：**
+
 ```typescript
 // packages/adapters-transform/src/custom-proxy.ts
 export class CustomProxyTransformAdapter implements ITransformAdapter {
   // 自动检测 i18n 初始化代码
   detectI18nInit(node: ASTNode, rules: DetectRule[]): boolean;
-  
+
   // 自动注入 Proxy 包装
   injectProxyWrapper(path: NodePath, options: InjectOptions): void;
 }
@@ -634,6 +643,7 @@ export function __i18nflow_createProxy(target: any, options: ProxyOptions) { ...
 #### Week 3-4: Transform 适配器
 
 **react-intl (1 周):**
+
 - [ ] 识别 `<FormattedMessage id="..." />`
 - [ ] 识别 `intl.formatMessage({ id: "..." })`
 - [ ] 识别 `defineMessages({ key: { id: "..." } })`
@@ -641,12 +651,14 @@ export function __i18nflow_createProxy(target: any, options: ProxyOptions) { ...
 - [ ] 编写测试用例
 
 **react-i18next (0.5 周):**
+
 - [ ] 识别 `<Trans i18nKey="..." />`
 - [ ] 识别 `t('key')`
 - [ ] 识别 `useTranslation()` hook
 - [ ] 编写测试用例
 
 **i18next (0.5 周):**
+
 - [ ] 识别 `i18next.t('key')`
 - [ ] 识别 `i18n.t('key')`
 - [ ] 支持命名空间 `t('namespace:key')`
@@ -655,32 +667,38 @@ export function __i18nflow_createProxy(target: any, options: ProxyOptions) { ...
 #### Week 5: Runtime 适配器
 
 **react-intl:**
+
 - [ ] 集成 `react-intl` 的 `IntlShape`
 - [ ] 读取翻译: 从 messages 对象
 - [ ] 更新翻译: 重新加载 messages
 
 **react-i18next:**
+
 - [ ] 集成 `i18next` 实例
 - [ ] 读取翻译: `i18n.getResource()`
 - [ ] 更新翻译: `i18n.addResource()`
 
 **i18next:**
+
 - [ ] 同 react-i18next
 - [ ] 支持多命名空间
 
 #### Week 6: File 适配器
 
 **JSON (2 天):**
+
 - [ ] 解析嵌套结构
 - [ ] 原子化更新（避免冲突）
 - [ ] 保持格式化（缩进、换行）
 
 **YAML (2 天):**
+
 - [ ] 使用 `js-yaml` 解析
 - [ ] 保持注释
 - [ ] 保持格式
 
 **Gettext (1 天):**
+
 - [ ] 使用 `node-gettext` 解析 .po
 - [ ] 更新 msgid/msgstr
 - [ ] 处理复数形式
@@ -692,12 +710,14 @@ export function __i18nflow_createProxy(target: any, options: ProxyOptions) { ...
 #### Week 7: Webpack Plugin
 
 **核心功能:**
+
 - [ ] 通过 `babel-loader` 注入转换
 - [ ] 使用 `devServer.setupMiddlewares` 注册中间件
 - [ ] 集成 Webpack HMR API
 - [ ] 配置项设计
 
 **配置示例:**
+
 ```javascript
 // webpack.config.js
 const { I18nWysiwygPlugin } = require('@i18n-wysiwyg/plugin-webpack');
@@ -706,7 +726,7 @@ module.exports = {
   plugins: [
     new I18nWysiwygPlugin({
       adapter: 'react-intl', // 或 'react-i18next', 'custom'
-      fileAdapter: 'json',   // 或 'typescript', 'yaml'
+      fileAdapter: 'json', // 或 'typescript', 'yaml'
       locales: ['en-US', 'zh-CN'],
       translationFiles: {
         'en-US': './src/locales/en-US.json',
@@ -725,12 +745,14 @@ module.exports = {
 #### Week 8: Vite Plugin
 
 **核心功能:**
+
 - [ ] 使用 `@vitejs/plugin-react` 的 `babel` 选项
 - [ ] 使用 `configureServer` 注册中间件
 - [ ] 集成 Vite HMR API (`import.meta.hot`)
 - [ ] 支持 Vue SFC (通过 `@vitejs/plugin-vue`)
 
 **配置示例:**
+
 ```javascript
 // vite.config.js
 import { defineConfig } from 'vite';
@@ -760,11 +782,13 @@ export default defineConfig({
 #### Week 10: React 运行时
 
 **组件库:**
+
 - [ ] `<I18nDebugProvider>` - Context Provider
 - [ ] `<I18nEditModal>` - 编辑弹窗（支持多适配器）
 - [ ] `useI18nDebug()` - Hook（读取、更新、AI 翻译）
 
 **优化:**
+
 - [ ] 使用 `React.lazy` 按需加载 Modal
 - [ ] 使用 `useMemo` 优化性能
 - [ ] 支持自定义快捷键
@@ -772,11 +796,13 @@ export default defineConfig({
 #### Week 11: Vue 运行时
 
 **组件库:**
+
 - [ ] Vue Plugin 实现
 - [ ] `<I18nEditModal>` - Composition API
 - [ ] `useI18nDebug()` - Composable
 
 **特殊处理:**
+
 - [ ] 支持 Vue SFC 中的 `<i18n>` 块
 - [ ] 支持 Options API
 - [ ] 支持 Composition API
@@ -788,6 +814,7 @@ export default defineConfig({
 #### Week 12: 完善文档
 
 **文档结构:**
+
 ```
 docs/
 ├── getting-started/
@@ -814,6 +841,7 @@ docs/
 ```
 
 **示例项目:**
+
 ```
 playground/
 ├── react-kiwi-rspack/      # Kiwi-Intl + Rspack 1.x
@@ -916,6 +944,7 @@ playground/
 **问题：** Vue 单文件组件的 `<i18n>` 块需要特殊处理
 
 **解决方案：**
+
 ```javascript
 // 使用 @vue/compiler-sfc 解析 SFC
 const { parse } = require('@vue/compiler-sfc');
@@ -928,6 +957,7 @@ const i18nBlock = descriptor.customBlocks.find(b => b.type === 'i18n');
 **问题：** 修改 .ts 文件时保持类型安全
 
 **解决方案：**
+
 ```javascript
 // 使用 TypeScript Compiler API
 import ts from 'typescript';
@@ -943,6 +973,7 @@ const result = ts.transform(sourceFile, [transformer]);
 **问题：** 如何准确识别哪些导出需要包装？
 
 **挑战：**
+
 1. 不同项目的 i18n 初始化方式不同
 2. 可能有多个导出，只有部分需要包装
 3. 避免误包装（如普通对象）
@@ -972,7 +1003,7 @@ const detectRules = [
 // Babel 插件中的检测逻辑
 function shouldWrapExport(path: NodePath, rules: DetectRule[]): boolean {
   const binding = getExportBinding(path);
-  
+
   for (const rule of rules) {
     if (rule.type === 'call') {
       // 检查初始化表达式
@@ -980,14 +1011,14 @@ function shouldWrapExport(path: NodePath, rules: DetectRule[]): boolean {
         return true;
       }
     }
-    
+
     if (rule.type === 'variable') {
       // 检查变量名
       if (rule.patterns.some(p => p.test(binding.name))) {
         return true;
       }
     }
-    
+
     if (rule.type === 'import') {
       // 检查导入来源
       if (isImportedFrom(binding, rule.from)) {
@@ -995,12 +1026,13 @@ function shouldWrapExport(path: NodePath, rules: DetectRule[]): boolean {
       }
     }
   }
-  
+
   return false;
 }
 ```
 
 **优势：**
+
 - ✅ 高度可配置，适应不同项目
 - ✅ 多种检测维度，准确率高
 - ✅ 支持自定义规则扩展
@@ -1010,22 +1042,24 @@ function shouldWrapExport(path: NodePath, rules: DetectRule[]): boolean {
 **问题：** 编译时无法追踪多层传递的 props
 
 **示例：**
+
 ```tsx
 // 父组件
-<Parent message={I18N.system.welcome} />
+<Parent message={I18N.system.welcome} />;
 
 // 子组件
 function Parent({ message }) {
-  return <Child msg={message} />;  // 编译时丢失了 I18N 的追踪
+  return <Child msg={message} />; // 编译时丢失了 I18N 的追踪
 }
 
 // 孙组件
 function Child({ msg }) {
-  return <div>{msg}</div>;  // 无法注入 data-i18n-key
+  return <div>{msg}</div>; // 无法注入 data-i18n-key
 }
 ```
 
 **解决方案：Proxy 策略自动解决 ⭐**
+
 ```tsx
 // I18N.system.welcome 本身就是：
 // <span data-i18n-key="system.welcome">欢迎</span>
@@ -1039,6 +1073,7 @@ function Child({ msg }) {
 ```
 
 **核心优势：**
+
 - ✅ 无需编译时追踪，运行时自然保留标记
 - ✅ 支持任意层级的传递
 - ✅ 支持动态引用、条件分支等复杂场景
@@ -1048,6 +1083,7 @@ function Child({ msg }) {
 **问题：** 修改翻译后立即看到效果，不刷新页面
 
 **解决方案：**
+
 ```javascript
 // 使用 HMR API + 局部刷新
 if (module.hot) {
@@ -1066,6 +1102,7 @@ if (module.hot) {
 **问题：** JSON/YAML/PO 格式差异大
 
 **解决方案：**
+
 ```typescript
 // 统一的内部格式
 interface TranslationData {
@@ -1093,16 +1130,16 @@ class GettextFileAdapter implements IFileAdapter {
 
 ## ✅ 技术可行性总结
 
-| 维度 | 可行性 | 理由 |
-|---|---|---|
+| 维度               | 可行性  | 理由                                          |
+| ------------------ | ------- | --------------------------------------------- |
 | **Proxy 双重策略** | ✅ 极高 | ⭐ **核心创新**，解决编译时无法追踪的所有场景 |
-| **编译时转换** | ✅ 高 | Babel 生态成熟，所有模式可识别 |
-| **运行时交互** | ✅ 高 | DOM API 通用，框架无关 |
-| **文件更新** | ✅ 高 | 成熟的解析工具，AST 操作可靠 |
-| **构建工具集成** | ✅ 高 | 所有工具都支持 Babel + 中间件 |
-| **插件化架构** | ✅ 高 | 接口清晰，扩展性强 |
-| **性能影响** | ✅ 低 | 仅开发环境，Proxy 开销可忽略 |
-| **维护成本** | ⚠️ 中 | 需要持续跟进各库的更新 |
+| **编译时转换**     | ✅ 高   | Babel 生态成熟，所有模式可识别                |
+| **运行时交互**     | ✅ 高   | DOM API 通用，框架无关                        |
+| **文件更新**       | ✅ 高   | 成熟的解析工具，AST 操作可靠                  |
+| **构建工具集成**   | ✅ 高   | 所有工具都支持 Babel + 中间件                 |
+| **插件化架构**     | ✅ 高   | 接口清晰，扩展性强                            |
+| **性能影响**       | ✅ 低   | 仅开发环境，Proxy 开销可忽略                  |
+| **维护成本**       | ⚠️ 中   | 需要持续跟进各库的更新                        |
 
 **总体评估：✅ 该方案在技术上完全可行，且具有很高的实用价值。**
 
@@ -1113,11 +1150,13 @@ class GettextFileAdapter implements IFileAdapter {
 ## 📊 开发资源评估
 
 ### 人力需求
+
 - **核心开发:** 2-3 人（全职）
 - **周期:** 13 周（约 3 个月）
 - **维护:** 1 人（长期）
 
 ### 技术栈
+
 - **语言:** TypeScript
 - **构建:** Turborepo + pnpm
 - **测试:** Jest + Playwright
@@ -1125,6 +1164,7 @@ class GettextFileAdapter implements IFileAdapter {
 - **CI/CD:** GitHub Actions
 
 ### 第三方依赖
+
 ```json
 {
   "dependencies": {
@@ -1172,9 +1212,9 @@ export default {
         framework: 'react',
         // 方式 1: 自动注入（推荐）- 无需修改源码
         autoWrap: {
-          files: ['./src/lang/I18N.ts'],  // 指定需要包装的文件
+          files: ['./src/lang/I18N.ts'], // 指定需要包装的文件
           detectRules: [
-            { type: 'call', name: 'KiwiIntl.init' },  // 检测规则
+            { type: 'call', name: 'KiwiIntl.init' }, // 检测规则
           ],
         },
         // 方式 2: 手动包装（如果需要更多控制）
@@ -1200,7 +1240,7 @@ const kiwiIntl = KiwiIntl.init('zh-CN', {
   'en-US': enUS,
 });
 
-export default kiwiIntl;  // Babel 会自动转换为包装后的版本
+export default kiwiIntl; // Babel 会自动转换为包装后的版本
 ```
 
 ```tsx
@@ -1217,6 +1257,7 @@ function App() {
 ```
 
 **迁移优势：**
+
 - ✅ **零侵入：无需修改 I18N.ts 源码！**（Babel 自动注入）
 - ✅ 配置简单，只需指定文件路径和检测规则
 - ✅ 类型安全，TypeScript 完全兼容
@@ -1234,25 +1275,25 @@ function App() {
    - 完美解决 props 多层传递、动态引用等编译时无法追踪的场景
    - 业界首创，技术壁垒高
 
-2. **渐进式架构** 
+2. **渐进式架构**
    - 核心抽象 + 适配器模式，易于扩展
    - 支持两种策略：Proxy（自定义）+ 编译时（第三方库）
 
-3. **向后兼容** 
+3. **向后兼容**
    - 当前实现可无缝迁移到新架构
    - 作为 `custom-proxy` 适配器保留
 
-4. **技术先进** 
+4. **技术先进**
    - 编译时 + 运行时双保险
    - WYSIWYG 体验，点击即编辑
    - AI 辅助翻译
 
-5. **社区价值** 
+5. **社区价值**
    - 填补市场空白（目前没有类似工具）
    - 解决真实痛点（翻译查找困难）
    - 开源社区友好
 
-6. **商业潜力** 
+6. **商业潜力**
    - 可发展为 SaaS 产品（翻译管理平台）
    - 支持团队协作、审核流程
    - 企业级功能（术语库、翻译记忆）
@@ -1268,4 +1309,3 @@ function App() {
 **最后更新:** 2025-11-13  
 **作者:** AI Assistant  
 **状态:** 待审核
-

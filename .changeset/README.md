@@ -13,6 +13,7 @@ pnpm changeset
 ```
 
 然后按提示：
+
 1. 选择你修改了哪些包
 2. 选择版本更新类型（major / minor / patch）
 3. 输入变更描述
@@ -28,6 +29,7 @@ pnpm version-packages
 ```
 
 这会：
+
 - 更新所有相关包的版本号
 - 生成/更新 CHANGELOG.md
 - 删除已应用的 changeset 文件
@@ -39,6 +41,7 @@ pnpm release
 ```
 
 这会：
+
 - 构建所有包
 - 发布到 npm registry
 
@@ -51,4 +54,3 @@ pnpm release
 ## 更多信息
 
 查看 [Changesets 文档](https://github.com/changesets/changesets)
-

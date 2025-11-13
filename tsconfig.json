@@ -9,11 +9,5 @@
       "@i18nflow/adapters-file": ["./packages/adapters-file/src"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    ".turbo"
-  ]
+  "exclude": ["node_modules", "dist", "build", ".turbo"]
 }
-

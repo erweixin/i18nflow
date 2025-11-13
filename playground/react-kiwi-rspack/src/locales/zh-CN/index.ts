@@ -72,4 +72,3 @@ export default {
     info: '提示：{message}',
   },
 };
-

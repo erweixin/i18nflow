@@ -15,14 +15,13 @@ const TemplateExample: React.FC = () => {
     <section className="example-section">
       <h3>{I18N.examples.template.title}</h3>
       <div className="example-content">
-
         {/* 示例 1: 单个变量插值 */}
         <div className="demo-box">
           <h4>1. 单个变量插值</h4>
           <input
             type="text"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={e => setUsername(e.target.value)}
             placeholder="输入用户名"
           />
           <p className="result">
@@ -30,9 +29,7 @@ const TemplateExample: React.FC = () => {
             {I18N.template?.(I18N.examples.template.helloUser, { username })}
           </p>
           <div className="code-block">
-            <code>
-              {`I18N.template(I18N.examples.template.helloUser, { username })`}
-            </code>
+            <code>{`I18N.template(I18N.examples.template.helloUser, { username })`}</code>
           </div>
         </div>
 
@@ -43,13 +40,13 @@ const TemplateExample: React.FC = () => {
             <input
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={e => setUsername(e.target.value)}
               placeholder="姓名"
             />
             <input
               type="number"
               value={age}
-              onChange={(e) => setAge(Number(e.target.value))}
+              onChange={e => setAge(Number(e.target.value))}
               placeholder="年龄"
             />
           </div>
@@ -76,13 +73,13 @@ const TemplateExample: React.FC = () => {
             <input
               type="number"
               value={messageCount}
-              onChange={(e) => setMessageCount(Number(e.target.value))}
+              onChange={e => setMessageCount(Number(e.target.value))}
               placeholder="消息数量"
             />
             <input
               type="text"
               value={sender}
-              onChange={(e) => setSender(e.target.value)}
+              onChange={e => setSender(e.target.value)}
               placeholder="发送者"
             />
           </div>
@@ -109,9 +106,15 @@ const TemplateExample: React.FC = () => {
             <code>I18N.template(text, variables)</code> 方法用于将变量插入到文本模板中。
           </p>
           <ul>
-            <li><strong>text:</strong> 包含 {`{variableName}`} 占位符的文本模板</li>
-            <li><strong>variables:</strong> 包含要替换的变量的对象</li>
-            <li><strong>返回值:</strong> 替换变量后的完整文本</li>
+            <li>
+              <strong>text:</strong> 包含 {`{variableName}`} 占位符的文本模板
+            </li>
+            <li>
+              <strong>variables:</strong> 包含要替换的变量的对象
+            </li>
+            <li>
+              <strong>返回值:</strong> 替换变量后的完整文本
+            </li>
           </ul>
         </div>
       </div>
@@ -120,4 +123,3 @@ const TemplateExample: React.FC = () => {
 };
 
 export default TemplateExample;
-

@@ -11,7 +11,7 @@ const BasicExample: React.FC = () => {
       <h3>{I18N.examples.basic.title}</h3>
       <div className="example-content">
         <p className="highlight">{I18N.examples.basic.content}</p>
-        
+
         <div className="code-block">
           <code>
             {`// 直接访问 I18N 对象的属性
@@ -31,4 +31,3 @@ I18N.examples.basic.content`}
 };
 
 export default BasicExample;
-
