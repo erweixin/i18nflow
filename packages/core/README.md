@@ -1,6 +1,15 @@
 # @i18nflow/core
 
-i18nflow 的核心抽象层，定义了所有适配器的接口和通用类型。
+核心接口和类型定义包。
+
+## 功能
+
+提供 i18nflow 的核心接口和类型定义：
+
+- **ITransformAdapter**: Transform 适配器接口（编译时转换）
+- **IRuntimeAdapter**: Runtime 适配器接口（运行时包装）
+- **IFileAdapter**: 文件适配器接口（文件读写）
+- **类型定义**: 框架类型、检测规则、配置类型等
 
 ## 安装
 
@@ -8,45 +17,21 @@ i18nflow 的核心抽象层，定义了所有适配器的接口和通用类型�
 pnpm add @i18nflow/core
 ```
 
-## 核心接口
-
-### ITransformAdapter
-
-编译时转换适配器接口，用于在构建时识别和转换 i18n 调用。
-
-### IRuntimeAdapter
-
-运行时适配器接口，用于在运行时读取、更新翻译内容。
-
-### IFileAdapter
-
-文件操作适配器接口，用于读写不同格式的翻译文件。
-
-## 使用示例
+## 使用
 
 ```typescript
-import type { ITransformAdapter, IRuntimeAdapter } from '@i18nflow/core';
+import type { ITransformAdapter, AdapterConfig } from '@i18nflow/core';
 
 // 实现自定义适配器
-class MyAdapter implements ITransformAdapter {
-  // ...
+class MyTransformAdapter implements ITransformAdapter {
+  name = 'my-adapter';
+
+  createBabelPlugin(config?: TransformAdapterConfig) {
+    // 实现 Babel 插件
+  }
 }
-```
-
-## 开发
-
-```bash
-# 开发模式
-pnpm dev
-
-# 构建
-pnpm build
-
-# 类型检查
-pnpm type-check
 ```
 
 ## License
 
 MIT
-

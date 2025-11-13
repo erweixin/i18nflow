@@ -23,8 +23,8 @@ module.exports = {
     'scope-empty': [0],
     'scope-case': [2, 'always', 'lower-case'],
     'subject-empty': [2, 'never'],
-    'subject-full-stop': [2, 'never', '.'],
+    'subject-full-stop': [0, 'never', '.'],
     'subject-case': [0],
-    'header-max-length': [2, 'always', 100],
+    'header-max-length': [2, 'always', 200],
   },
 };

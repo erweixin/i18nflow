@@ -1,7 +1,7 @@
 {
-  "name": "@i18nflow/core",
+  "name": "@i18nflow/shared",
   "version": "0.1.0",
-  "description": "Core interfaces and types for i18nflow",
+  "description": "Shared utilities and tools for i18nflow",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -10,6 +10,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.mjs",
+      "require": "./dist/server.js"
     }
   },
   "files": [
@@ -23,12 +28,22 @@
   },
   "keywords": [
     "i18n",
-    "internationalization",
-    "types"
+    "utilities",
+    "ast"
   ],
   "author": "erweixin",
   "license": "MIT",
+  "dependencies": {
+    "@i18nflow/core": "workspace:*",
+    "@babel/parser": "^7.23.0",
+    "@babel/traverse": "^7.23.0",
+    "@babel/generator": "^7.23.0",
+    "@babel/types": "^7.23.0"
+  },
   "devDependencies": {
+    "@types/babel__traverse": "^7.20.0",
+    "@types/babel__generator": "^7.6.0",
+    "@types/node": "^20.0.0",
     "tsup": "^8.0.0",
     "typescript": "^5.3.0"
   }

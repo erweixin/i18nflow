@@ -1,6 +1,7 @@
 const path = require('path');
 const rspack = require('@rspack/core');
 const ReactRefreshPlugin = require('@rspack/plugin-react-refresh');
+const { KiwiRspackPlugin } = require('@i18nflow/kiwi/plugin-rspack');
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -61,13 +62,22 @@ module.exports = {
   plugins: [
     new rspack.HtmlRspackPlugin({
       template: './public/index.html',
-      title: 'Kiwi-Intl + Rspack Demo',
+      title: 'Kiwi-Intl + Rspack Demo - @i18nflow/kiwi',
       inject: 'body',
     }),
     new rspack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
     isDev && new ReactRefreshPlugin(),
+    // 🔥 使用 @i18nflow/kiwi 插件
+    isDev &&
+      new KiwiRspackPlugin({
+        enabled: true,
+        i18nIdentifier: 'I18N',
+        localeDir: 'src/locales',
+        locales: ['zh-CN', 'en-US'],
+        fileExtension: '.ts',
+      }),
   ].filter(Boolean),
   devServer: {
     port: 3000,

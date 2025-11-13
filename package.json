@@ -21,6 +21,7 @@
   "author": "erweixin",
   "scripts": {
     "dev": "turbo run dev",
+    "dev:playground": "turbo run dev --filter=react-kiwi-rspack-demo...",
     "build": "turbo run build",
     "test": "turbo run test",
     "lint": "eslint . --max-warnings 0",

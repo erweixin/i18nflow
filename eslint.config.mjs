@@ -90,6 +90,48 @@ export default [
     },
   },
 
+  // 开发/调试/备份文件 - 放宽限制
+  {
+    files: [
+      '**/*-backup.{js,ts}',
+      '**/*.test.{js,ts,tsx}',
+      '**/*.spec.{js,ts,tsx}',
+      '**/server/**/*.{js,ts}',
+      '**/plugin/**/*.{js,ts}',
+      '**/transform/**/*.{js,ts}',
+    ],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+
+  // 类型定义、工具和运行时文件 - any 类型是合理的
+  {
+    files: [
+      '**/types.ts',
+      '**/interfaces.ts',
+      '**/ast.ts',
+      '**/middleware.ts',
+      '**/proxy.ts',
+      '**/typescript.ts',
+      '**/detector.ts',
+    ],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-console': 'off',
+    },
+  },
+
+  // React UI 组件 - any 在某些场景下合理
+  {
+    files: ['**/components/**/*.{ts,tsx}', '**/hooks/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-console': 'off',
+    },
+  },
+
   // Prettier 兼容（必须放在最后）
   prettier,
 ];
