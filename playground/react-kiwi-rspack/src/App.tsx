@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { I18nDebugProvider } from '@i18nflow/kiwi';
+import { I18nLocalDebugProvider } from './components/I18nLocalDebugProvider';
 import I18N from './locales/I18N';
 import { LocaleType } from './locales/I18N';
 import BasicExample from './components/BasicExample';
@@ -7,6 +8,7 @@ import TemplateExample from './components/TemplateExample';
 import PluralExample from './components/PluralExample';
 import FormExample from './components/FormExample';
 import PropsExample from './components/PropsExample';
+import { I18nDebugPanel } from './components/I18nDebugPanel';
 import './styles/app.css';
 
 const App: React.FC = () => {
@@ -19,8 +21,21 @@ const App: React.FC = () => {
     I18N.setLang?.(newLocale);
   };
 
+  // 在生产环境也启用调试功能（用于 Vercel 演示）
+  // 使用环境变量 REACT_APP_ENABLE_DEBUG 来控制
+  const isDebugEnabled =
+    process.env.NODE_ENV === 'development' || process.env.REACT_APP_ENABLE_DEBUG === 'true';
+
+  // 判断是否使用 localStorage 模式
+  // 在生产环境或设置了 REACT_APP_USE_LOCAL_STORAGE=true 时使用
+  const useLocalStorage =
+    process.env.NODE_ENV === 'production' || process.env.REACT_APP_USE_LOCAL_STORAGE === 'true';
+
+  // 选择合适的 Provider
+  const DebugProvider = useLocalStorage ? I18nLocalDebugProvider : I18nDebugProvider;
+
   return (
-    <I18nDebugProvider enabled={process.env.NODE_ENV === 'development'}>
+    <DebugProvider enabled={isDebugEnabled}>
       <div className="app-container">
         <header className="app-header">
           <h1>{I18N.app.title}</h1>
@@ -81,11 +96,20 @@ const App: React.FC = () => {
             </a>
           </p>
           <p style={{ fontSize: '14px', color: '#888', marginTop: '8px' }}>
-            💡 开发模式：按住 Ctrl+Shift (Mac: Cmd+Shift) 点击文案即可编辑
+            💡 {isDebugEnabled ? '调试模式' : '开发模式'}：按住 Ctrl+Shift (Mac: Cmd+Shift)
+            点击文案即可编辑
           </p>
+          {isDebugEnabled && (
+            <p style={{ fontSize: '12px', color: '#52c41a', marginTop: '4px' }}>
+              ✨ localStorage 模式：修改将保存在浏览器本地存储中
+            </p>
+          )}
         </footer>
       </div>
-    </I18nDebugProvider>
+
+      {/* 调试面板 - 仅在调试模式且使用 localStorage 时显示 */}
+      {isDebugEnabled && useLocalStorage && <I18nDebugPanel />}
+    </DebugProvider>
   );
 };
 

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "cd ../.. && pnpm install && pnpm --filter=@i18nflow/core build && pnpm --filter=@i18nflow/shared build && pnpm --filter=@i18nflow/ui-react build && pnpm --filter=@i18nflow/kiwi build && pnpm --filter=react-kiwi-rspack-demo build",
+  "outputDirectory": "dist",
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+  "framework": null,
+  "env": {
+    "NODE_ENV": "production",
+    "REACT_APP_ENABLE_DEBUG": "true",
+    "REACT_APP_USE_LOCAL_STORAGE": "true"
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
