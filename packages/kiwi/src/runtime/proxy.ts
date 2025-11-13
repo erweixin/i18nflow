@@ -18,23 +18,11 @@ type ReactElementWithStringMethods = React.ReactElement & {
  * 创建 I18N React 元素
  * @param value 翻译文本
  * @param key i18n key
- * @returns 开发环境返回 span 元素，生产环境返回字符串
+ * @returns 返回带有 data-i18n-key 的 span 元素
  */
-function createI18NReactElement(
-  value: string,
-  key: string
-): string | ReactElementWithStringMethods {
-  // 只在开发环境创建 React 元素
-  const isDev = process.env.NODE_ENV === 'development';
-
-  if (!isDev) {
-    // 生产环境：直接返回字符串
-    return value;
-  }
-
-  // 开发环境：创建 span 元素
+function createI18NReactElement(value: string, key: string): ReactElementWithStringMethods {
+  // 创建 span 元素，添加 data-i18n-key 属性
   // span 默认就是 inline，不会影响原样式和布局
-  // 只添加 data-i18n-key 属性，不添加任何样式
   const element = React.createElement(
     'span',
     {
@@ -80,8 +68,6 @@ function createI18NReactElement(
  * @returns 代理后的对象
  */
 function createI18NProxy<T extends object>(target: T, keyPath: string[] = []): T {
-  const isDev = process.env.NODE_ENV === 'development';
-
   return new Proxy(target, {
     get(proxyTarget, prop: string | symbol) {
       const propStr = String(prop);
@@ -115,13 +101,9 @@ function createI18NProxy<T extends object>(target: T, keyPath: string[] = []): T
           // 调用原始的 template 方法
           const result = originalValue.call(proxyTarget, templateValue, args);
 
-          // 开发环境返回 React 元素，生产环境返回字符串
-          if (isDev) {
-            const key = templateKey || '';
-            return createI18NReactElement(result, key);
-          }
-
-          return result;
+          // 始终返回带有 data-i18n-key 的 React 元素
+          const key = templateKey || '';
+          return createI18NReactElement(result, key);
         };
       }
 
@@ -134,16 +116,10 @@ function createI18NProxy<T extends object>(target: T, keyPath: string[] = []): T
       const currentKeyPath = [...keyPath, propStr];
       const value = originalValue;
 
-      // 如果是字符串值
+      // 如果是字符串值，始终返回 React 元素（span 包裹）
       if (typeof value === 'string') {
-        // 开发环境：返回 React 元素（span 包裹）
-        // 生产环境：直接返回字符串
-        if (isDev) {
-          const key = currentKeyPath.join('.');
-          return createI18NReactElement(value, key);
-        }
-
-        return value;
+        const key = currentKeyPath.join('.');
+        return createI18NReactElement(value, key);
       }
 
       // 如果值是对象且不是 React 元素，继续代理
@@ -176,22 +152,17 @@ function createI18NProxy<T extends object>(target: T, keyPath: string[] = []): T
  * 创建 Kiwi Proxy
  * 包装 i18n 对象，使其支持调试功能
  * @param i18nObject 原始 i18n 对象
- * @param options 配置选项
+ * @param _options 配置选项（保留参数以兼容旧版本 API，当前未使用）
  * @returns 代理后的对象
  */
 export function createKiwiProxy<T extends object>(
   i18nObject: T,
-  options: {
+  _options: {
     debug?: boolean;
     i18nIdentifier?: string;
   } = {}
 ): T {
-  const { debug = process.env.NODE_ENV === 'development' } = options;
-
-  if (!debug) {
-    return i18nObject;
-  }
-
+  // 始终启用 Proxy，不再根据环境判断
   return createI18NProxy(i18nObject);
 }
 
@@ -202,5 +173,6 @@ export function createKiwiProxy<T extends object>(
  * @returns 代理后的对象
  */
 export function __i18nflow_createProxy<T extends object>(obj: T): T {
-  return createKiwiProxy(obj, { debug: process.env.NODE_ENV === 'development' });
+  // 始终启用 Proxy
+  return createI18NProxy(obj);
 }
