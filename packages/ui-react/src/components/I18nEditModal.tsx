@@ -3,11 +3,14 @@
  * 展示和编辑翻译内容
  */
 
-import { ReloadOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import React, { useCallback, useEffect, useState } from 'react';
+
+import { useI18nDebug } from '../hooks/useI18nDebug';
 import {
   Modal,
   Form,
-  Input,
+  FormItem,
+  TextArea,
   Button,
   message,
   Space,
@@ -15,14 +18,10 @@ import {
   Spin,
   Alert,
   Tag,
-  Tooltip,
-} from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
-
-import { useI18nDebug } from '../hooks/useI18nDebug';
+  useForm,
+} from './native';
 
 const { Text } = Typography;
-const { TextArea } = Input;
 
 interface I18nEditModalProps {
   visible: boolean;
@@ -36,7 +35,7 @@ interface TranslationCandidate {
 }
 
 export const I18nEditModal: React.FC<I18nEditModalProps> = ({ visible, i18nKey, onClose }) => {
-  const [form] = Form.useForm();
+  const [form] = useForm();
   const { loading, readI18nValue, updateI18nValue, translateText, translating } = useI18nDebug();
   const [initialValues, setInitialValues] = useState<any>(null);
   const [loadingValues, setLoadingValues] = useState(false);
@@ -111,9 +110,10 @@ export const I18nEditModal: React.FC<I18nEditModalProps> = ({ visible, i18nKey, 
       setTranslations([]);
       form.resetFields();
     }
-  }, [visible, i18nKey, loadI18nValues, form, handleAITranslate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible, i18nKey]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = React.useCallback(async () => {
     if (!i18nKey) return;
 
     try {
@@ -132,21 +132,21 @@ export const I18nEditModal: React.FC<I18nEditModalProps> = ({ visible, i18nKey, 
     } catch (err) {
       console.error('表单验证失败:', err);
     }
-  };
+  }, [i18nKey, form, updateI18nValue, onClose]);
 
-  const handleCancel = () => {
+  const handleCancel = React.useCallback(() => {
     form.resetFields();
     setInitialValues(null);
     setLoadError(null);
     onClose();
-  };
+  }, [form, onClose]);
 
-  const handleReset = () => {
+  const handleReset = React.useCallback(() => {
     if (initialValues) {
       form.setFieldsValue(initialValues);
       message.info('已重置为初始值');
     }
-  };
+  }, [initialValues, form]);
 
   const handleRetry = () => {
     loadI18nValues();
@@ -157,189 +157,136 @@ export const I18nEditModal: React.FC<I18nEditModalProps> = ({ visible, i18nKey, 
     message.success('已应用翻译');
   };
 
+  const modalTitle = React.useMemo(
+    () => (
+      <span>
+        🌍 编辑翻译
+        {i18nKey && (
+          <Text type="secondary" style={{ marginLeft: 12, fontSize: 14 }}>
+            {i18nKey}
+          </Text>
+        )}
+      </span>
+    ),
+    [i18nKey]
+  );
+
+  const modalFooter = React.useMemo(
+    () => (
+      <Space>
+        <Button onClick={handleReset}>重置</Button>
+        <Button onClick={handleCancel}>取消</Button>
+        <Button type="primary" onClick={handleSubmit} loading={loading}>
+          保存并刷新
+        </Button>
+      </Space>
+    ),
+    [loading, handleReset, handleCancel, handleSubmit]
+  );
+
   return (
     <Modal
-      title="🌍 编辑翻译"
       open={visible}
-      onCancel={handleCancel}
+      title={modalTitle}
+      onClose={handleCancel}
+      footer={modalFooter}
       width={650}
-      centered
-      footer={
-        <Space>
-          <Button onClick={handleReset}>重置</Button>
-          <Button onClick={handleCancel}>取消</Button>
-          <Button type="primary" onClick={handleSubmit} loading={loading}>
-            保存并刷新
-          </Button>
-        </Space>
-      }
-      styles={{
-        body: { padding: '16px 24px' },
-      }}
     >
       <Spin spinning={loadingValues} tip="正在加载翻译内容...">
-        <Space direction="vertical" style={{ width: '100%' }} size="small">
+        <Space direction="vertical" style={{ width: '100%' }}>
           {/* 加载错误提示 */}
           {loadError && (
             <Alert
+              type="error"
               message="加载失败"
               description={
                 <Space direction="vertical" size={4}>
                   <div>{loadError}</div>
-                  <Button size="small" icon={<ReloadOutlined />} onClick={handleRetry}>
+                  <Button onClick={handleRetry} icon={<span>↻</span>}>
                     重试
                   </Button>
                 </Space>
               }
-              type="warning"
-              showIcon
-              closable
-              onClose={() => setLoadError(null)}
             />
           )}
 
-          {/* 提示：首次加载 */}
-          {!loadingValues && !loadError && !initialValues && (
-            <Alert message="正在获取当前翻译内容..." type="info" showIcon />
-          )}
+          {/* 表单 */}
+          {!loadError && (
+            <Form>
+              <FormItem label="中文翻译" name="zh-CN" required>
+                <TextArea
+                  value={form.getFieldValue('zh-CN')}
+                  onChange={e => form.setFieldValue('zh-CN', e.target.value)}
+                  placeholder="请输入中文翻译"
+                  rows={3}
+                />
+              </FormItem>
 
-          {/* 编辑表单 */}
-          <Form
-            form={form}
-            layout="vertical"
-            initialValues={initialValues}
-            disabled={loadingValues}
-            style={{ marginTop: 8 }}
-          >
-            <Form.Item
-              label={
-                <Space size={4}>
-                  <span>🇨🇳 中文</span>
-                </Space>
-              }
-              name="zh-CN"
-              rules={[{ required: true, message: '请输入中文翻译' }]}
-              style={{ marginBottom: 12 }}
-            >
-              <TextArea
-                rows={2}
-                placeholder="请输入中文翻译..."
-                autoSize={{ minRows: 2, maxRows: 4 }}
-              />
-            </Form.Item>
-
-            <Form.Item
-              label={
-                <Space size={8}>
-                  <span>🇺🇸 英文</span>
-                  <Tooltip title="AI 自动翻译">
-                    <Button
-                      size="small"
-                      type="text"
-                      icon={<ThunderboltOutlined />}
-                      onClick={handleAITranslate}
-                      loading={translating}
-                      disabled={loadingValues}
-                      style={{ padding: '0 4px', height: 20 }}
-                    />
-                  </Tooltip>
-                </Space>
-              }
-              name="en-US"
-              rules={[{ required: true, message: '请输入英文翻译' }]}
-              style={{ marginBottom: 8 }}
-            >
-              <TextArea
-                rows={2}
-                placeholder="Please enter English translation..."
-                autoSize={{ minRows: 2, maxRows: 4 }}
-              />
-            </Form.Item>
-
-            {/* AI 翻译候选词 */}
-            {translations.length > 0 && (
-              <div
-                style={{
-                  padding: '8px',
-                  background: '#f0f5ff',
-                  border: '1px solid #adc6ff',
-                  borderRadius: 4,
-                  marginBottom: 8,
-                }}
-              >
-                <Space direction="vertical" style={{ width: '100%' }} size={6}>
-                  <Space style={{ justifyContent: 'space-between', width: '100%' }}>
-                    <Text strong style={{ fontSize: 12, color: '#1890ff' }}>
-                      🤖 候选词（点击应用）
-                    </Text>
-                    <Button
-                      size="small"
-                      type="text"
-                      onClick={() => setTranslations([])}
-                      style={{ padding: '0 4px', height: 20, fontSize: 12 }}
-                    >
-                      清除
-                    </Button>
-                  </Space>
-                  <Space direction="vertical" style={{ width: '100%' }} size={6}>
-                    {translations.map(item => (
-                      <div
-                        key={`${item.style}-${item.text.substring(0, 20)}`}
-                        style={{
-                          padding: '6px 8px',
-                          background: '#fff',
-                          border: '1px solid #d9d9d9',
-                          borderRadius: 3,
-                          cursor: 'pointer',
-                          transition: 'all 0.15s',
-                        }}
-                        onClick={() => handleSelectTranslation(item.text)}
-                        onMouseEnter={e => {
-                          e.currentTarget.style.borderColor = '#1890ff';
-                          e.currentTarget.style.boxShadow = '0 1px 4px rgba(24, 144, 255, 0.2)';
-                        }}
-                        onMouseLeave={e => {
-                          e.currentTarget.style.borderColor = '#d9d9d9';
-                          e.currentTarget.style.boxShadow = 'none';
-                        }}
+              <FormItem
+                label={
+                  <span>
+                    英文翻译
+                    {typeof translateText === 'function' && (
+                      <Button
+                        style={{ marginLeft: 12 }}
+                        onClick={handleAITranslate}
+                        loading={translating}
+                        icon={<span>⚡</span>}
                       >
-                        <Space
-                          style={{
-                            width: '100%',
-                            justifyContent: 'space-between',
-                          }}
-                        >
-                          <Text style={{ flex: 1, fontSize: 13 }}>{item.text}</Text>
-                          <Tag
-                            color="blue"
-                            style={{
-                              margin: 0,
-                              fontSize: 11,
-                              padding: '0 6px',
-                            }}
-                          >
-                            {item.style}
-                          </Tag>
-                        </Space>
-                      </div>
+                        AI 翻译
+                      </Button>
+                    )}
+                  </span>
+                }
+                name="en-US"
+                required
+              >
+                <TextArea
+                  value={form.getFieldValue('en-US')}
+                  onChange={e => form.setFieldValue('en-US', e.target.value)}
+                  placeholder="请输入英文翻译"
+                  rows={3}
+                />
+              </FormItem>
+
+              {/* AI 翻译候选词 */}
+              {translations.length > 0 && (
+                <div>
+                  <div
+                    style={{
+                      marginBottom: 8,
+                      fontSize: 14,
+                      fontWeight: 500,
+                      color: '#262626',
+                    }}
+                  >
+                    AI 翻译候选（点击应用）
+                  </div>
+                  <Space style={{ flexWrap: 'wrap' }}>
+                    {translations.map((item, index) => (
+                      <Tag
+                        key={index}
+                        onClick={() => handleSelectTranslation(item.text)}
+                        icon={<span>⚡</span>}
+                      >
+                        {item.text}
+                        {item.style && (
+                          <Text type="secondary" style={{ marginLeft: 4, fontSize: 11 }}>
+                            ({item.style})
+                          </Text>
+                        )}
+                      </Tag>
                     ))}
                   </Space>
-                </Space>
-              </div>
-            )}
-          </Form>
+                </div>
+              )}
 
-          {/* 提示信息 */}
-          <Alert
-            message={
-              <Text style={{ fontSize: 12 }}>
-                💡 保存后将自动写入源文件并刷新页面，支持占位符如 {'{val1}'}
-              </Text>
-            }
-            type="info"
-            showIcon={false}
-            style={{ padding: '4px 12px' }}
-          />
+              {/* 提示信息 */}
+              {typeof translateText !== 'function' && (
+                <Alert type="info" message="AI 翻译功能未配置，请在开发环境中配置 API Key" />
+              )}
+            </Form>
+          )}
         </Space>
       </Spin>
     </Modal>

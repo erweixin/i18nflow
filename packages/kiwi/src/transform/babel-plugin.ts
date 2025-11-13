@@ -78,7 +78,7 @@ export function createKiwiBabelPlugin(
         }
 
         // 跳过已经是方法调用的表达式（如 String()）
-        if (t.isCallExpression(expression)) {
+        if (t.isCallExpression(expression) || t.isOptionalCallExpression(expression)) {
           const callee = expression.callee;
           if (t.isIdentifier(callee, { name: 'String' })) {
             return;
@@ -200,7 +200,7 @@ export function createKiwiBabelPlugin(
       // 处理对象属性中的 I18N 调用
       ObjectProperty(path) {
         // 跳过已经被 String() 包裹的表达式
-        if (t.isCallExpression(path.node.value)) {
+        if (t.isCallExpression(path.node.value) || t.isOptionalCallExpression(path.node.value)) {
           const callee = path.node.value.callee;
           if (t.isIdentifier(callee, { name: 'String' })) {
             return;
@@ -209,10 +209,13 @@ export function createKiwiBabelPlugin(
 
         const value = path.node.value;
 
-        // 处理直接的 I18N 表达式
-        if (isI18NExpression(value, i18nIdentifier) && t.isExpression(value)) {
-          path.node.value = t.callExpression(t.identifier('String'), [value]);
-          return;
+        // 处理直接的 I18N 表达式（包括可选链调用）
+        if (isI18NExpression(value, i18nIdentifier)) {
+          // 确保是 Expression 类型才能作为参数
+          if (t.isExpression(value) || t.isOptionalCallExpression(value)) {
+            path.node.value = t.callExpression(t.identifier('String'), [value as t.Expression]);
+            return;
+          }
         }
 
         // 处理箭头函数/函数表达式返回 I18N
@@ -434,12 +437,22 @@ function isI18NExpression(expression: t.Node, i18nIdentifier: string): boolean {
     }
   }
 
-  // 处理 I18N.template(...) 形式
-  if (t.isCallExpression(expression)) {
+  // 处理 I18N.template(...) 和 I18N.template?.(...) 形式
+  if (t.isCallExpression(expression) || t.isOptionalCallExpression(expression)) {
     const callee = expression.callee;
 
+    // 处理 I18N.template(...) 或 I18N.template?.(...)
     if (
       t.isMemberExpression(callee) &&
+      t.isIdentifier(callee.object, { name: i18nIdentifier }) &&
+      t.isIdentifier(callee.property, { name: 'template' })
+    ) {
+      return true;
+    }
+
+    // 处理 I18N?.template(...) 或 I18N?.template?.(...)
+    if (
+      t.isOptionalMemberExpression(callee) &&
       t.isIdentifier(callee.object, { name: i18nIdentifier }) &&
       t.isIdentifier(callee.property, { name: 'template' })
     ) {
@@ -513,18 +526,33 @@ function extractI18nKey(expression: t.Node, i18nIdentifier: string): string | nu
     }
   }
 
-  // 处理 I18N.template(...) 形式
-  if (t.isCallExpression(expression)) {
+  // 处理 I18N.template(...) 和 I18N.template?.(...) 形式
+  if (t.isCallExpression(expression) || t.isOptionalCallExpression(expression)) {
     const callee = expression.callee;
 
-    if (
-      t.isMemberExpression(callee) &&
-      t.isIdentifier(callee.object, { name: i18nIdentifier }) &&
-      t.isIdentifier(callee.property, { name: 'template' })
-    ) {
+    // 检查是否是 I18N.template(...) 或 I18N.template?.(...)
+    const isTemplateCall =
+      (t.isMemberExpression(callee) &&
+        t.isIdentifier(callee.object, { name: i18nIdentifier }) &&
+        t.isIdentifier(callee.property, { name: 'template' })) ||
+      (t.isOptionalMemberExpression(callee) &&
+        t.isIdentifier(callee.object, { name: i18nIdentifier }) &&
+        t.isIdentifier(callee.property, { name: 'template' }));
+
+    if (isTemplateCall) {
       const firstArg = expression.arguments[0];
+
+      // 处理第一个参数是 MemberExpression 的情况
       if (firstArg && t.isMemberExpression(firstArg)) {
         const key = buildKeyFromMemberExpression(firstArg);
+        if (key && key.startsWith(`${i18nIdentifier}.`)) {
+          return key.substring(i18nIdentifier.length + 1);
+        }
+      }
+
+      // 处理第一个参数是 OptionalMemberExpression 的情况
+      if (firstArg && t.isOptionalMemberExpression(firstArg)) {
+        const key = buildKeyFromOptionalMemberExpression(firstArg);
         if (key && key.startsWith(`${i18nIdentifier}.`)) {
           return key.substring(i18nIdentifier.length + 1);
         }
@@ -543,6 +571,31 @@ function buildKeyFromMemberExpression(node: t.Node): string | null {
   let current: t.Node = node;
 
   while (t.isMemberExpression(current)) {
+    if (t.isIdentifier(current.property)) {
+      parts.unshift(current.property.name);
+    } else {
+      return null;
+    }
+    current = current.object;
+  }
+
+  if (t.isIdentifier(current)) {
+    parts.unshift(current.name);
+  } else {
+    return null;
+  }
+
+  return parts.join('.');
+}
+
+/**
+ * 从 OptionalMemberExpression 构建完整的 key 路径
+ */
+function buildKeyFromOptionalMemberExpression(node: t.Node): string | null {
+  const parts: string[] = [];
+  let current: t.Node = node;
+
+  while (t.isOptionalMemberExpression(current) || t.isMemberExpression(current)) {
     if (t.isIdentifier(current.property)) {
       parts.unshift(current.property.name);
     } else {

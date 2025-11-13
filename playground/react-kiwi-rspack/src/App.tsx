@@ -37,11 +37,11 @@ const App: React.FC = () => {
               {I18N.template?.(I18N.welcome.greeting, { name: '张三' })}
             </p>
             <p>{I18N.welcome.message}</p>
-            <p>
+            <div>
               {I18N.template?.(I18N.welcome.todayIs, {
                 date: new Date().toLocaleDateString(locale),
               })}
-            </p>
+            </div>
           </section>
 
           {/* 1. 基础用法示例 */}
