@@ -57,16 +57,6 @@ export const I18nLocalDebugProvider: React.FC<I18nLocalDebugProviderProps> = ({
   }, [enabled]);
 
   /**
-   * 从 key 获取当前 DOM 上的文本内容
-   */
-  const getCurrentTextFromDOM = useCallback(
-    (element: HTMLElement): string =>
-      // 尝试获取元素的文本内容
-      element.textContent?.trim() || element.innerText?.trim() || '',
-    []
-  );
-
-  /**
    * 监听点击事件
    */
   const handleClick = useCallback(
@@ -104,7 +94,7 @@ export const I18nLocalDebugProvider: React.FC<I18nLocalDebugProviderProps> = ({
       setIsKeyPressed(false);
       document.body.style.cursor = '';
     },
-    [enabled, isKeyPressed, getCurrentTextFromDOM]
+    [enabled, isKeyPressed]
   );
 
   /**

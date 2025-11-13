@@ -12,13 +12,19 @@ interface I18nEditModalLocalProps {
   onClose: () => void;
 }
 
+interface I18nValues {
+  'zh-CN': string;
+  'en-US': string;
+  [key: string]: string;
+}
+
 export const I18nEditModalLocal: React.FC<I18nEditModalLocalProps> = ({
   visible,
   i18nKey,
   onClose,
 }) => {
   const { loading, readI18nValue, updateI18nValue } = useI18nLocalDebug();
-  const [values, setValues] = useState<Record<string, string>>({
+  const [values, setValues] = useState<I18nValues>({
     'zh-CN': '',
     'en-US': '',
   });
