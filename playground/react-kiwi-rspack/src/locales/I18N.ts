@@ -1,6 +1,7 @@
 import KiwiIntl from 'kiwi-intl';
 import zhCN from './zh-CN';
 import enUS from './en-US';
+import { createKiwiProxy } from '@i18nflow/kiwi';
 
 // 初始化 Kiwi-Intl 实例
 const kiwiIntl = KiwiIntl.init<typeof zhCN>(
@@ -11,7 +12,7 @@ const kiwiIntl = KiwiIntl.init<typeof zhCN>(
   }
 );
 
-export default kiwiIntl;
+export default createKiwiProxy(kiwiIntl);
 
 // 导出类型，方便 TypeScript 类型推导
 export type LangType = typeof zhCN;

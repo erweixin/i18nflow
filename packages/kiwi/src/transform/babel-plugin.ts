@@ -6,14 +6,15 @@
  * 2. JSX 字符串属性: <Input placeholder={I18N.system.login} /> → <Input placeholder={String(I18N.system.login)} />
  * 3. JSX 模板调用: <div>{I18N.template(I18N.system.welcome, {...})}</div> → <div>{String(I18N.template(...))}</div>
  * 4. JSX 变量引用: const items = [{ label: I18N.xxx }]; <div>{item.label}</div> → <div>{String(item.label)}</div>
- * 5. 对象属性值: { name: I18N.chart.title } → { name: String(I18N.chart.title) }
+ * 5. 对象属性值: { name: I18N.chart.title } → 保持不变（Proxy 会自动处理类型转换）
  * 6. 箭头函数返回: formatter: () => I18N.template(...) → formatter: () => String(I18N.template(...))
  * 7. 显式返回: return I18N.xxx → return String(I18N.xxx)
  *
  * 说明：
  * - 在 JSX 子元素中转换为 String() 避免嵌套 span 节点
- * - 在对象属性中转换为 String() 确保 echarts 等库接收字符串类型
- * - String() 会调用 Proxy 的 toString() 方法返回实际的文本值
+ * - 在 JSX 属性中转换为 String() 确保传递的是字符串值
+ * - 在对象属性中不添加 String()，允许 Proxy 返回的 React 元素通过 props 传递
+ * - Proxy 实现了 toString/valueOf/Symbol.toPrimitive，在需要时自动转换为字符串
  * - 同时在父元素上添加 data-i18n-key 属性用于调试
  */
 
@@ -108,6 +109,9 @@ export function createKiwiBabelPlugin(
         }
 
         // 2. 变量引用
+        // 注意：不再在 JSX 子元素中对变量引用添加 String()
+        // 这样可以保留 Proxy 返回的 React 元素（带 data-i18n-key）
+        // 只添加 data-i18n-key 到父元素，用于调试
         if (isI18NValueReference(expression, state, path)) {
           const refKey = extractI18nFromReference(expression, state, path);
           if (refKey) {
@@ -122,7 +126,7 @@ export function createKiwiBabelPlugin(
                 addDataI18nKeyAttribute(openingElement, refKey);
               }
             }
-            path.node.expression = t.callExpression(t.identifier('String'), [expression]);
+            // 不添加 String()，保持 Proxy 返回的 React 元素
             return;
           }
         }
@@ -198,25 +202,11 @@ export function createKiwiBabelPlugin(
       },
 
       // 处理对象属性中的 I18N 调用
+      // 注意：不再在对象属性中添加 String() 包装
+      // Proxy 已经实现了 toString/valueOf/Symbol.toPrimitive，可以自动转换
+      // 保留此处理器主要用于处理函数返回值的场景
       ObjectProperty(path) {
-        // 跳过已经被 String() 包裹的表达式
-        if (t.isCallExpression(path.node.value) || t.isOptionalCallExpression(path.node.value)) {
-          const callee = path.node.value.callee;
-          if (t.isIdentifier(callee, { name: 'String' })) {
-            return;
-          }
-        }
-
         const value = path.node.value;
-
-        // 处理直接的 I18N 表达式（包括可选链调用）
-        if (isI18NExpression(value, i18nIdentifier)) {
-          // 确保是 Expression 类型才能作为参数
-          if (t.isExpression(value) || t.isOptionalCallExpression(value)) {
-            path.node.value = t.callExpression(t.identifier('String'), [value as t.Expression]);
-            return;
-          }
-        }
 
         // 处理箭头函数/函数表达式返回 I18N
         if (t.isArrowFunctionExpression(value) || t.isFunctionExpression(value)) {
