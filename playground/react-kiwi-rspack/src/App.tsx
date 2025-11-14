@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { I18nDebugProvider } from '@i18nflow/kiwi';
 import I18N from './locales/I18N';
 import { LocaleType } from './locales/I18N';
@@ -9,19 +9,56 @@ import FormExample from './components/FormExample';
 import PropsExample from './components/PropsExample';
 import './styles/app.css';
 
+const LOCALE_STORAGE_KEY = 'i18nflow-locale';
+
+// 从本地存储获取语言设置
+const getStoredLocale = (): LocaleType => {
+  try {
+    const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
+    if (stored === 'zh-CN' || stored === 'en-US') {
+      return stored;
+    }
+  } catch (error) {
+    console.warn('Failed to read locale from localStorage:', error);
+  }
+  return 'zh-CN'; // 默认中文
+};
+
+// 保存语言设置到本地存储
+const saveLocale = (locale: LocaleType) => {
+  try {
+    localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+  } catch (error) {
+    console.warn('Failed to save locale to localStorage:', error);
+  }
+};
+
 const App: React.FC = () => {
-  const [locale, setLocale] = useState<LocaleType>('zh-CN');
+  const [locale, setLocale] = useState<LocaleType>(getStoredLocale);
+  const [renderKey, setRenderKey] = useState(0);
+
+  // 初始化语言设置
+  useEffect(() => {
+    const initialLocale = getStoredLocale();
+    setLocale(initialLocale);
+    I18N.setLang?.(initialLocale);
+    // 触发重渲染以应用语言设置
+    setRenderKey(prev => prev + 1);
+  }, []);
 
   // 切换语言
   const toggleLanguage = () => {
     const newLocale: LocaleType = locale === 'zh-CN' ? 'en-US' : 'zh-CN';
     setLocale(newLocale);
     I18N.setLang?.(newLocale);
+    saveLocale(newLocale);
+    // 触发重渲染以应用语言变更
+    setRenderKey(prev => prev + 1);
   };
 
   return (
     <I18nDebugProvider enabled={process.env.NODE_ENV === 'development'}>
-      <div className="app-container">
+      <div className="app-container" key={renderKey}>
         <header className="app-header">
           <h1>{I18N.app.title}</h1>
           <p>{I18N.app.description}</p>

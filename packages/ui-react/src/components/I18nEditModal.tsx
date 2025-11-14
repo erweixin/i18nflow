@@ -41,6 +41,8 @@ export const I18nEditModal: React.FC<I18nEditModalProps> = ({ visible, i18nKey, 
   const [loadingValues, setLoadingValues] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [translations, setTranslations] = useState<TranslationCandidate[]>([]);
+  const [chineseText, setChineseText] = useState<string>('');
+  const [shouldAutoTranslate, setShouldAutoTranslate] = useState(false);
 
   const loadI18nValues = useCallback(async () => {
     if (!i18nKey) return;
@@ -56,6 +58,10 @@ export const I18nEditModal: React.FC<I18nEditModalProps> = ({ visible, i18nKey, 
         console.log('✅ 读取成功:', values);
         setInitialValues(values);
         form.setFieldsValue(values);
+        // 更新中文文本状态
+        setChineseText(values['zh-CN'] || '');
+        // 设置自动翻译标志
+        setShouldAutoTranslate(true);
       } else {
         console.warn('⚠️ 未能读取翻译内容');
         setLoadError('未能读取翻译内容，可能该 key 不存在或格式错误');
@@ -68,10 +74,8 @@ export const I18nEditModal: React.FC<I18nEditModalProps> = ({ visible, i18nKey, 
     }
   }, [i18nKey, readI18nValue, form]);
 
-  const handleAITranslate = useCallback(async () => {
-    const chineseText = form.getFieldValue('zh-CN') as string;
-
-    if (!chineseText || typeof chineseText !== 'string' || chineseText.trim().length === 0) {
+  const handleAITranslate = async () => {
+    if (!chineseText || chineseText.trim().length === 0) {
       message.warning('请先输入中文内容');
       return;
     }
@@ -88,30 +92,43 @@ export const I18nEditModal: React.FC<I18nEditModalProps> = ({ visible, i18nKey, 
     } catch {
       message.error('翻译失败，请检查网络或 API 配置');
     }
-  }, [form, translateText]);
+  };
 
-  // 当 modal 打开且有 key 时，读取翻译内容并自动触发 AI 翻译
+  // 加载翻译值
   useEffect(() => {
     if (visible && i18nKey) {
-      loadI18nValues().then(() => {
-        // 加载完成后，自动触发 AI 翻译
-        const chineseText = form.getFieldValue('zh-CN') as string;
-        if (chineseText && typeof chineseText === 'string' && chineseText.trim()) {
-          // 使用 setTimeout 避免阻塞 UI
-          setTimeout(() => {
-            handleAITranslate();
-          }, 500);
-        }
-      });
+      loadI18nValues();
     } else {
       // 关闭时重置状态
       setInitialValues(null);
       setLoadError(null);
       setTranslations([]);
+      setChineseText('');
+      setShouldAutoTranslate(false);
       form.resetFields();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, i18nKey]);
+
+  // 自动触发 AI 翻译：仅在 loadI18nValues 完成后触发一次
+  useEffect(() => {
+    if (shouldAutoTranslate && chineseText && chineseText.trim()) {
+      // 重置标志，确保只触发一次
+      setShouldAutoTranslate(false);
+
+      translateText(chineseText, 3)
+        .then(result => {
+          if (result && result.length > 0) {
+            setTranslations(result);
+            message.success('AI 翻译成功，请选择候选词');
+          }
+        })
+        .catch(() => {
+          // 静默失败，用户可以手动点击翻译按钮
+          console.warn('自动 AI 翻译失败');
+        });
+    }
+  }, [shouldAutoTranslate, chineseText, translateText]);
 
   const handleSubmit = React.useCallback(async () => {
     if (!i18nKey) return;
@@ -216,7 +233,11 @@ export const I18nEditModal: React.FC<I18nEditModalProps> = ({ visible, i18nKey, 
               <FormItem label="中文翻译" name="zh-CN" required>
                 <TextArea
                   value={form.getFieldValue('zh-CN')}
-                  onChange={e => form.setFieldValue('zh-CN', e.target.value)}
+                  onChange={e => {
+                    const value = e.target.value;
+                    form.setFieldValue('zh-CN', value);
+                    setChineseText(value);
+                  }}
                   placeholder="请输入中文翻译"
                   rows={3}
                 />
