@@ -173,25 +173,25 @@ describe('Runtime Proxy - createKiwiProxy', () => {
     it('应该正确调用 template 方法', () => {
       const proxy = createKiwiProxy(mockI18n);
       const template = proxy.examples.template.helloUser;
-      const result = proxy.template!(template as any, { username: 'Alice' });
+      const result = proxy.template?.(template as any, { username: 'Alice' });
 
       expect(React.isValidElement(result)).toBe(true);
       if (React.isValidElement(result)) {
-        expect(result.props.children).toBe('Hello, Alice!');
+        expect((result.props as { children: string }).children).toBe('Hello, Alice!');
       }
     });
 
     it('应该从 React 元素中提取 template key', () => {
       const proxy = createKiwiProxy(mockI18n);
       const template = proxy.examples.template.helloUser;
-      const result = proxy.template!(template as any, { username: 'Bob' }) as any;
+      const result = proxy.template?.(template as any, { username: 'Bob' }) as any;
 
       expect(result.props['data-i18n-key']).toBe('examples.template.helloUser');
     });
 
     it('应该支持直接传入字符串', () => {
       const proxy = createKiwiProxy(mockI18n);
-      const result = proxy.template!('Hello, {name}!', { name: 'Charlie' });
+      const result = proxy.template?.('Hello, {name}!', { name: 'Charlie' });
 
       expect(React.isValidElement(result)).toBe(true);
       if (React.isValidElement(result)) {
@@ -202,7 +202,7 @@ describe('Runtime Proxy - createKiwiProxy', () => {
     it('应该在生产环境下返回纯字符串', () => {
       process.env.NODE_ENV = 'production';
       const proxy = createKiwiProxy(mockI18n);
-      const result = proxy.template!('Hello, {name}!', { name: 'David' });
+      const result = proxy.template?.('Hello, {name}!', { name: 'David' });
 
       expect(typeof result).toBe('string');
       expect(result).toBe('Hello, David!');
@@ -211,7 +211,7 @@ describe('Runtime Proxy - createKiwiProxy', () => {
     it('应该支持多个变量替换', () => {
       const proxy = createKiwiProxy(mockI18n);
       const template = proxy.examples.template.userInfo;
-      const result = proxy.template!(template as any, { name: 'Eve', age: 25 }) as any;
+      const result = proxy.template?.(template as any, { name: 'Eve', age: 25 }) as any;
 
       expect(result.props.children).toBe('User Eve is 25 years old');
     });
@@ -238,7 +238,7 @@ describe('Runtime Proxy - createKiwiProxy', () => {
       expect(typeof templateMethod).toBe('function');
 
       // 可以调用该方法
-      const result = templateMethod!('Test {value}', { value: 'Success' });
+      const result = templateMethod?.('Test {value}', { value: 'Success' });
       expect(React.isValidElement(result)).toBe(true);
     });
 
@@ -249,7 +249,7 @@ describe('Runtime Proxy - createKiwiProxy', () => {
       const templateText = proxy.examples.template.helloUser;
 
       // 再使用 template 方法
-      const result = proxy.template!(templateText as any, { username: 'Frank' }) as any;
+      const result = proxy.template?.(templateText as any, { username: 'Frank' }) as any;
 
       expect(result.props.children).toBe('Hello, Frank!');
       expect(result.props['data-i18n-key']).toBe('examples.template.helloUser');
@@ -259,14 +259,14 @@ describe('Runtime Proxy - createKiwiProxy', () => {
   describe('其他方法调用', () => {
     it('应该正确调用 setLang 方法', () => {
       const proxy = createKiwiProxy(mockI18n);
-      proxy.setLang!('en-US');
+      proxy.setLang?.('en-US');
 
       expect(mockI18n.setLang).toHaveBeenCalledWith('en-US');
     });
 
     it('应该正确调用 get 方法', () => {
       const proxy = createKiwiProxy(mockI18n);
-      const result = proxy.get!('test.key');
+      const result = proxy.get?.('test.key');
 
       expect(mockI18n.get).toHaveBeenCalledWith('test.key');
       expect(result).toBe('value_test.key');
@@ -274,10 +274,10 @@ describe('Runtime Proxy - createKiwiProxy', () => {
 
     it('应该绑定方法的 this 上下文', () => {
       const proxy = createKiwiProxy(mockI18n);
-      const setLang = proxy.setLang!;
+      const setLang = proxy.setLang;
 
       // 即使解构后调用，this 仍然正确
-      setLang('zh-CN');
+      setLang?.('zh-CN');
       expect(mockI18n.setLang).toHaveBeenCalledWith('zh-CN');
     });
   });
