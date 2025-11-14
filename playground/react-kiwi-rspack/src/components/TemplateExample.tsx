@@ -17,12 +17,12 @@ const TemplateExample: React.FC = () => {
       <div className="example-content">
         {/* 示例 1: 单个变量插值 */}
         <div className="demo-box">
-          <h4>1. 单个变量插值</h4>
+          <h4>{I18N.examples.template.section1Title}</h4>
           <input
             type="text"
             value={username}
             onChange={e => setUsername(e.target.value)}
-            placeholder="输入用户名"
+            placeholder={I18N.examples.template.inputPlaceholder.username}
           />
           <p className="result">
             {/* 使用 template 方法进行变量替换 */}
@@ -35,19 +35,19 @@ const TemplateExample: React.FC = () => {
 
         {/* 示例 2: 多个变量插值 */}
         <div className="demo-box">
-          <h4>2. 多个变量插值</h4>
+          <h4>{I18N.examples.template.section2Title}</h4>
           <div className="input-group">
             <input
               type="text"
               value={username}
               onChange={e => setUsername(e.target.value)}
-              placeholder="姓名"
+              placeholder={I18N.examples.template.inputPlaceholder.name}
             />
             <input
               type="number"
               value={age}
               onChange={e => setAge(Number(e.target.value))}
-              placeholder="年龄"
+              placeholder={I18N.examples.template.inputPlaceholder.age}
             />
           </div>
           <p className="result">
@@ -68,19 +68,19 @@ const TemplateExample: React.FC = () => {
 
         {/* 示例 3: 复杂场景 - 多个变量 */}
         <div className="demo-box">
-          <h4>3. 复杂变量插值</h4>
+          <h4>{I18N.examples.template.section3Title}</h4>
           <div className="input-group">
             <input
               type="number"
               value={messageCount}
               onChange={e => setMessageCount(Number(e.target.value))}
-              placeholder="消息数量"
+              placeholder={I18N.examples.template.inputPlaceholder.messageCount}
             />
             <input
               type="text"
               value={sender}
               onChange={e => setSender(e.target.value)}
-              placeholder="发送者"
+              placeholder={I18N.examples.template.inputPlaceholder.sender}
             />
           </div>
           <p className="result">
@@ -101,19 +101,22 @@ const TemplateExample: React.FC = () => {
 
         {/* API 说明 */}
         <div className="api-note">
-          <h4>📘 Template API 说明</h4>
+          <h4>{I18N.examples.template.apiTitle}</h4>
           <p>
-            <code>I18N.template(text, variables)</code> 方法用于将变量插入到文本模板中。
+            <code>I18N.template(text, variables)</code> {I18N.examples.template.apiDescription}
           </p>
           <ul>
             <li>
-              <strong>text:</strong> 包含 {`{variableName}`} 占位符的文本模板
+              <strong>{I18N.examples.template.apiParams.text}</strong>{' '}
+              {I18N.examples.template.apiParams.textDesc}
             </li>
             <li>
-              <strong>variables:</strong> 包含要替换的变量的对象
+              <strong>{I18N.examples.template.apiParams.variables}</strong>{' '}
+              {I18N.examples.template.apiParams.variablesDesc}
             </li>
             <li>
-              <strong>返回值:</strong> 替换变量后的完整文本
+              <strong>{I18N.examples.template.apiParams.return}</strong>{' '}
+              {I18N.examples.template.apiParams.returnDesc}
             </li>
           </ul>
         </div>

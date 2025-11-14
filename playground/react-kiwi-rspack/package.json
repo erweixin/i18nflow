@@ -4,7 +4,7 @@
   "private": true,
   "description": "React demo using kiwi-intl and rspack with @i18nflow/kiwi",
   "scripts": {
-    "dev": "rspack dev",
+    "dev": "rspack dev --port 3010",
     "build": "rspack build",
     "preview": "rspack preview",
     "clean": "rm -rf dist .rspack node_modules"

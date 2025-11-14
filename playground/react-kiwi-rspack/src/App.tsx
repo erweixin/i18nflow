@@ -63,15 +63,15 @@ const App: React.FC = () => {
 
         <footer className="app-footer">
           <p>
-            Powered by{' '}
+            {I18N.footer.poweredBy}{' '}
             <a href="https://github.com/alibaba/kiwi" target="_blank" rel="noopener noreferrer">
               Kiwi-Intl
             </a>
-            {' & '}
+            {I18N.footer.and}
             <a href="https://www.rspack.dev/" target="_blank" rel="noopener noreferrer">
               Rspack
             </a>
-            {' & '}
+            {I18N.footer.and}
             <a
               href="https://github.com/erweixin/i18nflow"
               target="_blank"
@@ -81,7 +81,7 @@ const App: React.FC = () => {
             </a>
           </p>
           <p style={{ fontSize: '14px', color: '#888', marginTop: '8px' }}>
-            💡 开发模式：按住 Ctrl+Shift (Mac: Cmd+Shift) 点击文案即可编辑
+            {I18N.footer.devModeTip}
           </p>
         </footer>
       </div>

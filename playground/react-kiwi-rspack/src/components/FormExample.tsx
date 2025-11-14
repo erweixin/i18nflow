@@ -119,10 +119,10 @@ const FormExample: React.FC = () => {
 
   return (
     <section className="example-section">
-      <h3>表单综合示例</h3>
+      <h3>{I18N.examples.form.title}</h3>
       <div className="example-content">
         <div className="demo-box">
-          <h4>用户注册表单</h4>
+          <h4>{I18N.examples.form.registrationTitle}</h4>
 
           {/* 通知消息 */}
           {notification.type && (
@@ -216,22 +216,26 @@ const validateForm = () => {
 
         {/* API 说明 */}
         <div className="api-note">
-          <h4>📘 表单国际化最佳实践</h4>
+          <h4>{I18N.examples.form.apiTitle}</h4>
           <ul>
             <li>
-              <strong>标签和占位符:</strong> 使用 I18N 对象直接访问文案
+              <strong>{I18N.examples.form.apiDetails.labels}</strong>{' '}
+              {I18N.examples.form.apiDetails.labelsDesc}
             </li>
             <li>
-              <strong>验证消息:</strong> 使用 I18N.template 动态插入字段名和约束值
+              <strong>{I18N.examples.form.apiDetails.validation}</strong>{' '}
+              {I18N.examples.form.apiDetails.validationDesc}
             </li>
             <li>
-              <strong>通知消息:</strong> 根据类型选择对应的国际化文案
+              <strong>{I18N.examples.form.apiDetails.notification}</strong>{' '}
+              {I18N.examples.form.apiDetails.notificationDesc}
             </li>
             <li>
-              <strong>按钮文本:</strong> 统一使用 button 命名空间下的文案
+              <strong>{I18N.examples.form.apiDetails.buttons}</strong>{' '}
+              {I18N.examples.form.apiDetails.buttonsDesc}
             </li>
           </ul>
-          <p>这样可以确保整个表单的完全国际化，包括错误提示和用户反馈。</p>
+          <p>{I18N.examples.form.apiNote}</p>
         </div>
       </div>
     </section>

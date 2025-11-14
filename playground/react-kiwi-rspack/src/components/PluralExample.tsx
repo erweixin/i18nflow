@@ -26,7 +26,7 @@ const PluralExample: React.FC = () => {
       <div className="example-content">
         {/* 示例 1: 简单计数 */}
         <div className="demo-box">
-          <h4>1. 基础计数</h4>
+          <h4>{I18N.examples.plural.section1Title}</h4>
           <div className="counter-controls">
             <button onClick={() => setItemCount(Math.max(0, itemCount - 1))}>-</button>
             <span className="counter-value">{itemCount}</span>
@@ -42,7 +42,7 @@ const PluralExample: React.FC = () => {
 
         {/* 示例 2: 复数形式处理 */}
         <div className="demo-box">
-          <h4>2. 复数形式处理 (zero/one/other)</h4>
+          <h4>{I18N.examples.plural.section2Title}</h4>
           <div className="counter-controls">
             <button onClick={() => setMessageCount(Math.max(0, messageCount - 1))}>-</button>
             <span className="counter-value">{messageCount}</span>
@@ -63,16 +63,16 @@ const getPluralMessage = (count: number) => {
 
         {/* 显示当前状态 */}
         <div className="demo-box status-box">
-          <h4>当前状态</h4>
+          <h4>{I18N.examples.plural.statusTitle}</h4>
           <ul>
             <li>
-              <strong>项目数:</strong> {itemCount}
+              <strong>{I18N.examples.plural.statusLabels.itemCount}</strong> {itemCount}
             </li>
             <li>
-              <strong>消息数:</strong> {messageCount}
+              <strong>{I18N.examples.plural.statusLabels.messageCount}</strong> {messageCount}
             </li>
             <li>
-              <strong>复数形式:</strong>{' '}
+              <strong>{I18N.examples.plural.statusLabels.pluralForm}</strong>{' '}
               {messageCount === 0 ? 'zero' : messageCount === 1 ? 'one' : 'other'}
             </li>
           </ul>
@@ -80,22 +80,23 @@ const getPluralMessage = (count: number) => {
 
         {/* API 说明 */}
         <div className="api-note">
-          <h4>📘 复数处理说明</h4>
-          <p>Kiwi-Intl 支持多种复数形式的处理：</p>
+          <h4>{I18N.examples.plural.apiTitle}</h4>
+          <p>{I18N.examples.plural.apiDescription}</p>
           <ul>
             <li>
-              <strong>zero:</strong> 数量为 0 时的特殊文案
+              <strong>{I18N.examples.plural.apiDetails.zero}</strong>{' '}
+              {I18N.examples.plural.apiDetails.zeroDesc}
             </li>
             <li>
-              <strong>one:</strong> 数量为 1 时的文案
+              <strong>{I18N.examples.plural.apiDetails.one}</strong>{' '}
+              {I18N.examples.plural.apiDetails.oneDesc}
             </li>
             <li>
-              <strong>other:</strong> 其他数量的文案（通常使用 template 插值）
+              <strong>{I18N.examples.plural.apiDetails.other}</strong>{' '}
+              {I18N.examples.plural.apiDetails.otherDesc}
             </li>
           </ul>
-          <p>
-            通过在语言包中定义不同后缀的 key（如 messageCount_zero），可以实现复数形式的本地化。
-          </p>
+          <p>{I18N.examples.plural.apiNote}</p>
         </div>
       </div>
     </section>

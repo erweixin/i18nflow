@@ -27,6 +27,27 @@ export default {
       helloUser: 'Hello, {username}!',
       userInfo: 'User {name} is {age} years old',
       multipleVars: 'You have {count} messages from {sender}',
+      section1Title: '1. Single Variable Interpolation',
+      section2Title: '2. Multiple Variable Interpolation',
+      section3Title: '3. Complex Variable Interpolation',
+      inputPlaceholder: {
+        username: 'Enter username',
+        name: 'Name',
+        age: 'Age',
+        messageCount: 'Message count',
+        sender: 'Sender',
+      },
+      apiTitle: '📘 Template API Description',
+      apiDescription:
+        'The I18N.template(text, variables) method is used to insert variables into text templates.',
+      apiParams: {
+        text: 'text:',
+        textDesc: 'Text template containing {variableName} placeholders',
+        variables: 'variables:',
+        variablesDesc: 'Object containing variables to replace',
+        return: 'return:',
+        returnDesc: 'Complete text with variables replaced',
+      },
     },
     plural: {
       title: 'Pluralization',
@@ -34,6 +55,26 @@ export default {
       messageCount_zero: 'No messages',
       messageCount_one: '1 message',
       messageCount_other: '{count} messages',
+      section1Title: '1. Basic Counter',
+      section2Title: '2. Plural Forms (zero/one/other)',
+      statusTitle: 'Current Status',
+      statusLabels: {
+        itemCount: 'Item count:',
+        messageCount: 'Message count:',
+        pluralForm: 'Plural form:',
+      },
+      apiTitle: '📘 Pluralization Guide',
+      apiDescription: 'Kiwi-Intl supports multiple plural forms:',
+      apiDetails: {
+        zero: 'zero:',
+        zeroDesc: 'Special text when count is 0',
+        one: 'one:',
+        oneDesc: 'Text when count is 1',
+        other: 'other:',
+        otherDesc: 'Text for other counts (usually uses template interpolation)',
+      },
+      apiNote:
+        'By defining keys with different suffixes in the language pack (e.g., messageCount_zero), plural forms can be localized.',
     },
     format: {
       title: 'Formatting',
@@ -68,6 +109,23 @@ export default {
       nestedTitle: 'Nested Component Title',
       nestedSubtitle: 'This is an I18N value passed through multiple component layers',
     },
+    form: {
+      title: 'Comprehensive Form Example',
+      registrationTitle: 'User Registration Form',
+      apiTitle: '📘 Form Internationalization Best Practices',
+      apiDetails: {
+        labels: 'Labels and placeholders:',
+        labelsDesc: 'Use I18N object to directly access text',
+        validation: 'Validation messages:',
+        validationDesc: 'Use I18N.template to dynamically insert field names and constraint values',
+        notification: 'Notification messages:',
+        notificationDesc: 'Choose corresponding internationalized text based on type',
+        buttons: 'Button text:',
+        buttonsDesc: 'Uniformly use text under the button namespace',
+      },
+      apiNote:
+        'This ensures complete internationalization of the entire form, including error messages and user feedback.',
+    },
   },
   button: {
     switchLanguage: 'Switch Language',
@@ -97,5 +155,10 @@ export default {
     error: 'Operation failed: {message}',
     warning: 'Warning: {message}',
     info: 'Info: {message}',
+  },
+  footer: {
+    poweredBy: 'Powered by',
+    and: ' & ',
+    devModeTip: '💡 Dev Mode: Hold Ctrl+Shift (Mac: Cmd+Shift) and click on text to edit',
   },
 };
