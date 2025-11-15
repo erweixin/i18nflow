@@ -1,0 +1,153 @@
+{
+  "title": "高级示例",
+  "description": "展示更复杂的国际化场景，包括 Props 传递、对象变量、数组变量等",
+  "propsExample": {
+    "title": "Props 传递示例",
+    "description": "展示如何通过 Props 传递国际化文本",
+    "buttonLabel": "点击我",
+    "tooltip": "这是一个提示信息",
+    "cardTitle": "卡片标题: {{title}}",
+    "cardDescription": "描述: {{description}}",
+    "card1Title": "第一个卡片",
+    "card1Description": "这是描述文本",
+    "card2Title": "第二个卡片",
+    "card2Description": "待处理的任务",
+    "card3Title": "第三个卡片",
+    "card3Description": "已完成的项目",
+    "status": {
+      "active": "激活",
+      "inactive": "未激活",
+      "pending": "等待中",
+      "completed": "已完成"
+    }
+  },
+  "objectExample": {
+    "title": "对象变量示例",
+    "userInfoObject": "用户信息对象",
+    "userProfile": {
+      "name": "姓名",
+      "age": "年龄",
+      "email": "邮箱",
+      "address": "地址",
+      "phone": "电话"
+    },
+    "displayText": "用户 {{name}} ({{age}}岁) 的邮箱是 {{email}}",
+    "fullInfo": "{{name}}，{{age}}岁，居住在{{city}}，联系方式：{{phone}}"
+  },
+  "arrayExample": {
+    "title": "数组变量示例",
+    "items": {
+      "apple": "苹果",
+      "banana": "香蕉",
+      "orange": "橙子",
+      "grape": "葡萄",
+      "watermelon": "西瓜"
+    },
+    "itemCount": "共 {{count}} 项",
+    "selectedItems": "已选择: {{items}}",
+    "listTitle": "水果列表",
+    "noItems": "暂无数据"
+  },
+  "mapExample": {
+    "title": "Array.map 组件示例",
+    "productCard": {
+      "name": "产品名称",
+      "price": "价格",
+      "stock": "库存",
+      "category": "分类",
+      "addToCart": "加入购物车",
+      "outOfStock": "缺货",
+      "inStock": "有货 ({{count}} 件)",
+      "priceLabel": "¥{{price}}",
+      "discount": "优惠 {{percent}}%"
+    },
+    "products": {
+      "laptop": {
+        "name": "笔记本电脑",
+        "category": "电子产品"
+      },
+      "phone": {
+        "name": "智能手机",
+        "category": "电子产品"
+      },
+      "book": {
+        "name": "编程书籍",
+        "category": "图书"
+      },
+      "headphones": {
+        "name": "无线耳机",
+        "category": "配件"
+      }
+    }
+  },
+  "complexNesting": {
+    "title": "复杂嵌套示例",
+    "tableHeaders": {
+      "id": "编号",
+      "name": "名称",
+      "status": "状态",
+      "date": "日期",
+      "action": "操作"
+    },
+    "actions": {
+      "view": "查看",
+      "edit": "编辑",
+      "delete": "删除",
+      "confirm": "确认删除 {{name}} 吗？"
+    },
+    "statusText": "状态: {{status}}，更新于 {{date}}",
+    "rowInfo": "第 {{index}} 行 - {{name}} (ID: {{id}})"
+  },
+  "dynamicComponents": {
+    "title": "动态组件示例",
+    "notification": {
+      "success": "操作成功！",
+      "error": "操作失败：{{message}}",
+      "warning": "警告：{{message}}",
+      "info": "提示：{{message}}"
+    },
+    "modal": {
+      "title": "{{action}}确认",
+      "message": "确定要{{action}} {{item}} 吗？",
+      "confirm": "确定",
+      "cancel": "取消"
+    },
+    "badge": {
+      "new": "新",
+      "hot": "热",
+      "sale": "促销",
+      "count": "{{count}}"
+    }
+  },
+  "conditionalRender": {
+    "title": "条件渲染示例",
+    "loginStatus": {
+      "loggedIn": "欢迎回来，{{username}}！",
+      "loggedOut": "请登录以继续",
+      "guest": "游客模式"
+    },
+    "permissions": {
+      "admin": "管理员权限",
+      "user": "普通用户",
+      "guest": "访客权限",
+      "message": "您当前是 {{role}}，{{action}}"
+    }
+  },
+  "templateLiterals": {
+    "title": "模板字符串示例",
+    "greeting": "你好，{{name}}！今天是 {{date}}，天气{{weather}}。",
+    "summary": "总计：{{total}} 件商品，总价：¥{{price}}，优惠：¥{{discount}}，实付：¥{{final}}",
+    "userStatus": "用户 {{username}} 于 {{time}} 在 {{location}} {{action}}了 {{count}} 个{{item}}"
+  },
+  "exampleData": {
+    "userName1": "张三",
+    "userName2": "李四",
+    "city1": "北京",
+    "weather": "晴朗",
+    "action": "创建",
+    "item": "文档",
+    "projectA": "项目A",
+    "projectB": "项目B",
+    "projectC": "项目C"
+  }
+}

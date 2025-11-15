@@ -1,0 +1,151 @@
+{
+  "title": "React-i18next API 完整示例",
+  "description": "展示 react-i18next 的所有核心 API 用法",
+
+  "useTranslation": {
+    "title": "useTranslation Hook",
+    "description": "最常用的 Hook，获取 t 函数和 i18n 实例",
+    "example": "这是使用 useTranslation 的示例",
+    "withParams": "用户名: {{username}}，邮箱: {{email}}",
+    "currentLang": "当前语言: {{lng}}"
+  },
+
+  "trans": {
+    "title": "Trans 组件",
+    "description": "用于包含 HTML 标签和 React 组件的复杂翻译",
+    "simpleHtml": "这是 <strong>粗体文本</strong> 和 <em>斜体文本</em>",
+    "withLink": "访问我们的 <link>官方网站</link> 了解更多信息",
+    "withComponent": "点击 <button>这里</button> 查看详情",
+    "complexNesting": "欢迎 <strong>{{username}}</strong>，您有 <badge>{{count}}</badge> 条新消息",
+    "multipleComponents": "查看 <icon></icon> <link>文档</link> 或 <link2>示例</link2>",
+    "withValues": "总价: <price>¥{{amount}}</price>，折扣: <discount>{{percent}}%</discount>"
+  },
+
+  "pluralization": {
+    "title": "复数处理 (Pluralization)",
+    "description": "根据数量自动选择正确的复数形式",
+    "item_zero": "没有项目",
+    "item_one": "1 个项目",
+    "item_other": "{{count}} 个项目",
+    "message_zero": "暂无消息",
+    "message_one": "1 条消息",
+    "message_other": "{{count}} 条消息",
+    "file_zero": "没有文件",
+    "file_one": "1 个文件",
+    "file_other": "{{count}} 个文件",
+    "day_zero": "今天",
+    "day_one": "1 天前",
+    "day_other": "{{count}} 天前"
+  },
+
+  "interpolation": {
+    "title": "插值 (Interpolation)",
+    "description": "在翻译中嵌入变量值",
+    "simple": "你好，{{name}}！",
+    "multiple": "{{name}} 在 {{date}} 完成了 {{count}} 个任务",
+    "nested": "用户 {{user.name}} ({{user.age}}岁) 来自 {{user.city}}",
+    "formatting": "价格: {{price, number}}，日期: {{date, datetime}}",
+    "defaultValue": "值: {{value, 未设置}}"
+  },
+
+  "context": {
+    "title": "上下文 (Context)",
+    "description": "根据上下文显示不同的翻译",
+    "friend": "朋友",
+    "friend_male": "男性朋友",
+    "friend_female": "女性朋友",
+    "message": "消息",
+    "message_read": "已读消息",
+    "message_unread": "未读消息"
+  },
+
+  "namespace": {
+    "title": "命名空间 (Namespace)",
+    "description": "使用多个翻译文件组织内容",
+    "common": "这是 common 命名空间的内容",
+    "specific": "这是特定命名空间的内容"
+  },
+
+  "i18nObject": {
+    "title": "i18n 对象方法",
+    "description": "直接使用 i18n 实例的各种方法",
+    "changeLanguage": "切换语言",
+    "currentLanguage": "当前语言",
+    "loadedNamespaces": "已加载的命名空间",
+    "exists": "检查 key 是否存在",
+    "hasLoadedNamespace": "检查命名空间是否加载"
+  },
+
+  "nesting": {
+    "title": "嵌套翻译",
+    "description": "在一个翻译中引用另一个翻译",
+    "welcome": "欢迎",
+    "fullWelcome": "$t(nesting.welcome)回来，{{name}}！",
+    "title": "标题",
+    "pageTitle": "$t(nesting.title) - 主页"
+  },
+
+  "formatting": {
+    "title": "格式化 (Formatting)",
+    "description": "使用格式化函数处理数字、日期等",
+    "currency": "价格: {{value, currency}}",
+    "percentage": "进度: {{value, percentage}}",
+    "date": "日期: {{value, date}}",
+    "time": "时间: {{value, time}}",
+    "number": "数量: {{value, number}}"
+  },
+
+  "arrays": {
+    "title": "数组处理",
+    "description": "处理数组类型的翻译",
+    "items": ["第一项", "第二项", "第三项", "第四项", "第五项"],
+    "steps": ["准备", "执行", "验证", "完成"],
+    "joinedItems": "项目: {{items}}"
+  },
+
+  "fallback": {
+    "title": "回退机制",
+    "description": "当翻译缺失时的处理",
+    "existing": "这个 key 存在",
+    "withDefault": "这是默认值"
+  },
+
+  "cimode": {
+    "title": "CI 模式",
+    "description": "开发和测试时使用",
+    "example": "在 CI 模式下，将直接显示 key"
+  },
+
+  "withTranslation": {
+    "title": "withTranslation HOC",
+    "description": "高阶组件包装方式（类组件使用）",
+    "example": "这是通过 HOC 获取的翻译"
+  },
+
+  "translation": {
+    "title": "Translation 组件",
+    "description": "使用 render props 模式",
+    "example": "这是通过 Translation 组件获取的翻译"
+  },
+
+  "ready": {
+    "loading": "翻译加载中...",
+    "loaded": "翻译已加载",
+    "error": "翻译加载失败"
+  },
+
+  "keyPrefix": {
+    "title": "Key 前缀",
+    "description": "简化翻译 key 的书写",
+    "item1": "项目 1",
+    "item2": "项目 2",
+    "item3": "项目 3"
+  },
+
+  "suspense": {
+    "title": "Suspense 支持",
+    "description": "配合 React Suspense 使用",
+    "loading": "加载中...",
+    "content": "内容已加载"
+  }
+}

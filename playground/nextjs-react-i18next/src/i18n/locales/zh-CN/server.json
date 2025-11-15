@@ -1,0 +1,47 @@
+{
+  "title": "服务端组件示例",
+  "description": "这些内容是在服务端渲染的，支持 SEO 优化",
+  "features": {
+    "title": "主要特性",
+    "ssr": {
+      "title": "服务端渲染",
+      "description": "内容在服务器上预渲染，提高首屏加载速度和 SEO 效果"
+    },
+    "seo": {
+      "title": "SEO 友好",
+      "description": "搜索引擎可以直接索引已渲染的内容"
+    },
+    "performance": {
+      "title": "性能优化",
+      "description": "减少客户端 JavaScript 执行，提升页面性能"
+    }
+  },
+  "dataFetching": {
+    "title": "数据获取示例",
+    "loading": "加载中...",
+    "userInfo": "用户信息",
+    "userId": "用户 ID: {{id}}",
+    "userName": "姓名: {{name}}",
+    "userEmail": "邮箱: {{email}}",
+    "posts": "文章列表",
+    "postTitle": "文章标题: {{title}}",
+    "postCount": "共 {{count}} 篇文章",
+    "fetchedAt": "数据获取时间: {{time}}"
+  },
+  "metadata": {
+    "pageTitle": "服务端渲染 - Next.js 国际化示例",
+    "pageDescription": "展示 Next.js 服务端组件与 react-i18next 的集成"
+  },
+  "dynamicContent": {
+    "title": "动态内容",
+    "greeting": "你好，{{name}}！",
+    "timeMessage": "现在是 {{time}}",
+    "itemCount": "您有 {{count}} 个项目",
+    "itemCount_plural": "您有 {{count}} 个项目",
+    "complexMessage": "用户 {{userName}} 在 {{date}} 创建了 {{count}} 个项目"
+  },
+
+  "exampleData": {
+    "userName": "张三"
+  }
+}

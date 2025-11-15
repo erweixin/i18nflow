@@ -1,0 +1,14 @@
+{
+  "title": "Next.js + React-i18next Demo",
+  "description": "This is a complete Next.js internationalization example with SSR and client components",
+  "welcome": "Welcome to Next.js i18n",
+  "switchLanguage": "Switch Language",
+  "serverSideRendering": "Server Side Rendering Example",
+  "clientSideRendering": "Client Side Rendering Example",
+  "currentLanguage": "Current Language: {{lng}}",
+  "lastUpdated": "Last Updated: {{date}}",
+  "counterExample": "Counter Example: {{count}}",
+  "reset": "Reset",
+  "clientTip": "💡 This component is client-side rendered, with interactive state and real-time updates.",
+  "serverTip": "🚀 This component is server-side rendered, all data is fetched on the server and passed to the client."
+}

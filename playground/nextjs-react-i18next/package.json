@@ -1,0 +1,31 @@
+{
+  "name": "nextjs-react-i18next-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Next.js demo using react-i18next with SSR support",
+  "scripts": {
+    "dev": "next dev -p 3030",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "clean": "rm -rf .next node_modules"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "next": "^14.2.0",
+    "i18next": "^23.11.0",
+    "react-i18next": "^14.1.0",
+    "i18next-resources-to-backend": "^1.2.1",
+    "i18next-browser-languagedetector": "^7.2.0",
+    "accept-language": "^3.0.18"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.2.0"
+  }
+}

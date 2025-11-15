@@ -1,0 +1,153 @@
+{
+  "title": "Advanced Examples",
+  "description": "Demonstrate more complex i18n scenarios including Props passing, object variables, array variables, etc.",
+  "propsExample": {
+    "title": "Props Passing Example",
+    "description": "Show how to pass internationalized text through Props",
+    "buttonLabel": "Click Me",
+    "tooltip": "This is a tooltip",
+    "cardTitle": "Card Title: {{title}}",
+    "cardDescription": "Description: {{description}}",
+    "card1Title": "First Card",
+    "card1Description": "This is description text",
+    "card2Title": "Second Card",
+    "card2Description": "Pending tasks",
+    "card3Title": "Third Card",
+    "card3Description": "Completed project",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "completed": "Completed"
+    }
+  },
+  "objectExample": {
+    "title": "Object Variable Example",
+    "userInfoObject": "User Info Object",
+    "userProfile": {
+      "name": "Name",
+      "age": "Age",
+      "email": "Email",
+      "address": "Address",
+      "phone": "Phone"
+    },
+    "displayText": "User {{name}} ({{age}} years old) email is {{email}}",
+    "fullInfo": "{{name}}, {{age}} years old, living in {{city}}, contact: {{phone}}"
+  },
+  "arrayExample": {
+    "title": "Array Variable Example",
+    "items": {
+      "apple": "Apple",
+      "banana": "Banana",
+      "orange": "Orange",
+      "grape": "Grape",
+      "watermelon": "Watermelon"
+    },
+    "itemCount": "Total {{count}} items",
+    "selectedItems": "Selected: {{items}}",
+    "listTitle": "Fruit List",
+    "noItems": "No data"
+  },
+  "mapExample": {
+    "title": "Array.map Component Example",
+    "productCard": {
+      "name": "Product Name",
+      "price": "Price",
+      "stock": "Stock",
+      "category": "Category",
+      "addToCart": "Add to Cart",
+      "outOfStock": "Out of Stock",
+      "inStock": "In Stock ({{count}} items)",
+      "priceLabel": "${{price}}",
+      "discount": "{{percent}}% OFF"
+    },
+    "products": {
+      "laptop": {
+        "name": "Laptop Computer",
+        "category": "Electronics"
+      },
+      "phone": {
+        "name": "Smartphone",
+        "category": "Electronics"
+      },
+      "book": {
+        "name": "Programming Book",
+        "category": "Books"
+      },
+      "headphones": {
+        "name": "Wireless Headphones",
+        "category": "Accessories"
+      }
+    }
+  },
+  "complexNesting": {
+    "title": "Complex Nesting Example",
+    "tableHeaders": {
+      "id": "ID",
+      "name": "Name",
+      "status": "Status",
+      "date": "Date",
+      "action": "Action"
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirm": "Confirm delete {{name}}?"
+    },
+    "statusText": "Status: {{status}}, Updated at {{date}}",
+    "rowInfo": "Row {{index}} - {{name}} (ID: {{id}})"
+  },
+  "dynamicComponents": {
+    "title": "Dynamic Component Example",
+    "notification": {
+      "success": "Operation successful!",
+      "error": "Operation failed: {{message}}",
+      "warning": "Warning: {{message}}",
+      "info": "Info: {{message}}"
+    },
+    "modal": {
+      "title": "{{action}} Confirmation",
+      "message": "Are you sure you want to {{action}} {{item}}?",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    },
+    "badge": {
+      "new": "New",
+      "hot": "Hot",
+      "sale": "Sale",
+      "count": "{{count}}"
+    }
+  },
+  "conditionalRender": {
+    "title": "Conditional Rendering Example",
+    "loginStatus": {
+      "loggedIn": "Welcome back, {{username}}!",
+      "loggedOut": "Please login to continue",
+      "guest": "Guest Mode"
+    },
+    "permissions": {
+      "admin": "Administrator",
+      "user": "Regular User",
+      "guest": "Guest",
+      "message": "You are {{role}}, {{action}}"
+    }
+  },
+  "templateLiterals": {
+    "title": "Template Literals Example",
+    "greeting": "Hello, {{name}}! Today is {{date}}, weather is {{weather}}.",
+    "summary": "Total: {{total}} items, Price: ${{price}}, Discount: ${{discount}}, Final: ${{final}}",
+    "userStatus": "User {{username}} {{action}} {{count}} {{item}} at {{location}} on {{time}}"
+  },
+  "exampleData": {
+    "userName1": "John",
+    "userName2": "Jane",
+    "city1": "New York",
+    "weather": "sunny",
+    "action": "created",
+    "item": "documents",
+    "projectA": "Project A",
+    "projectB": "Project B",
+    "projectC": "Project C"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Next.js + React-i18next 示例",
+  "description": "这是一个完整的 Next.js 国际化示例，包含 SSR 和客户端组件",
+  "welcome": "欢迎使用 Next.js 国际化",
+  "switchLanguage": "切换语言",
+  "serverSideRendering": "服务端渲染示例",
+  "clientSideRendering": "客户端渲染示例",
+  "currentLanguage": "当前语言: {{lng}}",
+  "lastUpdated": "最后更新: {{date}}",
+  "counterExample": "计数器示例：{{count}}",
+  "reset": "重置",
+  "clientTip": "💡 这个组件是客户端渲染的，包含交互式状态和实时更新。",
+  "serverTip": "🚀 这个组件是在服务端渲染的，所有数据在服务器上获取并传递到客户端。"
+}

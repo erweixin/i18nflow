@@ -1,0 +1,151 @@
+{
+  "title": "React-i18next API Complete Examples",
+  "description": "Demonstrate all core APIs of react-i18next",
+
+  "useTranslation": {
+    "title": "useTranslation Hook",
+    "description": "Most commonly used Hook to get t function and i18n instance",
+    "example": "This is an example using useTranslation",
+    "withParams": "Username: {{username}}, Email: {{email}}",
+    "currentLang": "Current language: {{lng}}"
+  },
+
+  "trans": {
+    "title": "Trans Component",
+    "description": "For complex translations with HTML tags and React components",
+    "simpleHtml": "This is <strong>bold text</strong> and <em>italic text</em>",
+    "withLink": "Visit our <link>official website</link> for more information",
+    "withComponent": "Click <button>here</button> for details",
+    "complexNesting": "Welcome <strong>{{username}}</strong>, you have <badge>{{count}}</badge> new messages",
+    "multipleComponents": "Check <icon></icon> <link>documentation</link> or <link2>examples</link2>",
+    "withValues": "Total: <price>${{amount}}</price>, Discount: <discount>{{percent}}%</discount>"
+  },
+
+  "pluralization": {
+    "title": "Pluralization",
+    "description": "Automatically select the correct plural form based on count",
+    "item_zero": "No items",
+    "item_one": "1 item",
+    "item_other": "{{count}} items",
+    "message_zero": "No messages",
+    "message_one": "1 message",
+    "message_other": "{{count}} messages",
+    "file_zero": "No files",
+    "file_one": "1 file",
+    "file_other": "{{count}} files",
+    "day_zero": "Today",
+    "day_one": "1 day ago",
+    "day_other": "{{count}} days ago"
+  },
+
+  "interpolation": {
+    "title": "Interpolation",
+    "description": "Embed variable values in translations",
+    "simple": "Hello, {{name}}!",
+    "multiple": "{{name}} completed {{count}} tasks on {{date}}",
+    "nested": "User {{user.name}} ({{user.age}} years old) from {{user.city}}",
+    "formatting": "Price: {{price, number}}, Date: {{date, datetime}}",
+    "defaultValue": "Value: {{value, Not set}}"
+  },
+
+  "context": {
+    "title": "Context",
+    "description": "Display different translations based on context",
+    "friend": "Friend",
+    "friend_male": "Male friend",
+    "friend_female": "Female friend",
+    "message": "Message",
+    "message_read": "Read message",
+    "message_unread": "Unread message"
+  },
+
+  "namespace": {
+    "title": "Namespace",
+    "description": "Organize content with multiple translation files",
+    "common": "This is content from common namespace",
+    "specific": "This is content from specific namespace"
+  },
+
+  "i18nObject": {
+    "title": "i18n Object Methods",
+    "description": "Various methods of i18n instance",
+    "changeLanguage": "Change Language",
+    "currentLanguage": "Current Language",
+    "loadedNamespaces": "Loaded Namespaces",
+    "exists": "Check if key exists",
+    "hasLoadedNamespace": "Check if namespace is loaded"
+  },
+
+  "nesting": {
+    "title": "Nesting Translations",
+    "description": "Reference another translation within a translation",
+    "welcome": "Welcome",
+    "fullWelcome": "$t(nesting.welcome) back, {{name}}!",
+    "title": "Title",
+    "pageTitle": "$t(nesting.title) - Home"
+  },
+
+  "formatting": {
+    "title": "Formatting",
+    "description": "Use formatting functions for numbers, dates, etc.",
+    "currency": "Price: {{value, currency}}",
+    "percentage": "Progress: {{value, percentage}}",
+    "date": "Date: {{value, date}}",
+    "time": "Time: {{value, time}}",
+    "number": "Amount: {{value, number}}"
+  },
+
+  "arrays": {
+    "title": "Array Handling",
+    "description": "Handle array type translations",
+    "items": ["First item", "Second item", "Third item", "Fourth item", "Fifth item"],
+    "steps": ["Prepare", "Execute", "Verify", "Complete"],
+    "joinedItems": "Items: {{items}}"
+  },
+
+  "fallback": {
+    "title": "Fallback Mechanism",
+    "description": "Handling when translation is missing",
+    "existing": "This key exists",
+    "withDefault": "This is the default value"
+  },
+
+  "cimode": {
+    "title": "CI Mode",
+    "description": "Used in development and testing",
+    "example": "In CI mode, the key will be displayed directly"
+  },
+
+  "withTranslation": {
+    "title": "withTranslation HOC",
+    "description": "Higher-Order Component wrapper (for class components)",
+    "example": "This is translation obtained through HOC"
+  },
+
+  "translation": {
+    "title": "Translation Component",
+    "description": "Using render props pattern",
+    "example": "This is translation obtained through Translation component"
+  },
+
+  "ready": {
+    "loading": "Loading translations...",
+    "loaded": "Translations loaded",
+    "error": "Translation loading failed"
+  },
+
+  "keyPrefix": {
+    "title": "Key Prefix",
+    "description": "Simplify translation key writing",
+    "item1": "Item 1",
+    "item2": "Item 2",
+    "item3": "Item 3"
+  },
+
+  "suspense": {
+    "title": "Suspense Support",
+    "description": "Use with React Suspense",
+    "loading": "Loading...",
+    "content": "Content loaded"
+  }
+}

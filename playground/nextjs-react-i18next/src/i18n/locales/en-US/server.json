@@ -1,0 +1,47 @@
+{
+  "title": "Server Component Example",
+  "description": "This content is rendered on the server side, supporting SEO optimization",
+  "features": {
+    "title": "Key Features",
+    "ssr": {
+      "title": "Server Side Rendering",
+      "description": "Content is pre-rendered on the server, improving initial load speed and SEO"
+    },
+    "seo": {
+      "title": "SEO Friendly",
+      "description": "Search engines can directly index rendered content"
+    },
+    "performance": {
+      "title": "Performance Optimization",
+      "description": "Reduce client-side JavaScript execution, enhance page performance"
+    }
+  },
+  "dataFetching": {
+    "title": "Data Fetching Example",
+    "loading": "Loading...",
+    "userInfo": "User Information",
+    "userId": "User ID: {{id}}",
+    "userName": "Name: {{name}}",
+    "userEmail": "Email: {{email}}",
+    "posts": "Posts List",
+    "postTitle": "Post Title: {{title}}",
+    "postCount": "Total {{count}} posts",
+    "fetchedAt": "Data fetched at: {{time}}"
+  },
+  "metadata": {
+    "pageTitle": "Server Side Rendering - Next.js i18n Demo",
+    "pageDescription": "Demonstrates Next.js server component integration with react-i18next"
+  },
+  "dynamicContent": {
+    "title": "Dynamic Content",
+    "greeting": "Hello, {{name}}!",
+    "timeMessage": "It is now {{time}}",
+    "itemCount": "You have {{count}} item",
+    "itemCount_plural": "You have {{count}} items",
+    "complexMessage": "User {{userName}} created {{count}} projects on {{date}}"
+  },
+
+  "exampleData": {
+    "userName": "John Doe"
+  }
+}
