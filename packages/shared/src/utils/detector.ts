@@ -18,7 +18,7 @@ export function detectInCode(code: string, rules: DetectRule[]): boolean {
 
     traverse(ast, {
       // 检测调用表达式
-      CallExpression(path) {
+      CallExpression(path: any) {
         for (const rule of rules) {
           if (rule.type === 'call') {
             const callee = path.node.callee;
@@ -38,7 +38,7 @@ export function detectInCode(code: string, rules: DetectRule[]): boolean {
       },
 
       // 检测 import 语句
-      ImportDeclaration(path) {
+      ImportDeclaration(path: any) {
         for (const rule of rules) {
           if (rule.type === 'import' && rule.module) {
             if (path.node.source.value === rule.module) {
@@ -61,7 +61,7 @@ export function detectInCode(code: string, rules: DetectRule[]): boolean {
       },
 
       // 检测标识符
-      Identifier(path) {
+      Identifier(path: any) {
         for (const rule of rules) {
           if (rule.type === 'identifier' && path.node.name === rule.name) {
             matched = true;

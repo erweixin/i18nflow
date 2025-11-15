@@ -159,5 +159,6 @@ export default {
   footer: {
     poweredBy: 'Powered by',
     and: ' & ',
+    devModeTip: '💡 Dev Mode: Hold Ctrl+Shift (Mac: Cmd+Shift) and click on text to edit',
   },
 };

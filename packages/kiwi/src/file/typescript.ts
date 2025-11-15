@@ -27,7 +27,7 @@ export class KiwiTypeScriptFileAdapter implements IFileAdapter {
     let result: any = null;
 
     traverse(ast, {
-      ExportDefaultDeclaration: path => {
+      ExportDefaultDeclaration: (path: any) => {
         const declaration = path.node.declaration;
         if (t.isObjectExpression(declaration)) {
           result = this.objectExpressionToPlainObject(declaration);
@@ -62,7 +62,7 @@ export class KiwiTypeScriptFileAdapter implements IFileAdapter {
       let updated = false;
 
       traverse(ast, {
-        ExportDefaultDeclaration(path) {
+        ExportDefaultDeclaration(path: any) {
           const declaration = path.node.declaration;
           if (t.isObjectExpression(declaration)) {
             updated = updateProperty(declaration, propertyPath, newValue);
@@ -96,7 +96,7 @@ export class KiwiTypeScriptFileAdapter implements IFileAdapter {
       let result: string | null = null;
 
       traverse(ast, {
-        ExportDefaultDeclaration(path) {
+        ExportDefaultDeclaration(path: any) {
           const declaration = path.node.declaration;
           if (t.isObjectExpression(declaration)) {
             result = findPropertyValue(declaration, propertyPath);

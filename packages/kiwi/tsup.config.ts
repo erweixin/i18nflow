@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     'plugin-rspack': 'src/plugin-rspack.ts',
+    'plugin-vite': 'src/plugin-vite.ts',
   },
   format: ['cjs', 'esm'],
   dts: true,
@@ -18,6 +19,7 @@ export default defineConfig({
     '@babel/types',
     'babel-loader',
     'react',
+    'vite',
     'fs',
     'path',
     'http',

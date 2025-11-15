@@ -157,5 +157,6 @@ export default {
   footer: {
     poweredBy: 'Powered by',
     and: ' & ',
+    devModeTip: '💡 开发模式：按住 Ctrl+Shift (Mac: Cmd+Shift) 点击文案即可编辑',
   },
 };

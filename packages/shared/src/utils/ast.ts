@@ -3,9 +3,15 @@
  */
 
 import * as parser from '@babel/parser';
-import traverse from '@babel/traverse';
-import generate from '@babel/generator';
+import traverseModule from '@babel/traverse';
+import generateModule from '@babel/generator';
 import * as t from '@babel/types';
+
+// 处理 ESM/CJS 兼容性
+// @babel/traverse 和 @babel/generator 是 CommonJS 模块
+// 在 ESM 环境中需要访问 .default
+const traverse = (traverseModule as any).default || traverseModule;
+const generate = (generateModule as any).default || generateModule;
 
 /**
  * 解析 TypeScript/JavaScript 代码为 AST

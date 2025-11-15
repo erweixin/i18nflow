@@ -3,6 +3,8 @@ import zhCN from './zh-CN';
 import enUS from './en-US';
 
 // 初始化 Kiwi-Intl 实例
+// 注意：不需要手动调用 createKiwiProxy！
+// KiwiVitePlugin 会自动在编译时包装这个导出
 const kiwiIntl = KiwiIntl.init<typeof zhCN>(
   'zh-CN', // 默认语言
   {

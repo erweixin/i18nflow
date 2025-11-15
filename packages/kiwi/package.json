@@ -15,6 +15,11 @@
       "types": "./dist/plugin-rspack.d.ts",
       "import": "./dist/plugin-rspack.mjs",
       "require": "./dist/plugin-rspack.js"
+    },
+    "./plugin-vite": {
+      "types": "./dist/plugin-vite.d.ts",
+      "import": "./dist/plugin-vite.mjs",
+      "require": "./dist/plugin-vite.js"
     }
   },
   "files": [
@@ -77,6 +82,7 @@
     "react": "^18.3.1",
     "tsup": "^8.0.0",
     "typescript": "^5.3.0",
+    "vite": "^5.0.0",
     "vitest": "^2.0.0"
   }
 }

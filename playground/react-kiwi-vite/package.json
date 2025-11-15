@@ -2,7 +2,7 @@
   "name": "react-kiwi-vite-demo",
   "version": "1.0.0",
   "private": true,
-  "description": "React demo using kiwi-intl and Vite",
+  "description": "React demo using kiwi-intl and Vite with @i18nflow/kiwi",
   "type": "module",
   "scripts": {
     "dev": "vite --port 3020",
@@ -16,6 +16,7 @@
     "kiwi-intl": "^1.2.1"
   },
   "devDependencies": {
+    "@i18nflow/kiwi": "workspace:*",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.2.1",
