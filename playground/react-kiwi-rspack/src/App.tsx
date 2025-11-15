@@ -57,7 +57,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <I18nDebugProvider enabled={process.env.NODE_ENV === 'development'}>
+    <>
       <div className="app-container" key={renderKey}>
         <header className="app-header">
           <h1>{I18N.app.title}</h1>
@@ -122,7 +122,10 @@ const App: React.FC = () => {
           </p>
         </footer>
       </div>
-    </I18nDebugProvider>
+
+      {/* I18nDebugProvider 不需要包裹内容，使用自闭合标签 */}
+      <I18nDebugProvider enabled={process.env.NODE_ENV === 'development'} />
+    </>
   );
 };
 

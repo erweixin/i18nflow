@@ -211,8 +211,7 @@ export default function ApiExample({ lng }: { lng: string }) {
                 badge: <Badge />,
               }}
             >
-              {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-              {/* @ts-ignore */}
+              {/* @ts-expect-error ？？？？？ */}
               Welcome <strong>{'{{username}}'}</strong>, you have <badge>{'{{count}}'}</badge> new
               messages
             </Trans>

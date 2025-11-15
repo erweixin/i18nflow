@@ -9,12 +9,16 @@ import { I18nEditModal } from './I18nEditModal';
 
 interface I18nDebugProviderProps {
   enabled?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 /**
  * I18N 调试提供者组件
  * 在开发环境下按住 Ctrl/Cmd + Shift 点击文案时，调起编辑 Modal
+ *
+ * 使用方式：
+ * 1. 不包裹内容（推荐）：<I18nDebugProvider enabled={true} />
+ * 2. 包裹内容（兼容旧版）：<I18nDebugProvider>{children}</I18nDebugProvider>
  */
 export const I18nDebugProvider: React.FC<I18nDebugProviderProps> = ({
   enabled = true,
@@ -83,7 +87,8 @@ export const I18nDebugProvider: React.FC<I18nDebugProviderProps> = ({
 
       // 向上遍历 DOM 树查找 data-i18n-key
       while (target && target !== document.body) {
-        const key = target.getAttribute('data-i18n-key');
+        const key =
+          target.getAttribute('data-i18n-key') || target.getAttribute('data-i18n-placeholder');
         if (key) {
           i18nKey = key;
           clickedElement = target;
@@ -185,7 +190,7 @@ export const I18nDebugProvider: React.FC<I18nDebugProviderProps> = ({
   }, [enabled]);
 
   if (!enabled) {
-    return <>{children}</>;
+    return children ? <>{children}</> : null;
   }
 
   return (

@@ -77,6 +77,23 @@ import { I18nDebugProvider } from '@i18nflow/kiwi';
 
 function App() {
   return (
+    <>
+      <div>{I18N.app.title}</div>
+
+      {/* I18nDebugProvider 不需要包裹内容，使用自闭合标签 */}
+      <I18nDebugProvider enabled={process.env.NODE_ENV === 'development'} />
+    </>
+  );
+}
+```
+
+**推荐：** 使用自闭合标签，代码更简洁，调试功能独立。
+
+或者使用包裹方式（兼容）：
+
+```tsx
+function App() {
+  return (
     <I18nDebugProvider enabled={process.env.NODE_ENV === 'development'}>
       <div>{I18N.app.title}</div>
     </I18nDebugProvider>
@@ -149,7 +166,7 @@ src/
 │   └── index.ts
 ├── components/        # 示例组件
 ├── styles/
-└── App.tsx           # 主应用（包裹 I18nDebugProvider）
+└── App.tsx           # 主应用（添加 I18nDebugProvider）
 ```
 
 ## 技术栈

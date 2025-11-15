@@ -81,6 +81,23 @@ import { I18nDebugProvider } from '@i18nflow/kiwi';
 
 function App() {
   return (
+    <>
+      <div>{I18N.app.title}</div>
+
+      {/* I18nDebugProvider 不需要包裹内容，使用自闭合标签 */}
+      <I18nDebugProvider enabled={import.meta.env.DEV} />
+    </>
+  );
+}
+```
+
+**推荐：** 使用自闭合标签，代码更简洁，调试功能独立。
+
+或者使用包裹方式（兼容）：
+
+```tsx
+function App() {
+  return (
     <I18nDebugProvider enabled={import.meta.env.DEV}>
       <div>{I18N.app.title}</div>
     </I18nDebugProvider>

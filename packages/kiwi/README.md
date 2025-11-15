@@ -60,13 +60,15 @@ export default I18N;
 
 ### 3. 在应用中使用 Provider
 
+#### 方式 1：自闭合标签（推荐）
+
 ```tsx
 import { I18nDebugProvider } from '@i18nflow/kiwi';
 import I18N from './locales/I18N';
 
 function App() {
   return (
-    <I18nDebugProvider enabled={process.env.NODE_ENV === 'development'}>
+    <>
       {/* 开发环境：自动渲染为 <span data-i18n-key="components.title">标题</span> */}
       {/* 生产环境：直接渲染为字符串 */}
       <div>{I18N.components.title}</div>
@@ -76,6 +78,24 @@ function App() {
 
       {/* 在任何需要字符串的地方都可以使用 */}
       <Input placeholder={I18N.common.inputPlaceholder} />
+
+      {/* I18nDebugProvider 不需要包裹内容，使用自闭合标签 */}
+      <I18nDebugProvider enabled={process.env.NODE_ENV === 'development'} />
+    </>
+  );
+}
+```
+
+**优势：** 代码更简洁，调试功能独立，不影响组件树结构。
+
+#### 方式 2：包裹 children（兼容）
+
+```tsx
+function App() {
+  return (
+    <I18nDebugProvider enabled={process.env.NODE_ENV === 'development'}>
+      <div>{I18N.components.title}</div>
+      {/* ... */}
     </I18nDebugProvider>
   );
 }

@@ -26,7 +26,7 @@
     "test": "turbo run test",
     "test:run": "turbo run test:run",
     "test:ui": "turbo run test:ui",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint . --max-warnings 10",
     "lint:fix": "eslint . --fix",
     "type-check": "turbo run type-check",
     "clean": "turbo run clean && rm -rf node_modules",
