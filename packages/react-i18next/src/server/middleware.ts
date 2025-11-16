@@ -46,14 +46,28 @@ export interface ReactI18nextMiddlewareConfig {
  * 解析翻译 key，提取 namespace 和实际 key
  * @param fullKey 完整的 key，格式：namespace:key 或 key
  * @param defaultNs 默认 namespace
+ * @param locales 支持的语言列表，用于验证
  */
 function parseTranslationKey(
   fullKey: string,
-  defaultNs: string = 'common'
+  defaultNs: string = 'common',
+  locales: string[] = []
 ): { ns: string; key: string } {
   if (fullKey.includes(':')) {
     const [ns, ...keyParts] = fullKey.split(':');
-    return { ns, key: keyParts.join(':') };
+    const key = keyParts.join(':');
+
+    // 检查是否错误地使用了 locale 作为 namespace
+    if (locales.includes(ns)) {
+      throw new Error(
+        `Invalid key format: "${fullKey}". ` +
+          `You are using locale "${ns}" as namespace. ` +
+          `Correct format is "namespace:key" (e.g. "common:${key}"), not "locale:key". ` +
+          `Available locales: ${locales.join(', ')}`
+      );
+    }
+
+    return { ns, key };
   }
   return { ns: defaultNs, key: fullKey };
 }
@@ -131,7 +145,7 @@ async function readI18nValue(
   localeDir: string,
   defaultNs: string
 ): Promise<TranslationValues> {
-  const { ns, key } = parseTranslationKey(fullKey, defaultNs);
+  const { ns, key } = parseTranslationKey(fullKey, defaultNs, locales);
   const values: TranslationValues = {};
 
   for (const locale of locales) {
@@ -160,7 +174,7 @@ async function batchUpdateI18n(
   localeDir: string,
   defaultNs: string
 ): Promise<Array<{ locale: string; success: boolean; error?: string }>> {
-  const { ns, key } = parseTranslationKey(fullKey, defaultNs);
+  const { ns, key } = parseTranslationKey(fullKey, defaultNs, locales);
   const results: Array<{ locale: string; success: boolean; error?: string }> = [];
 
   for (const locale of locales) {

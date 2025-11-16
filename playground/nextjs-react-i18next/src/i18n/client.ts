@@ -3,7 +3,8 @@
 import i18next, { i18n as I18nInstance } from 'i18next';
 import { initReactI18next, useTranslation as useTranslationOrg } from 'react-i18next';
 import resourcesToBackend from 'i18next-resources-to-backend';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
+import { wrapTFunction } from '@i18nflow/react-i18next';
 import { getOptions, languages } from './settings';
 
 const runsOnServerSide = typeof window === 'undefined';
@@ -40,11 +41,21 @@ export function useTranslation(
   const ret = useTranslationOrg(ns, { i18n, ...options });
 
   // 确保使用正确的语言（处理语言切换）
-  const { i18n: i18nFromHook } = ret;
+  const { i18n: i18nFromHook, t: originalT } = ret;
   useEffect(() => {
     if (i18nFromHook.resolvedLanguage === lng) return;
     i18nFromHook.changeLanguage(lng);
   }, [lng, i18nFromHook]);
 
-  return ret;
+  // 包装 t 函数，添加 i18nflow 调试功能
+  // context 格式: 'namespace' 或 'namespace:keyPrefix'
+  const context = useMemo(() => {
+    return options.keyPrefix ? `${ns}:${options.keyPrefix}` : ns;
+  }, [ns, options.keyPrefix]);
+
+  const t = useMemo(() => {
+    return wrapTFunction(originalT, context);
+  }, [originalT, context]);
+
+  return { ...ret, t };
 }

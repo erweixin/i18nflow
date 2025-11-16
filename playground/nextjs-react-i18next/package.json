@@ -4,7 +4,9 @@
   "private": true,
   "description": "Next.js demo using react-i18next with SSR support and i18nflow debugging",
   "scripts": {
-    "dev": "next dev -p 3033",
+    "dev": "concurrently \"npm run dev:next\" \"npm run dev:i18n\" -n \"next,i18n\" -c \"cyan,green\"",
+    "dev:next": "next dev -p 3035",
+    "dev:i18n": "i18n-dev-server -p 3034 -d src/i18n/locales -l zh-CN,en-US -n common",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -28,6 +30,7 @@
     "typescript": "^5.3.0",
     "eslint": "^8.0.0",
     "eslint-config-next": "^14.2.0",
-    "babel-loader": "^9.1.0"
+    "babel-loader": "^9.1.0",
+    "concurrently": "^8.2.2"
   }
 }

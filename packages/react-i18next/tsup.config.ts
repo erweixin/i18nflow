@@ -7,6 +7,7 @@ export default defineConfig({
     'plugin-vite': 'src/plugin-vite.ts',
     'plugin-rspack': 'src/plugin-rspack.ts',
     'babel-plugin': 'src/transform/babel-plugin.ts',
+    'server/dev-server': 'src/server/dev-server.ts',
   },
   format: ['cjs', 'esm'],
   dts: true,

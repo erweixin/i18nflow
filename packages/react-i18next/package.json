@@ -5,6 +5,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "i18n-dev-server": "./bin/i18n-dev-server.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -30,10 +33,16 @@
       "types": "./dist/babel-plugin.d.ts",
       "import": "./dist/babel-plugin.mjs",
       "require": "./dist/babel-plugin.js"
+    },
+    "./server/dev-server": {
+      "types": "./dist/server/dev-server.d.ts",
+      "import": "./dist/server/dev-server.mjs",
+      "require": "./dist/server/dev-server.js"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "bin"
   ],
   "scripts": {
     "build": "tsup",
