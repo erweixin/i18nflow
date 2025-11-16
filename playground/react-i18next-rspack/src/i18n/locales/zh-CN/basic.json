@@ -1,0 +1,44 @@
+{
+  "title": "基础用法示例",
+  "description": "展示 react-i18next 的基本翻译功能",
+  "simpleTranslation": {
+    "title": "1. 简单翻译",
+    "content": "这是一个简单的翻译文本",
+    "example": "使用 t('key') 进行翻译"
+  },
+  "interpolation": {
+    "title": "2. 插值（变量替换）",
+    "greeting": "你好，{{name}}！欢迎来到 {{place}}",
+    "userInfo": "用户 {{username}} 的邮箱是 {{email}}",
+    "multipleVars": "今天是 {{date}}，当前时间是 {{time}}，天气 {{weather}}"
+  },
+  "pluralization": {
+    "title": "3. 复数处理",
+    "apple_zero": "没有苹果",
+    "apple_one": "1 个苹果",
+    "apple_other": "{{count}} 个苹果",
+    "item_zero": "没有项目",
+    "item_one": "1 个项目",
+    "item_other": "{{count}} 个项目",
+    "message_zero": "没有消息",
+    "message_one": "1 条消息",
+    "message_other": "{{count}} 条消息"
+  },
+  "nesting": {
+    "title": "4. 嵌套翻译",
+    "welcome": "欢迎",
+    "back": "回来",
+    "fullMessage": "$t(basic:nesting.welcome)$t(basic:nesting.back)，{{name}}！",
+    "appName": "我的应用",
+    "pageTitle": "$t(basic:nesting.appName) - 首页"
+  },
+  "context": {
+    "title": "5. 上下文变体",
+    "friend": "朋友",
+    "friend_male": "男性朋友",
+    "friend_female": "女性朋友",
+    "message": "消息",
+    "message_read": "已读消息",
+    "message_unread": "未读消息"
+  }
+}

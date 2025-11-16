@@ -1,0 +1,27 @@
+{
+  "name": "react-i18next-rspack-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "React demo using react-i18next and rspack with comprehensive examples",
+  "scripts": {
+    "dev": "rspack dev --port 3040",
+    "build": "rspack build",
+    "preview": "rspack preview",
+    "clean": "rm -rf dist .rspack node_modules"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "i18next": "^23.11.0",
+    "react-i18next": "^14.1.0",
+    "i18next-browser-languagedetector": "^7.2.0"
+  },
+  "devDependencies": {
+    "@rspack/cli": "^1.1.0",
+    "@rspack/core": "^1.1.0",
+    "@rspack/plugin-react-refresh": "^1.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.3.0"
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "title": "高级用法示例",
+  "description": "展示在复杂场景中使用 react-i18next 的方式",
+  "propsExample": {
+    "title": "1. Props 传递翻译",
+    "description": "将翻译后的文本作为 props 传递给子组件",
+    "cardTitle": "卡片标题：{{title}}",
+    "cardDescription": "{{description}}",
+    "card1Title": "项目 Alpha",
+    "card1Description": "这是一个重要的项目，需要在本月完成",
+    "card2Title": "项目 Beta",
+    "card2Description": "这个项目正在进行中，预计下个月交付",
+    "card3Title": "项目 Gamma",
+    "card3Description": "已完成的项目，表现优秀",
+    "status": {
+      "active": "进行中",
+      "pending": "等待中",
+      "completed": "已完成"
+    },
+    "buttonLabel": "查看详情",
+    "tooltip": "点击了按钮！"
+  },
+  "mapExample": {
+    "title": "2. Array.map 返回组件",
+    "description": "在 map 循环中使用翻译",
+    "products": {
+      "laptop": {
+        "name": "笔记本电脑",
+        "category": "电子产品"
+      },
+      "phone": {
+        "name": "智能手机",
+        "category": "电子产品"
+      },
+      "book": {
+        "name": "编程书籍",
+        "category": "图书"
+      },
+      "headphones": {
+        "name": "蓝牙耳机",
+        "category": "配件"
+      }
+    },
+    "productCard": {
+      "category": "分类",
+      "price": "价格",
+      "priceLabel": "¥{{price}}",
+      "stock": "库存",
+      "inStock": "{{count}} 件库存",
+      "outOfStock": "缺货",
+      "addToCart": "加入购物车",
+      "discount": "折扣 {{percent}}%"
+    }
+  },
+  "objectExample": {
+    "title": "3. 对象变量翻译",
+    "userInfoObject": "用户信息对象",
+    "userProfile": {
+      "name": "姓名",
+      "age": "年龄",
+      "email": "邮箱",
+      "phone": "电话",
+      "city": "城市"
+    },
+    "displayText": "用户 {{name}}，{{age}} 岁，邮箱：{{email}}",
+    "fullInfo": "{{name}} 来自 {{city}}，年龄 {{age}} 岁，联系方式：{{phone}}"
+  },
+  "arrayExample": {
+    "title": "4. 数组变量示例",
+    "listTitle": "水果列表",
+    "items": {
+      "apple": "苹果",
+      "banana": "香蕉",
+      "orange": "橙子",
+      "grape": "葡萄",
+      "watermelon": "西瓜"
+    },
+    "itemCount": "共 {{count}} 种水果",
+    "selectedItems": "选中的水果：{{items}}"
+  },
+  "conditionalRender": {
+    "title": "5. 条件渲染",
+    "loginStatus": {
+      "loggedIn": "欢迎回来，{{username}}！",
+      "loggedOut": "请先登录"
+    }
+  },
+  "complexNesting": {
+    "title": "6. 复杂表格嵌套",
+    "tableHeaders": {
+      "id": "ID",
+      "name": "名称",
+      "status": "状态",
+      "date": "日期",
+      "action": "操作"
+    },
+    "actions": {
+      "view": "查看",
+      "edit": "编辑",
+      "delete": "删除",
+      "confirm": "确定要删除 {{name}} 吗？"
+    },
+    "rowInfo": "第 {{index}} 行：{{name}} (ID: {{id}})"
+  },
+  "templateLiterals": {
+    "title": "7. 模板字符串复杂示例",
+    "greeting": "你好 {{name}}！今天是 {{date}}，天气{{weather}}",
+    "summary": "您购买了 {{total}} 件商品，总价 ¥{{price}}，折扣 {{discount}}%，实付 ¥{{final}}",
+    "userStatus": "用户 {{username}} 于 {{time}} 在 {{location}} {{action}}了 {{count}} 个{{item}}"
+  },
+  "dynamicComponents": {
+    "title": "8. 动态组件",
+    "notification": {
+      "success": "操作成功！",
+      "error": "操作失败！",
+      "info": "信息：{{message}}"
+    }
+  },
+  "exampleData": {
+    "userName1": "张三",
+    "userName2": "李四",
+    "city1": "北京",
+    "city2": "上海",
+    "weather": "晴朗",
+    "action": "更新",
+    "item": "文档",
+    "projectA": "项目 A",
+    "projectB": "项目 B",
+    "projectC": "项目 C"
+  }
+}

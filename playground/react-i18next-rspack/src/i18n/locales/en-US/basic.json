@@ -1,0 +1,44 @@
+{
+  "title": "Basic Usage Examples",
+  "description": "Demonstrating basic translation features of react-i18next",
+  "simpleTranslation": {
+    "title": "1. Simple Translation",
+    "content": "This is a simple translated text",
+    "example": "Use t('key') for translation"
+  },
+  "interpolation": {
+    "title": "2. Interpolation (Variable Substitution)",
+    "greeting": "Hello, {{name}}! Welcome to {{place}}",
+    "userInfo": "User {{username}}'s email is {{email}}",
+    "multipleVars": "Today is {{date}}, current time is {{time}}, weather is {{weather}}"
+  },
+  "pluralization": {
+    "title": "3. Pluralization",
+    "apple_zero": "No apples",
+    "apple_one": "1 apple",
+    "apple_other": "{{count}} apples",
+    "item_zero": "No items",
+    "item_one": "1 item",
+    "item_other": "{{count}} items",
+    "message_zero": "No messages",
+    "message_one": "1 message",
+    "message_other": "{{count}} messages"
+  },
+  "nesting": {
+    "title": "4. Nesting Translation",
+    "welcome": "Welcome",
+    "back": "back",
+    "fullMessage": "$t(basic:nesting.welcome) $t(basic:nesting.back), {{name}}!",
+    "appName": "My App",
+    "pageTitle": "$t(basic:nesting.appName) - Home"
+  },
+  "context": {
+    "title": "5. Context Variants",
+    "friend": "Friend",
+    "friend_male": "Male friend",
+    "friend_female": "Female friend",
+    "message": "Message",
+    "message_read": "Read message",
+    "message_unread": "Unread message"
+  }
+}

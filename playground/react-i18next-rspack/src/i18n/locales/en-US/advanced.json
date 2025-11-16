@@ -1,0 +1,131 @@
+{
+  "title": "Advanced Usage Examples",
+  "description": "Demonstrating how to use react-i18next in complex scenarios",
+  "propsExample": {
+    "title": "1. Props Translation Passing",
+    "description": "Pass translated text as props to child components",
+    "cardTitle": "Card Title: {{title}}",
+    "cardDescription": "{{description}}",
+    "card1Title": "Project Alpha",
+    "card1Description": "This is an important project that needs to be completed this month",
+    "card2Title": "Project Beta",
+    "card2Description": "This project is in progress, expected delivery next month",
+    "card3Title": "Project Gamma",
+    "card3Description": "Completed project with excellent performance",
+    "status": {
+      "active": "Active",
+      "pending": "Pending",
+      "completed": "Completed"
+    },
+    "buttonLabel": "View Details",
+    "tooltip": "Button clicked!"
+  },
+  "mapExample": {
+    "title": "2. Array.map Returning Components",
+    "description": "Using translations in map loops",
+    "products": {
+      "laptop": {
+        "name": "Laptop Computer",
+        "category": "Electronics"
+      },
+      "phone": {
+        "name": "Smartphone",
+        "category": "Electronics"
+      },
+      "book": {
+        "name": "Programming Book",
+        "category": "Books"
+      },
+      "headphones": {
+        "name": "Bluetooth Headphones",
+        "category": "Accessories"
+      }
+    },
+    "productCard": {
+      "category": "Category",
+      "price": "Price",
+      "priceLabel": "${{price}}",
+      "stock": "Stock",
+      "inStock": "{{count}} in stock",
+      "outOfStock": "Out of stock",
+      "addToCart": "Add to Cart",
+      "discount": "{{percent}}% OFF"
+    }
+  },
+  "objectExample": {
+    "title": "3. Object Variable Translation",
+    "userInfoObject": "User Information Object",
+    "userProfile": {
+      "name": "Name",
+      "age": "Age",
+      "email": "Email",
+      "phone": "Phone",
+      "city": "City"
+    },
+    "displayText": "User {{name}}, {{age}} years old, email: {{email}}",
+    "fullInfo": "{{name}} from {{city}}, {{age}} years old, contact: {{phone}}"
+  },
+  "arrayExample": {
+    "title": "4. Array Variable Example",
+    "listTitle": "Fruit List",
+    "items": {
+      "apple": "Apple",
+      "banana": "Banana",
+      "orange": "Orange",
+      "grape": "Grape",
+      "watermelon": "Watermelon"
+    },
+    "itemCount": "Total {{count}} fruits",
+    "selectedItems": "Selected fruits: {{items}}"
+  },
+  "conditionalRender": {
+    "title": "5. Conditional Rendering",
+    "loginStatus": {
+      "loggedIn": "Welcome back, {{username}}!",
+      "loggedOut": "Please login first"
+    }
+  },
+  "complexNesting": {
+    "title": "6. Complex Table Nesting",
+    "tableHeaders": {
+      "id": "ID",
+      "name": "Name",
+      "status": "Status",
+      "date": "Date",
+      "action": "Action"
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirm": "Are you sure you want to delete {{name}}?"
+    },
+    "rowInfo": "Row {{index}}: {{name}} (ID: {{id}})"
+  },
+  "templateLiterals": {
+    "title": "7. Complex Template Literals",
+    "greeting": "Hello {{name}}! Today is {{date}}, weather is {{weather}}",
+    "summary": "You purchased {{total}} items, total price ${{price}}, discount {{discount}}%, paid ${{final}}",
+    "userStatus": "User {{username}} {{action}} {{count}} {{item}} at {{time}} in {{location}}"
+  },
+  "dynamicComponents": {
+    "title": "8. Dynamic Components",
+    "notification": {
+      "success": "Operation successful!",
+      "error": "Operation failed!",
+      "info": "Info: {{message}}"
+    }
+  },
+  "exampleData": {
+    "userName1": "John",
+    "userName2": "Alice",
+    "city1": "Beijing",
+    "city2": "Shanghai",
+    "weather": "sunny",
+    "action": "updated",
+    "item": "documents",
+    "projectA": "Project A",
+    "projectB": "Project B",
+    "projectC": "Project C"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "title": "API 高级示例",
+  "description": "展示 react-i18next 的高级 API 用法",
+  "useTranslation": {
+    "title": "useTranslation Hook",
+    "description": "最常用的 Hook，返回 t 函数、i18n 实例和 ready 状态",
+    "example": "这是使用 useTranslation Hook 的示例",
+    "withParams": "用户名：{{username}}，邮箱：{{email}}",
+    "currentLang": "当前语言：{{lng}}"
+  },
+  "trans": {
+    "title": "Trans 组件",
+    "description": "用于处理包含 HTML 标签和组件的复杂翻译",
+    "simpleHtml": "这是 <strong>粗体文本</strong> 和 <em>斜体文本</em>",
+    "withLink": "访问我们的 <link>官方网站</link> 了解更多信息",
+    "withComponent": "点击 <button>这里</button> 查看详情",
+    "complexNesting": "欢迎 <strong>{{username}}</strong>，你有 <badge>{{count}}</badge> 条新消息",
+    "multipleComponents": "<icon></icon>查看 <link>文档</link> 或 <link2>教程</link2>",
+    "withValues": "商品价格 <price>¥{{amount}}</price>，享受 <discount>{{percent}}%</discount> 折扣"
+  },
+  "pluralization": {
+    "title": "复数处理（Pluralization）",
+    "description": "根据数量自动选择正确的复数形式",
+    "item_zero": "没有项目",
+    "item_one": "1 个项目",
+    "item_other": "{{count}} 个项目",
+    "message_zero": "没有消息",
+    "message_one": "1 条消息",
+    "message_other": "{{count}} 条消息",
+    "file_zero": "没有文件",
+    "file_one": "1 个文件",
+    "file_other": "{{count}} 个文件",
+    "day_zero": "没有天数",
+    "day_one": "1 天",
+    "day_other": "{{count}} 天"
+  },
+  "interpolation": {
+    "title": "插值（Interpolation）",
+    "description": "在翻译中插入变量值",
+    "simple": "你好，{{name}}！",
+    "multiple": "用户 {{name}} 于 {{date}} 进行了 {{count}} 次操作",
+    "nested": "用户信息：{{user.name}}，年龄 {{user.age}}，来自 {{user.city}}"
+  },
+  "context": {
+    "title": "上下文（Context）",
+    "description": "根据上下文选择不同的翻译",
+    "friend": "朋友",
+    "friend_male": "男性朋友",
+    "friend_female": "女性朋友",
+    "message": "消息",
+    "message_read": "已读消息",
+    "message_unread": "未读消息"
+  },
+  "nesting": {
+    "title": "嵌套翻译",
+    "description": "在翻译中引用其他翻译键",
+    "welcome": "欢迎",
+    "fullWelcome": "$t(api:nesting.welcome)回来，{{name}}！",
+    "appName": "我的应用",
+    "pageTitle": "$t(api:nesting.appName) - 首页"
+  },
+  "i18nObject": {
+    "title": "i18n 对象方法",
+    "description": "直接使用 i18n 实例的方法",
+    "currentLanguage": "当前语言",
+    "loadedNamespaces": "已加载的命名空间",
+    "exists": "检查 Key 是否存在",
+    "changeLanguage": "切换语言"
+  },
+  "keyPrefix": {
+    "title": "Key 前缀（keyPrefix）",
+    "description": "使用 keyPrefix 简化翻译 key 的书写",
+    "item1": "前缀项目 1",
+    "item2": "前缀项目 2",
+    "item3": "前缀项目 3"
+  },
+  "translation": {
+    "title": "Translation 组件（Render Props）",
+    "description": "使用 render props 模式的翻译组件",
+    "example": "这是 Translation 组件的示例"
+  },
+  "ready": {
+    "loading": "加载中...",
+    "loaded": "已加载"
+  }
+}

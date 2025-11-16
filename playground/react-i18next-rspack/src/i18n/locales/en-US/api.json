@@ -1,0 +1,86 @@
+{
+  "title": "Advanced API Examples",
+  "description": "Demonstrating advanced API usage of react-i18next",
+  "useTranslation": {
+    "title": "useTranslation Hook",
+    "description": "Most commonly used Hook, returns t function, i18n instance and ready state",
+    "example": "This is an example using useTranslation Hook",
+    "withParams": "Username: {{username}}, Email: {{email}}",
+    "currentLang": "Current Language: {{lng}}"
+  },
+  "trans": {
+    "title": "Trans Component",
+    "description": "For handling complex translations with HTML tags and components",
+    "simpleHtml": "This is <strong>bold text</strong> and <em>italic text</em>",
+    "withLink": "Visit our <link>official website</link> for more information",
+    "withComponent": "Click <button>here</button> for details",
+    "complexNesting": "Welcome <strong>{{username}}</strong>, you have <badge>{{count}}</badge> new messages",
+    "multipleComponents": "<icon></icon>Check out <link>documentation</link> or <link2>tutorials</link2>",
+    "withValues": "Product price <price>${{amount}}</price>, enjoy <discount>{{percent}}%</discount> discount"
+  },
+  "pluralization": {
+    "title": "Pluralization",
+    "description": "Automatically select the correct plural form based on count",
+    "item_zero": "No items",
+    "item_one": "1 item",
+    "item_other": "{{count}} items",
+    "message_zero": "No messages",
+    "message_one": "1 message",
+    "message_other": "{{count}} messages",
+    "file_zero": "No files",
+    "file_one": "1 file",
+    "file_other": "{{count}} files",
+    "day_zero": "No days",
+    "day_one": "1 day",
+    "day_other": "{{count}} days"
+  },
+  "interpolation": {
+    "title": "Interpolation",
+    "description": "Insert variable values into translations",
+    "simple": "Hello, {{name}}!",
+    "multiple": "User {{name}} performed {{count}} operations on {{date}}",
+    "nested": "User info: {{user.name}}, age {{user.age}}, from {{user.city}}"
+  },
+  "context": {
+    "title": "Context",
+    "description": "Select different translations based on context",
+    "friend": "Friend",
+    "friend_male": "Male friend",
+    "friend_female": "Female friend",
+    "message": "Message",
+    "message_read": "Read message",
+    "message_unread": "Unread message"
+  },
+  "nesting": {
+    "title": "Nesting Translation",
+    "description": "Reference other translation keys in translations",
+    "welcome": "Welcome",
+    "fullWelcome": "$t(api:nesting.welcome) back, {{name}}!",
+    "appName": "My App",
+    "pageTitle": "$t(api:nesting.appName) - Home"
+  },
+  "i18nObject": {
+    "title": "i18n Object Methods",
+    "description": "Directly use methods of i18n instance",
+    "currentLanguage": "Current Language",
+    "loadedNamespaces": "Loaded Namespaces",
+    "exists": "Check if Key Exists",
+    "changeLanguage": "Change Language"
+  },
+  "keyPrefix": {
+    "title": "Key Prefix (keyPrefix)",
+    "description": "Use keyPrefix to simplify translation key writing",
+    "item1": "Prefix Item 1",
+    "item2": "Prefix Item 2",
+    "item3": "Prefix Item 3"
+  },
+  "translation": {
+    "title": "Translation Component (Render Props)",
+    "description": "Translation component using render props pattern",
+    "example": "This is an example of Translation component"
+  },
+  "ready": {
+    "loading": "Loading...",
+    "loaded": "Loaded"
+  }
+}

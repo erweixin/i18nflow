@@ -1,0 +1,65 @@
+{
+  "title": "Form Example",
+  "description": "Demonstrating use of react-i18next in forms",
+  "userForm": {
+    "title": "User Registration Form",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "phone": "Phone",
+    "country": "Country",
+    "city": "City",
+    "address": "Address",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "age": "Age",
+    "bio": "Bio",
+    "interests": "Interests",
+    "agreeTerms": "I agree to the terms of service",
+    "subscribe": "Subscribe to newsletter",
+    "submit": "Submit",
+    "reset": "Reset",
+    "placeholders": {
+      "firstName": "Enter first name",
+      "lastName": "Enter last name",
+      "email": "example@email.com",
+      "password": "At least 6 characters",
+      "confirmPassword": "Enter password again",
+      "phone": "Enter phone number",
+      "city": "Enter city",
+      "address": "Enter detailed address",
+      "bio": "Tell us about yourself...",
+      "interests": "e.g., Reading, Traveling, Music"
+    },
+    "errors": {
+      "required": "{{field}} is required",
+      "emailInvalid": "Invalid email format",
+      "passwordTooShort": "Password must be at least 6 characters",
+      "passwordNotMatch": "Passwords do not match",
+      "phoneInvalid": "Invalid phone number format"
+    },
+    "success": "Registration successful!",
+    "submitting": "Submitting..."
+  },
+  "validation": {
+    "title": "Form Validation",
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "minLength": "Minimum {{min}} characters required",
+    "maxLength": "Maximum {{max}} characters allowed",
+    "pattern": "Invalid format",
+    "min": "Minimum value is {{min}}",
+    "max": "Maximum value is {{max}}"
+  },
+  "countries": {
+    "china": "China",
+    "usa": "United States",
+    "japan": "Japan",
+    "korea": "South Korea",
+    "uk": "United Kingdom"
+  }
+}

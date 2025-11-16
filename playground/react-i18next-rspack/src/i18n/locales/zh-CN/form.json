@@ -1,0 +1,65 @@
+{
+  "title": "表单示例",
+  "description": "展示在表单中使用 react-i18next",
+  "userForm": {
+    "title": "用户注册表单",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "email": "邮箱",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "phone": "电话",
+    "country": "国家",
+    "city": "城市",
+    "address": "地址",
+    "gender": "性别",
+    "male": "男",
+    "female": "女",
+    "other": "其他",
+    "age": "年龄",
+    "bio": "个人简介",
+    "interests": "兴趣爱好",
+    "agreeTerms": "我同意服务条款",
+    "subscribe": "订阅新闻通讯",
+    "submit": "提交",
+    "reset": "重置",
+    "placeholders": {
+      "firstName": "请输入名字",
+      "lastName": "请输入姓氏",
+      "email": "example@email.com",
+      "password": "至少 6 位字符",
+      "confirmPassword": "再次输入密码",
+      "phone": "请输入电话号码",
+      "city": "请输入城市",
+      "address": "请输入详细地址",
+      "bio": "介绍一下你自己...",
+      "interests": "例如：阅读、旅行、音乐"
+    },
+    "errors": {
+      "required": "{{field}} 是必填项",
+      "emailInvalid": "邮箱格式不正确",
+      "passwordTooShort": "密码至少需要 6 位字符",
+      "passwordNotMatch": "两次输入的密码不一致",
+      "phoneInvalid": "电话号码格式不正确"
+    },
+    "success": "注册成功！",
+    "submitting": "提交中..."
+  },
+  "validation": {
+    "title": "表单验证",
+    "required": "此字段为必填项",
+    "email": "请输入有效的邮箱地址",
+    "minLength": "至少需要 {{min}} 个字符",
+    "maxLength": "最多 {{max}} 个字符",
+    "pattern": "格式不正确",
+    "min": "最小值为 {{min}}",
+    "max": "最大值为 {{max}}"
+  },
+  "countries": {
+    "china": "中国",
+    "usa": "美国",
+    "japan": "日本",
+    "korea": "韩国",
+    "uk": "英国"
+  }
+}
