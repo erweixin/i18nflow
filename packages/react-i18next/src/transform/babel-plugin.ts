@@ -36,6 +36,8 @@ interface BabelPluginOptions {
   hookName?: string;
   /** t 函数名称（默认：'t'） */
   tFunctionName?: string;
+  /** 是否使用自定义签名：useTranslation(lng, ns, options) 而不是标准的 useTranslation(ns, options) */
+  customSignature?: boolean;
 }
 
 /**
@@ -61,11 +63,13 @@ interface PluginState extends PluginPass {
 /**
  * 从 useTranslation 参数中提取 namespace
  */
-function extractNamespace(args: t.CallExpression['arguments']): string | t.Expression {
-  // react-i18next 的 useTranslation 签名：
-  // useTranslation(ns?, options?)
-  // 第一个参数是 namespace（可选）
-  const nsArg = args[0];
+function extractNamespace(
+  args: t.CallExpression['arguments'],
+  customSignature: boolean = false
+): string | t.Expression {
+  // 标准 react-i18next 签名：useTranslation(ns?, options?)
+  // 自定义签名：useTranslation(lng, ns?, options?)
+  const nsArg = customSignature ? args[1] : args[0];
 
   if (!nsArg) {
     return 'common'; // 默认 namespace
@@ -91,11 +95,13 @@ function extractNamespace(args: t.CallExpression['arguments']): string | t.Expre
 /**
  * 从 useTranslation 的 options 参数中提取 keyPrefix
  */
-function extractKeyPrefix(args: t.CallExpression['arguments']): string | t.Expression | null {
-  // react-i18next 的 useTranslation 签名：
-  // useTranslation(ns?, options?)
-  // 第二个参数是 options
-  const optionsArg = args[1];
+function extractKeyPrefix(
+  args: t.CallExpression['arguments'],
+  customSignature: boolean = false
+): string | t.Expression | null {
+  // 标准 react-i18next 签名：useTranslation(ns?, options?)
+  // 自定义签名：useTranslation(lng, ns?, options?)
+  const optionsArg = customSignature ? args[2] : args[1];
 
   if (!optionsArg || !t.isObjectExpression(optionsArg)) {
     return null;
@@ -271,7 +277,7 @@ function extractTranslationKey(
 export function createReactI18nextBabelPlugin(
   options: BabelPluginOptions = {}
 ): PluginObj<PluginState> {
-  const { hookName = 'useTranslation', tFunctionName = 't' } = options;
+  const { hookName = 'useTranslation', tFunctionName = 't', customSignature = false } = options;
 
   return {
     name: 'react-i18next-i18nflow',
@@ -337,8 +343,8 @@ export function createReactI18nextBabelPlugin(
         if (!callExpression) return;
 
         // 提取 namespace 和 keyPrefix
-        const namespace = extractNamespace(callExpression.arguments);
-        const keyPrefix = extractKeyPrefix(callExpression.arguments);
+        const namespace = extractNamespace(callExpression.arguments, customSignature);
+        const keyPrefix = extractKeyPrefix(callExpression.arguments, customSignature);
 
         // 检查是否是对象解构
         const pattern = path.node.id;

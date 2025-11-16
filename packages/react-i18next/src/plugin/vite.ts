@@ -34,6 +34,8 @@ export interface ReactI18nextVitePluginOptions extends ReactI18nextMiddlewareCon
   transComponentName?: string;
   /** useTranslation hook 名称 */
   hookName?: string;
+  /** 是否使用自定义签名：useTranslation(lng, ns, options) 而不是标准的 useTranslation(ns, options) */
+  customSignature?: boolean;
 }
 
 /**
@@ -44,6 +46,7 @@ export function ReactI18nextVitePlugin(options: ReactI18nextVitePluginOptions = 
     enabled = true,
     tFunctionName = 't',
     hookName = 'useTranslation',
+    customSignature = false,
     localeDir = 'src/i18n/locales',
     locales = ['zh-CN', 'en-US'],
     defaultNs = 'common',
@@ -119,6 +122,7 @@ export function ReactI18nextVitePlugin(options: ReactI18nextVitePluginOptions = 
             createReactI18nextBabelPlugin({
               tFunctionName,
               hookName,
+              customSignature,
             }),
           ],
           presets: [],

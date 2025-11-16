@@ -20,6 +20,7 @@ const nextConfig = {
           localeDir: 'src/i18n/locales',
           locales: ['zh-CN', 'en-US'],
           defaultNs: 'common',
+          customSignature: true, // 使用自定义签名 useTranslation(lng, ns, options)
         })
       );
 
