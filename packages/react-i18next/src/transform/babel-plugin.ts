@@ -62,9 +62,10 @@ interface PluginState extends PluginPass {
  * 从 useTranslation 参数中提取 namespace
  */
 function extractNamespace(args: t.CallExpression['arguments']): string | t.Expression {
-  // useTranslation(lng, ns, options)
-  // 第二个参数是 namespace
-  const nsArg = args[1];
+  // react-i18next 的 useTranslation 签名：
+  // useTranslation(ns?, options?)
+  // 第一个参数是 namespace（可选）
+  const nsArg = args[0];
 
   if (!nsArg) {
     return 'common'; // 默认 namespace
@@ -91,9 +92,10 @@ function extractNamespace(args: t.CallExpression['arguments']): string | t.Expre
  * 从 useTranslation 的 options 参数中提取 keyPrefix
  */
 function extractKeyPrefix(args: t.CallExpression['arguments']): string | t.Expression | null {
-  // useTranslation(lng, ns, options)
-  // 第三个参数是 options
-  const optionsArg = args[2];
+  // react-i18next 的 useTranslation 签名：
+  // useTranslation(ns?, options?)
+  // 第二个参数是 options
+  const optionsArg = args[1];
 
   if (!optionsArg || !t.isObjectExpression(optionsArg)) {
     return null;
