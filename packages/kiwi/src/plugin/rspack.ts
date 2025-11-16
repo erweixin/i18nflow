@@ -26,6 +26,8 @@ export interface KiwiRspackPluginOptions extends KiwiMiddlewareConfig {
   i18nIdentifier?: string;
   /** 是否自动包装 kiwiIntl（默认：true），设为 false 则需要手动调用 createKiwiProxy */
   autoProxy?: boolean;
+  /** 是否自动注入 I18nDebugProvider（默认：true），设为 false 则需要手动在应用中添加 */
+  autoInjectDebugUI?: boolean;
 }
 
 /**
@@ -42,6 +44,7 @@ export class KiwiRspackPlugin implements RspackPluginInstance {
       locales: ['zh-CN', 'en-US'],
       fileExtension: '.ts',
       autoProxy: true,
+      autoInjectDebugUI: true,
       ...options,
     };
   }
@@ -53,6 +56,11 @@ export class KiwiRspackPlugin implements RspackPluginInstance {
     }
 
     console.log('🔧 Setting up Kiwi I18N Debug Plugin...');
+
+    // 自动注入 I18nDebugProvider
+    if (this.options.autoInjectDebugUI) {
+      this.injectDebugUI(compiler);
+    }
 
     // 修改 Rspack 配置
     compiler.options.module = compiler.options.module || {};
@@ -125,5 +133,42 @@ export class KiwiRspackPlugin implements RspackPluginInstance {
         return middlewares;
       };
     }
+  }
+
+  /**
+   * 自动注入 I18nDebugProvider
+   */
+  private injectDebugUI(compiler: Compiler): void {
+    // 使用包名导入，确保在编译后也能正确解析
+    // 这个模块会在编译时被打包到 @i18nflow/kiwi 中
+    const debugUIInjectorPath = '@i18nflow/kiwi/runtime/debug-ui-injector';
+
+    // 修改 entry 配置，在主入口之前添加调试 UI 注入模块
+    const originalEntry = compiler.options.entry;
+
+    if (typeof originalEntry === 'string') {
+      compiler.options.entry = [debugUIInjectorPath, originalEntry];
+    } else if (Array.isArray(originalEntry)) {
+      compiler.options.entry = [debugUIInjectorPath, ...originalEntry];
+    } else if (typeof originalEntry === 'object' && originalEntry !== null) {
+      // 对象形式的 entry，修改每个入口点
+      Object.keys(originalEntry).forEach(key => {
+        const entryValue = originalEntry[key];
+        if (typeof entryValue === 'string') {
+          originalEntry[key] = [debugUIInjectorPath, entryValue];
+        } else if (Array.isArray(entryValue)) {
+          originalEntry[key] = [debugUIInjectorPath, ...entryValue];
+        } else if (typeof entryValue === 'object' && entryValue.import) {
+          const importValue = entryValue.import;
+          if (typeof importValue === 'string') {
+            entryValue.import = [debugUIInjectorPath, importValue];
+          } else if (Array.isArray(importValue)) {
+            entryValue.import = [debugUIInjectorPath, ...importValue];
+          }
+        }
+      });
+    }
+
+    console.log('✅ I18nDebugProvider will be auto-injected');
   }
 }

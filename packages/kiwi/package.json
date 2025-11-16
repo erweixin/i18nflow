@@ -20,6 +20,11 @@
       "types": "./dist/plugin-vite.d.ts",
       "import": "./dist/plugin-vite.mjs",
       "require": "./dist/plugin-vite.js"
+    },
+    "./runtime/debug-ui-injector": {
+      "types": "./dist/runtime/debug-ui-injector.d.ts",
+      "import": "./dist/runtime/debug-ui-injector.mjs",
+      "require": "./dist/runtime/debug-ui-injector.js"
     }
   },
   "files": [
@@ -65,7 +70,8 @@
     "@babel/types": "^7.23.0",
     "@i18nflow/core": "workspace:*",
     "@i18nflow/shared": "workspace:*",
-    "@i18nflow/ui-react": "workspace:*"
+    "@i18nflow/ui-react": "workspace:*",
+    "@i18nflow/ui-vanilla": "workspace:*"
   },
   "peerDependencies": {
     "kiwi-intl": ">=1.0.0",
