@@ -1,9 +1,0 @@
-{
-  "presets": ["next/babel"],
-  "plugins": [
-    ["@i18nflow/react-i18next/babel-plugin", {
-      "tFunctionName": "t",
-      "hookName": "useTranslation"
-    }]
-  ]
-}

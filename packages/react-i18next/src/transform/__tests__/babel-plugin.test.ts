@@ -141,7 +141,7 @@ describe('Babel Plugin - JSX 转换', () => {
     expect(output).not.toContain("String(t('title'))");
   });
 
-  it('应该在原生 HTML 标签属性中转换 t() 调用', () => {
+  it('应该在原生 HTML 标签属性中添加 data-i18n 属性', () => {
     const input = `
       const { t } = useTranslation(lng, 'common');
       <input placeholder={t('placeholder')} />
@@ -149,12 +149,14 @@ describe('Babel Plugin - JSX 转换', () => {
 
     const output = transform(input);
 
-    expect(output).toContain("placeholder={String(t('placeholder'))}");
-    // fullkey 包含 namespace
+    // 不再添加 String() 包装，让 Proxy 的隐式转换工作
+    expect(output).toContain("placeholder={t('placeholder')}");
+    expect(output).not.toContain("String(t('placeholder'))");
+    // 在父元素上添加 data-i18n-{attrName} 属性
     expect(output).toContain('data-i18n-placeholder="common:placeholder"');
   });
 
-  it('不应该在自定义组件属性中转换 t() 调用', () => {
+  it('应该在自定义组件属性中添加 data-i18n 属性', () => {
     const input = `
       const { t } = useTranslation(lng, 'common');
       <CustomComponent title={t('title')} />
@@ -162,9 +164,11 @@ describe('Babel Plugin - JSX 转换', () => {
 
     const output = transform(input);
 
-    // 自定义组件可以接收 React 元素，不需要 String()
+    // 自定义组件可以接收 React 元素，不需要 String() 包装
     expect(output).toContain("title={t('title')}");
     expect(output).not.toContain("String(t('title'))");
+    // 但也添加 data-i18n-{attrName} 属性用于调试
+    expect(output).toContain('data-i18n-title="common:title"');
   });
 
   it('应该处理多个 t() 调用', () => {
@@ -194,13 +198,13 @@ describe('Babel Plugin - JSX 转换', () => {
 
     const output = transform(input);
 
-    // 原生 HTML 标签属性需要 String() 并添加 data-i18n-{attrName}
-    expect(output).toContain("placeholder={String(t('search'))}");
-    // fullkey 包含 namespace
+    // 不再添加 String() 包装，让 Proxy 的隐式转换工作
+    expect(output).toContain("placeholder={t('search')}");
+    expect(output).not.toContain("String(t('search'))");
+    // 在父元素上添加 data-i18n-{attrName} 属性
     expect(output).toContain('data-i18n-placeholder="common:search"');
-    // JSX 子元素不需要 String()
+    // JSX 子元素不需要任何转换
     expect(output).toContain("{t('submit')}");
-    expect(output).not.toContain("String(t('submit'))");
   });
 
   it('不应该重复转换已经是 String() 的调用', () => {
@@ -230,13 +234,17 @@ describe('Babel Plugin - JSX 转换', () => {
 
     const output = transform(input);
 
-    // JSX 子元素不需要 String()
+    // JSX 子元素不需要任何转换
     expect(output).toContain("{t('welcome')}");
     expect(output).not.toContain("String(t('welcome'))");
-    // 原生 HTML 标签属性需要 String()
-    expect(output).toContain("placeholder={String(t('enter_name'))}");
-    // 自定义组件属性不转换
+    // 原生 HTML 标签属性也不需要 String() 包装，让 Proxy 隐式转换
+    expect(output).toContain("placeholder={t('enter_name')}");
+    expect(output).not.toContain("String(t('enter_name'))");
+    // 添加 data-i18n-{attrName} 属性
+    expect(output).toContain('data-i18n-placeholder="common:enter_name"');
+    // 自定义组件属性也添加 data-i18n-{attrName}
     expect(output).toContain("label={t('custom_label')}");
+    expect(output).toContain('data-i18n-label="common:custom_label"');
   });
 });
 
@@ -331,13 +339,17 @@ describe('Babel Plugin - 完整示例', () => {
     expect(output).toContain('__i18nflow_wrap(__i18nflow_t_original, "common:users")');
 
     // 检查 JSX 转换
-    // JSX 子元素不需要 String()
+    // JSX 子元素不需要任何转换
     expect(output).toContain("{t('title')}");
     expect(output).toContain("{t('description')}");
     expect(output).not.toContain("String(t('title'))");
-    // 原生 HTML 标签属性需要 String()
-    expect(output).toContain("placeholder={String(t('name'))}");
-    // 自定义组件属性不转换
+    // 原生 HTML 标签属性也不需要 String() 包装
+    expect(output).toContain("placeholder={t('name')}");
+    expect(output).not.toContain("String(t('name'))");
+    // 添加 data-i18n-{attrName} 属性
+    expect(output).toContain('data-i18n-placeholder="common:users.name"');
+    // 自定义组件属性也添加 data-i18n-{attrName}
     expect(output).toContain("title={t('card_title')}");
+    expect(output).toContain('data-i18n-title="common:users.card_title"');
   });
 });

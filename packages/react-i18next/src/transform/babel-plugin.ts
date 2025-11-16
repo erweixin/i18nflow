@@ -3,18 +3,25 @@
  *
  * 功能：
  * 1. 自动检测 useTranslation 调用，包装返回的 t 函数
- * 2. 处理 JSX 中的 t() 调用，添加必要的转换
+ * 2. 在 JSX 属性中添加 data-i18n-{attrName} 调试标记
  *
  * 转换示例：
  * ```typescript
  * // 转换前
  * const { t } = useTranslation(lng, 'common', { keyPrefix: 'users' });
+ * <input placeholder={t('name')} />
  *
  * // 转换后
  * import { wrapTFunction as __i18nflow_wrap } from '@i18nflow/react-i18next';
  * const { t: __i18nflow_t_original } = useTranslation(lng, 'common', { keyPrefix: 'users' });
  * const t = __i18nflow_wrap(__i18nflow_t_original, 'common:users');
+ * <input placeholder={t('name')} data-i18n-placeholder="common:users.name" />
  * ```
+ *
+ * 重要设计决策：
+ * - JSX 子元素中的 t() 不做任何转换，运行时返回 React 元素（带 data-i18n-key）
+ * - JSX 属性中的 t() 不添加 String() 包装，让 Proxy 的隐式转换工作（保留 React 元素的 data-i18n-key）
+ * - 在父元素上添加 data-i18n-{attrName} 属性，用于可视化调试
  */
 
 import type { PluginObj, PluginPass } from '@babel/core';
@@ -171,128 +178,6 @@ function isUseTranslationCall(node: t.Node, hookName: string): node is t.CallExp
   }
 
   return false;
-}
-
-/**
- * 检查是否是原生 HTML 标签
- */
-const HTML_TAGS = new Set([
-  'a',
-  'abbr',
-  'address',
-  'area',
-  'article',
-  'aside',
-  'audio',
-  'b',
-  'base',
-  'bdi',
-  'bdo',
-  'blockquote',
-  'body',
-  'br',
-  'button',
-  'canvas',
-  'caption',
-  'cite',
-  'code',
-  'col',
-  'colgroup',
-  'data',
-  'datalist',
-  'dd',
-  'del',
-  'details',
-  'dfn',
-  'dialog',
-  'div',
-  'dl',
-  'dt',
-  'em',
-  'embed',
-  'fieldset',
-  'figcaption',
-  'figure',
-  'footer',
-  'form',
-  'h1',
-  'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
-  'head',
-  'header',
-  'hgroup',
-  'hr',
-  'html',
-  'i',
-  'iframe',
-  'img',
-  'input',
-  'ins',
-  'kbd',
-  'label',
-  'legend',
-  'li',
-  'link',
-  'main',
-  'map',
-  'mark',
-  'menu',
-  'meta',
-  'meter',
-  'nav',
-  'noscript',
-  'object',
-  'ol',
-  'optgroup',
-  'option',
-  'output',
-  'p',
-  'param',
-  'picture',
-  'pre',
-  'progress',
-  'q',
-  'rp',
-  'rt',
-  'ruby',
-  's',
-  'samp',
-  'script',
-  'section',
-  'select',
-  'slot',
-  'small',
-  'source',
-  'span',
-  'strong',
-  'style',
-  'sub',
-  'summary',
-  'sup',
-  'table',
-  'tbody',
-  'td',
-  'template',
-  'textarea',
-  'tfoot',
-  'th',
-  'thead',
-  'time',
-  'title',
-  'tr',
-  'track',
-  'u',
-  'ul',
-  'var',
-  'video',
-  'wbr',
-]);
-
-function isNativeHTMLTag(name: string): boolean {
-  return HTML_TAGS.has(name.toLowerCase());
 }
 
 /**
@@ -544,35 +429,28 @@ export function createReactI18nextBabelPlugin(
           }
 
           const openingElement = jsxOpeningElement.node;
-          const tagName = t.isJSXIdentifier(openingElement.name) ? openingElement.name.name : '';
 
-          // 只对原生 HTML 标签的属性进行 String() 包装
-          // 自定义组件可以接收 React 元素，所以不需要转换
-          if (isNativeHTMLTag(tagName)) {
-            // 包装 String()
-            value.expression = t.callExpression(t.identifier('String'), [expression]);
+          // 对所有标签（原生和自定义）都添加 data-i18n-{attrName} 属性
+          // 不添加 String() 包装，让 Proxy 的隐式转换工作，保留 React 元素的 data-i18n-key
+          const attrName = t.isJSXIdentifier(path.node.name) ? path.node.name.name : '';
+          if (attrName && t.isCallExpression(expression)) {
+            const translationKey = extractTranslationKey(expression, state);
+            if (translationKey) {
+              // 添加 data-i18n-{attrName} 属性
+              const dataAttrName = `data-i18n-${attrName}`;
 
-            // 提取翻译 key 并添加 data-i18n-{attrName} 属性
-            const attrName = t.isJSXIdentifier(path.node.name) ? path.node.name.name : '';
-            if (attrName && t.isCallExpression(expression)) {
-              const translationKey = extractTranslationKey(expression, state);
-              if (translationKey) {
-                // 添加 data-i18n-{attrName} 属性
-                const dataAttrName = `data-i18n-${attrName}`;
+              // 检查是否已经存在该属性
+              const existingAttr = openingElement.attributes.find(
+                attr =>
+                  t.isJSXAttribute(attr) &&
+                  t.isJSXIdentifier(attr.name) &&
+                  attr.name.name === dataAttrName
+              );
 
-                // 检查是否已经存在该属性
-                const existingAttr = openingElement.attributes.find(
-                  attr =>
-                    t.isJSXAttribute(attr) &&
-                    t.isJSXIdentifier(attr.name) &&
-                    attr.name.name === dataAttrName
+              if (!existingAttr) {
+                openingElement.attributes.push(
+                  t.jsxAttribute(t.jsxIdentifier(dataAttrName), t.stringLiteral(translationKey))
                 );
-
-                if (!existingAttr) {
-                  openingElement.attributes.push(
-                    t.jsxAttribute(t.jsxIdentifier(dataAttrName), t.stringLiteral(translationKey))
-                  );
-                }
               }
             }
           }
