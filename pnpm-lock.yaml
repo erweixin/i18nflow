@@ -464,6 +464,9 @@ importers:
       '@i18nflow/kiwi':
         specifier: workspace:*
         version: link:../../packages/kiwi
+      '@i18nflow/ui-vanilla':
+        specifier: workspace:*
+        version: link:../../packages/ui-vanilla
       '@types/react':
         specifier: ^18.3.0
         version: 18.3.26

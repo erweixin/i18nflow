@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { I18nDebugProvider } from '@i18nflow/kiwi';
 import I18N from './locales/I18N';
 import { LocaleType } from './locales/I18N';
 import BasicExample from './components/BasicExample';
@@ -122,9 +121,6 @@ const App: React.FC = () => {
           </p>
         </footer>
       </div>
-
-      {/* I18nDebugProvider 不需要包裹内容，使用自闭合标签 */}
-      <I18nDebugProvider enabled={import.meta.env.DEV} />
     </>
   );
 };
