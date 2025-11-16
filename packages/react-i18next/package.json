@@ -21,6 +21,11 @@
       "import": "./dist/plugin-vite.mjs",
       "require": "./dist/plugin-vite.js"
     },
+    "./plugin-rspack": {
+      "types": "./dist/plugin-rspack.d.ts",
+      "import": "./dist/plugin-rspack.mjs",
+      "require": "./dist/plugin-rspack.js"
+    },
     "./babel-plugin": {
       "types": "./dist/babel-plugin.d.ts",
       "import": "./dist/babel-plugin.mjs",

@@ -17,11 +17,14 @@
     "i18next-browser-languagedetector": "^7.2.0"
   },
   "devDependencies": {
+    "@i18nflow/react-i18next": "workspace:*",
     "@rspack/cli": "^1.1.0",
     "@rspack/core": "^1.1.0",
     "@rspack/plugin-react-refresh": "^1.0.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "babel-loader": "^9.2.1",
+    "@babel/core": "^7.26.0"
   }
 }

@@ -1,6 +1,7 @@
 const path = require('path');
 const rspack = require('@rspack/core');
 const ReactRefreshPlugin = require('@rspack/plugin-react-refresh');
+const { ReactI18nextRspackPlugin } = require('@i18nflow/react-i18next/plugin-rspack');
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -71,9 +72,17 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
     isDev && new ReactRefreshPlugin(),
+    // 🔥 使用 @i18nflow/react-i18next 插件
+    isDev &&
+      new ReactI18nextRspackPlugin({
+        enabled: true,
+        localeDir: 'src/i18n/locales',
+        locales: ['zh-CN', 'en-US'],
+        defaultNs: 'common',
+      }),
   ].filter(Boolean),
   devServer: {
-    port: 3020,
+    port: 3040,
     hot: true,
     open: true,
     historyApiFallback: true,

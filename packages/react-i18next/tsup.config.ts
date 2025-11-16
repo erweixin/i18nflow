@@ -5,6 +5,7 @@ export default defineConfig({
     index: 'src/index.ts',
     'plugin-next': 'src/plugin-next.ts',
     'plugin-vite': 'src/plugin-vite.ts',
+    'plugin-rspack': 'src/plugin-rspack.ts',
     'babel-plugin': 'src/transform/babel-plugin.ts',
   },
   format: ['cjs', 'esm'],
