@@ -2,7 +2,15 @@
   "$schema": "https://unpkg.com/@changesets/config@2.3.0/schema.json",
   "changelog": "@changesets/cli/changelog",
   "commit": false,
-  "fixed": [],
+  "fixed": [
+    [
+      "@i18nflow/core",
+      "@i18nflow/shared",
+      "@i18nflow/ui-react",
+      "@i18nflow/ui-vanilla",
+      "@i18nflow/kiwi"
+    ]
+  ],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
