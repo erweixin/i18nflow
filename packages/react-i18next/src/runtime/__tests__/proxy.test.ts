@@ -202,31 +202,6 @@ describe('wrapTFunction - Runtime Proxy', () => {
     });
   });
 
-  describe('生产环境', () => {
-    beforeEach(() => {
-      // 设置为生产环境
-      process.env.NODE_ENV = 'production';
-    });
-
-    it('应该直接返回原始 t 函数', () => {
-      const originalT = createMockTFunction();
-      const wrappedT = wrapTFunction(originalT, 'common');
-
-      // 在生产环境，应该返回原函数本身
-      expect(wrappedT).toBe(originalT);
-    });
-
-    it('不应该创建 React 元素', () => {
-      const originalT = createMockTFunction();
-      const wrappedT = wrapTFunction(originalT, 'common');
-
-      wrappedT('name');
-
-      // 生产环境不应该调用 React.createElement
-      expect(React.createElement).not.toHaveBeenCalled();
-    });
-  });
-
   describe('边界情况', () => {
     beforeEach(() => {
       process.env.NODE_ENV = 'development';

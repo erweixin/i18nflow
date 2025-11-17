@@ -50,6 +50,7 @@
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
     "test": "vitest",
+    "test:run": "vitest run",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage"
   },

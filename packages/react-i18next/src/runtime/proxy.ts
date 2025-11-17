@@ -31,9 +31,8 @@ function createI18nReactElement(
   value: string,
   key: string
 ): string | ReactElementWithStringMethods {
-  // 简单策略：开发环境始终启用
-  // 生产环境通过 Tree Shaking 移除这些代码
-  const isDev = true;
+  // 检查环境：开发环境启用调试功能
+  const isDev = process.env.NODE_ENV !== 'production';
 
   // 生产环境：直接返回字符串
   if (!isDev) {
@@ -124,9 +123,8 @@ function buildFullKey(key: string, namespace: string, keyPrefix: string, options
  * ```
  */
 export function wrapTFunction(originalT: TFunction, context?: string): TFunction {
-  // 简单策略：开发环境始终启用
-  // 生产环境通过 Tree Shaking 移除这些代码
-  const isDev = true;
+  // 检查环境：开发环境启用调试功能
+  const isDev = process.env.NODE_ENV !== 'production';
 
   // 生产环境：直接返回原函数，零性能开销
   if (!isDev) {

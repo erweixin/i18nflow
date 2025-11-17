@@ -28,7 +28,7 @@ function transform(code: string, options = {}) {
 describe('Babel Plugin - useTranslation 转换', () => {
   it('应该转换基本的 useTranslation 调用', () => {
     const input = `
-      const { t } = useTranslation(lng, 'common');
+      const { t } = useTranslation('common');
     `;
 
     const output = transform(input);
@@ -40,7 +40,7 @@ describe('Babel Plugin - useTranslation 转换', () => {
 
   it('应该处理带 keyPrefix 的 useTranslation 调用', () => {
     const input = `
-      const { t } = useTranslation(lng, 'common', { keyPrefix: 'users' });
+      const { t } = useTranslation('common', { keyPrefix: 'users' });
     `;
 
     const output = transform(input);
@@ -50,7 +50,7 @@ describe('Babel Plugin - useTranslation 转换', () => {
 
   it('应该处理没有 namespace 的 useTranslation 调用', () => {
     const input = `
-      const { t } = useTranslation(lng);
+      const { t } = useTranslation();
     `;
 
     const output = transform(input);
@@ -61,7 +61,7 @@ describe('Babel Plugin - useTranslation 转换', () => {
   it('应该处理运行时 namespace 变量', () => {
     const input = `
       const namespace = 'advanced';
-      const { t } = useTranslation(lng, namespace);
+      const { t } = useTranslation(namespace);
     `;
 
     const output = transform(input);
@@ -72,7 +72,7 @@ describe('Babel Plugin - useTranslation 转换', () => {
   it('应该处理运行时 keyPrefix 变量', () => {
     const input = `
       const prefix = 'users';
-      const { t } = useTranslation(lng, 'common', { keyPrefix: prefix });
+      const { t } = useTranslation('common', { keyPrefix: prefix });
     `;
 
     const output = transform(input);
@@ -84,7 +84,7 @@ describe('Babel Plugin - useTranslation 转换', () => {
 
   it('应该处理 await useTranslation (服务端组件)', () => {
     const input = `
-      const { t } = await useTranslation(lng, 'common');
+      const { t } = await useTranslation('common');
     `;
 
     const output = transform(input);
@@ -94,7 +94,7 @@ describe('Babel Plugin - useTranslation 转换', () => {
 
   it('应该处理重命名的 t 函数', () => {
     const input = `
-      const { t: translate } = useTranslation(lng, 'common');
+      const { t: translate } = useTranslation('common');
     `;
 
     const output = transform(input);
@@ -105,8 +105,8 @@ describe('Babel Plugin - useTranslation 转换', () => {
 
   it('应该处理多个 useTranslation 调用', () => {
     const input = `
-      const { t: t1 } = useTranslation(lng, 'common');
-      const { t: t2 } = useTranslation(lng, 'advanced');
+      const { t: t1 } = useTranslation('common');
+      const { t: t2 } = useTranslation('advanced');
     `;
 
     const output = transform(input);
@@ -130,7 +130,7 @@ describe('Babel Plugin - useTranslation 转换', () => {
 describe('Babel Plugin - JSX 转换', () => {
   it('应该在 JSX 子元素中转换 t() 调用', () => {
     const input = `
-      const { t } = useTranslation(lng, 'common');
+      const { t } = useTranslation('common');
       <div>{t('title')}</div>
     `;
 
@@ -143,7 +143,7 @@ describe('Babel Plugin - JSX 转换', () => {
 
   it('应该在原生 HTML 标签属性中添加 data-i18n 属性', () => {
     const input = `
-      const { t } = useTranslation(lng, 'common');
+      const { t } = useTranslation('common');
       <input placeholder={t('placeholder')} />
     `;
 
@@ -158,7 +158,7 @@ describe('Babel Plugin - JSX 转换', () => {
 
   it('应该在自定义组件属性中添加 data-i18n 属性', () => {
     const input = `
-      const { t } = useTranslation(lng, 'common');
+      const { t } = useTranslation('common');
       <CustomComponent title={t('title')} />
     `;
 
@@ -173,7 +173,7 @@ describe('Babel Plugin - JSX 转换', () => {
 
   it('应该处理多个 t() 调用', () => {
     const input = `
-      const { t } = useTranslation(lng, 'common');
+      const { t } = useTranslation('common');
       <div>
         <h1>{t('title')}</h1>
         <p>{t('description')}</p>
@@ -189,7 +189,7 @@ describe('Babel Plugin - JSX 转换', () => {
 
   it('应该处理嵌套的 JSX', () => {
     const input = `
-      const { t } = useTranslation(lng, 'common');
+      const { t } = useTranslation('common');
       <div>
         <input placeholder={t('search')} />
         <button>{t('submit')}</button>
@@ -209,7 +209,7 @@ describe('Babel Plugin - JSX 转换', () => {
 
   it('不应该重复转换已经是 String() 的调用', () => {
     const input = `
-      const { t } = useTranslation(lng, 'common');
+      const { t } = useTranslation('common');
       <div>{String(t('title'))}</div>
     `;
 
@@ -222,7 +222,7 @@ describe('Babel Plugin - JSX 转换', () => {
 
   it('应该处理复杂的 JSX 结构', () => {
     const input = `
-      const { t } = useTranslation(lng, 'common');
+      const { t } = useTranslation('common');
       const Component = () => (
         <div>
           <h1>{t('welcome')}</h1>
@@ -297,7 +297,7 @@ describe('Babel Plugin - 边界情况', () => {
 
   it('应该处理数组形式的 namespace', () => {
     const input = `
-      const { t } = useTranslation(lng, ['common', 'advanced']);
+      const { t } = useTranslation(['common', 'advanced']);
     `;
 
     const output = transform(input);
@@ -315,9 +315,9 @@ describe('Babel Plugin - 完整示例', () => {
     const input = `
       import { useTranslation } from 'react-i18next';
 
-      function MyComponent({ lng }) {
-        const { t } = useTranslation(lng, 'common', { keyPrefix: 'users' });
-        
+      function MyComponent() {
+        const { t } = useTranslation('common', { keyPrefix: 'users' });
+
         return (
           <div>
             <h1>{t('title')}</h1>
