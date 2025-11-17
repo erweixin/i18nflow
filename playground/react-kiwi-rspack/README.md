@@ -26,20 +26,24 @@ pnpm install && pnpm dev
 
 ## 📦 一步配置
 
-在 Rspack 配置中添加插件即可：
+在 Rspack 配置中添加插件（**仅开发环境**）：
 
 ```javascript
 // rspack.config.js
 const { KiwiRspackPlugin } = require('@i18nflow/kiwi/plugin-rspack');
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 module.exports = {
   plugins: [
-    new KiwiRspackPlugin({
-      i18nIdentifier: 'I18N', // 你的 I18N 对象名
-      localeDir: 'src/locales', // 语言文件目录
-      locales: ['zh-CN', 'en-US'], // 支持的语言
-    }),
-  ],
+    // 🔥 仅开发环境加载插件
+    isDev &&
+      new KiwiRspackPlugin({
+        i18nIdentifier: 'I18N', // 你的 I18N 对象名
+        localeDir: 'src/locales', // 语言文件目录
+        locales: ['zh-CN', 'en-US'], // 支持的语言
+      }),
+  ].filter(Boolean),
 };
 ```
 
@@ -48,7 +52,8 @@ module.exports = {
 - ✅ 检测并包装你的 I18N 对象
 - ✅ 注入可视化调试 UI
 - ✅ 启用 HMR 和开发服务器
-- ✅ 生产环境自动移除调试代码
+
+> 💡 **重要：** 通过 `isDev &&` 控制插件加载，生产环境不会包含任何调试代码。
 
 ## 🎯 如何调试
 

@@ -30,8 +30,6 @@ interface AutoProxyPluginState extends PluginPass {
 }
 
 export interface AutoProxyPluginOptions {
-  /** 是否启用自动包装（默认：true） */
-  enabled?: boolean;
   /** kiwi-intl 包名（默认：'kiwi-intl'） */
   kiwiIntlPackage?: string;
   /** @i18nflow/kiwi 包名（默认：'@i18nflow/kiwi'） */
@@ -46,18 +44,7 @@ const PROXY_FUNCTION_NAME = '__i18nflow_createKiwiProxy';
 export function createAutoProxyPlugin(
   options: AutoProxyPluginOptions = {}
 ): PluginObj<AutoProxyPluginState> {
-  const {
-    enabled = true,
-    kiwiIntlPackage = 'kiwi-intl',
-    i18nflowPackage = '@i18nflow/kiwi',
-  } = options;
-
-  if (!enabled) {
-    return {
-      name: 'kiwi-auto-proxy',
-      visitor: {},
-    };
-  }
+  const { kiwiIntlPackage = 'kiwi-intl', i18nflowPackage = '@i18nflow/kiwi' } = options;
 
   return {
     name: 'kiwi-auto-proxy',

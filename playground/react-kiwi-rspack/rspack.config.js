@@ -69,10 +69,9 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
     isDev && new ReactRefreshPlugin(),
-    // 🔥 使用 @i18nflow/kiwi 插件
+    // 🔥 Kiwi I18N 可视化调试插件（仅开发环境）
     isDev &&
       new KiwiRspackPlugin({
-        enabled: true,
         i18nIdentifier: 'I18N',
         localeDir: 'src/locales',
         locales: ['zh-CN', 'en-US'],

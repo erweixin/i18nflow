@@ -32,8 +32,6 @@ interface Plugin {
 }
 
 export interface KiwiVitePluginOptions extends KiwiMiddlewareConfig {
-  /** 是否启用（默认仅在开发环境启用） */
-  enabled?: boolean;
   /** i18n 对象名称 */
   i18nIdentifier?: string;
   /** 是否自动包装 kiwiIntl（默认：true），设为 false 则需要手动调用 createKiwiProxy */
@@ -47,7 +45,6 @@ export interface KiwiVitePluginOptions extends KiwiMiddlewareConfig {
  */
 export function KiwiVitePlugin(options: KiwiVitePluginOptions = {}): Plugin {
   const {
-    enabled = true,
     i18nIdentifier = 'I18N',
     localeDir = 'src/lang',
     locales = ['zh-CN', 'en-US'],
@@ -56,17 +53,13 @@ export function KiwiVitePlugin(options: KiwiVitePluginOptions = {}): Plugin {
     autoInjectDebugUI = true,
   } = options;
 
-  let isDev = false;
-
   return {
     name: 'vite-plugin-kiwi-i18n',
 
     // 配置模式
-    config(config, { command }) {
-      isDev = command === 'serve';
-
+    config(config) {
       // 确保 @i18nflow/ui-vanilla 被 Vite 正确处理
-      if (isDev && autoInjectDebugUI) {
+      if (autoInjectDebugUI) {
         config.optimizeDeps = config.optimizeDeps || {};
         config.optimizeDeps.include = config.optimizeDeps.include || [];
         if (!config.optimizeDeps.include.includes('@i18nflow/ui-vanilla')) {
@@ -77,10 +70,6 @@ export function KiwiVitePlugin(options: KiwiVitePluginOptions = {}): Plugin {
 
     // 配置开发服务器
     configureServer(server: ViteDevServer) {
-      if (!enabled || !isDev) {
-        return;
-      }
-
       console.log('🔧 Setting up Kiwi I18N Debug Plugin for Vite...');
 
       // 创建中间件
@@ -109,11 +98,6 @@ export function KiwiVitePlugin(options: KiwiVitePluginOptions = {}): Plugin {
 
     // 转换代码
     transform(code: string, id: string) {
-      // 只在开发环境和启用时处理
-      if (!enabled || !isDev) {
-        return null;
-      }
-
       // 只处理 tsx, jsx, ts, js 文件
       if (!/\.(tsx|jsx|ts|js)$/.test(id)) {
         return null;
@@ -169,7 +153,7 @@ if (typeof window !== 'undefined') {
 
         // 如果启用了自动包装，添加 auto-proxy 插件
         if (autoProxy) {
-          babelPlugins.push(createAutoProxyPlugin({ enabled: true }));
+          babelPlugins.push(createAutoProxyPlugin());
         }
 
         // 使用 Babel 转换代码

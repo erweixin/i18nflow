@@ -28,15 +28,18 @@ pnpm add kiwi-intl antd @ant-design/icons
 // rspack.config.js
 const { KiwiRspackPlugin } = require('@i18nflow/kiwi/plugin-rspack');
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 module.exports = {
   plugins: [
-    new KiwiRspackPlugin({
-      enabled: process.env.NODE_ENV === 'development',
-      localeDir: 'src/lang',
-      locales: ['zh-CN', 'en-US'],
-      i18nIdentifier: 'I18N',
-    }),
-  ],
+    // 🔥 仅在开发环境加载插件
+    isDev &&
+      new KiwiRspackPlugin({
+        localeDir: 'src/lang',
+        locales: ['zh-CN', 'en-US'],
+        i18nIdentifier: 'I18N',
+      }),
+  ].filter(Boolean),
 };
 ```
 
@@ -189,8 +192,6 @@ function createKiwiProxy<T extends object>(
 
 ```typescript
 interface KiwiRspackPluginOptions {
-  /** 是否启用（默认 true） */
-  enabled?: boolean;
   /** i18n 对象名称（默认 'I18N'） */
   i18nIdentifier?: string;
   /** 语言目录（默认 'src/lang'） */
@@ -199,8 +200,14 @@ interface KiwiRspackPluginOptions {
   locales?: string[];
   /** 文件扩展名（默认 '.ts'） */
   fileExtension?: string;
+  /** 是否自动包装 kiwiIntl（默认 true） */
+  autoProxy?: boolean;
+  /** 是否自动注入 I18nDebugProvider（默认 true） */
+  autoInjectDebugUI?: boolean;
 }
 ```
+
+> 💡 **提示：** 通过在配置中使用 `isDev &&` 来控制插件是否加载
 
 ### createKiwiBabelPlugin
 

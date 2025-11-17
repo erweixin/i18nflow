@@ -203,19 +203,6 @@ describe('Auto Proxy Plugin', () => {
   });
 
   describe('配置选项', () => {
-    it('应该支持禁用插件', () => {
-      const code = `
-        import KiwiIntl from 'kiwi-intl';
-        const kiwiIntl = KiwiIntl.init('zh-CN', {});
-        export default kiwiIntl;
-      `;
-
-      const output = transform(code, { enabled: false });
-
-      // 禁用时不应该进行任何转换
-      expect(output).not.toContain('__i18nflow_createKiwiProxy');
-    });
-
     it('应该支持自定义包名', () => {
       const code = `
         import MyIntl from 'my-custom-intl';

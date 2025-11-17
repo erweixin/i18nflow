@@ -132,10 +132,7 @@ export function createKiwiMiddleware(
     } catch (error) {
       console.error('❌ I18N middleware error:', error);
       sendError(res, 500, error instanceof Error ? error.message : 'Internal server error', {
-        stack:
-          process.env.NODE_ENV === 'development' && error instanceof Error
-            ? error.stack
-            : undefined,
+        stack: error instanceof Error ? error.stack : undefined,
       });
       return;
     }
