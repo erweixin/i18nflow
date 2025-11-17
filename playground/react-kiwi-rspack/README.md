@@ -1,195 +1,102 @@
 # React + Kiwi-Intl + Rspack Demo
 
-使用 `@i18nflow/kiwi` 的完整示例项目。
+`@i18nflow/kiwi` 完整示例 - 展示零配置的可视化 i18n 调试体验。
 
-## 功能特性
+## 🚀 快速体验
 
-✅ **Runtime Proxy**: 开发环境自动添加 `data-i18n-key`，生产环境零开销  
-✅ **可视化编辑**: 按住 Ctrl+Shift (Mac: Cmd+Shift) 点击文案即可编辑  
-✅ **热更新**: 编辑翻译后自动更新文件并触发 HMR  
-✅ **TypeScript**: 完整的类型支持  
-✅ **Babel Transform**: 自动处理 JSX 中的 i18n 调用
+**在线试用（推荐）：**
 
-## 快速开始
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-kiwi-rspack?file=src/App.tsx)
 
-### 安装依赖
+**本地运行：**
 
 ```bash
-pnpm install
+pnpm install && pnpm dev
 ```
 
-### 开发模式
+访问 http://localhost:3010，按住 `Ctrl/Cmd + Shift` 点击任意文案即可编辑。
 
-```bash
-pnpm dev
-```
+## ✨ 核心特性
 
-访问 http://localhost:3000
+- 🎯 **零配置** - 无需手动 Proxy，无需添加 Provider，开箱即用
+- ✏️ **可视化编辑** - 点击页面文案直接编辑，实时预览
+- 🤖 **AI 翻译** - 自动生成多个候选译文
+- ⚡ **热更新** - 修改即时生效，无需刷新
+- 🚫 **生产零开销** - 编译时自动移除所有调试代码
 
-### 构建生产版本
+## 📦 一步配置
 
-```bash
-pnpm build
-```
-
-## 核心配置
-
-### 1. Rspack 插件配置 (`rspack.config.js`)
+在 Rspack 配置中添加插件即可：
 
 ```javascript
+// rspack.config.js
 const { KiwiRspackPlugin } = require('@i18nflow/kiwi/plugin-rspack');
 
 module.exports = {
   plugins: [
-    isDev &&
-      new KiwiRspackPlugin({
-        enabled: true,
-        i18nIdentifier: 'I18N',
-        localeDir: 'src/locales',
-        locales: ['zh-CN', 'en-US'],
-        fileExtension: '.ts',
-      }),
-  ].filter(Boolean),
+    new KiwiRspackPlugin({
+      i18nIdentifier: 'I18N', // 你的 I18N 对象名
+      localeDir: 'src/locales', // 语言文件目录
+      locales: ['zh-CN', 'en-US'], // 支持的语言
+    }),
+  ],
 };
 ```
 
-### 2. I18N 初始化 (`src/locales/I18N.ts`)
+**完成！** 插件会自动：
+
+- ✅ 检测并包装你的 I18N 对象
+- ✅ 注入可视化调试 UI
+- ✅ 启用 HMR 和开发服务器
+- ✅ 生产环境自动移除调试代码
+
+## 🎯 如何调试
+
+按住 `Ctrl/Cmd + Shift` 点击任意文案 → 编辑 → 保存 → 即时生效！
+
+**调试功能包括：**
+
+- ✏️ 编辑所有语言的翻译
+- 🤖 一键 AI 翻译（自动生成候选译文）
+- 🔍 查看 key 路径和文件位置
+- ⚡ 修改实时生效，无需刷新
+
+## 🔧 工作原理
+
+<details>
+<summary>开发环境 vs 生产环境</summary>
+
+**开发环境：**
 
 ```typescript
-import KiwiIntl from 'kiwi-intl';
-import { createKiwiProxy } from '@i18nflow/kiwi';
-
-const kiwiIntl = KiwiIntl.init('zh-CN', {
-  'zh-CN': zhCN,
-  'en-US': enUS,
-});
-
-// 🔥 使用 Proxy 包装
-const I18N = createKiwiProxy(kiwiIntl);
-
-export default I18N;
+I18N.app.title
+// ↓ 自动包装为带标记的 React 元素
+<span data-i18n-key="app.title">应用标题</span>
 ```
 
-### 3. App 组件 (`src/App.tsx`)
+- 插件自动检测 `KiwiIntl.init()` 并添加 Proxy 包装
+- 自动注入调试 UI（无需手动添加 Provider）
+- 自动启用开发服务器中间件和 HMR
 
-```tsx
-import { I18nDebugProvider } from '@i18nflow/kiwi';
+**生产环境：**
 
-function App() {
-  return (
-    <>
-      <div>{I18N.app.title}</div>
-
-      {/* I18nDebugProvider 不需要包裹内容，使用自闭合标签 */}
-      <I18nDebugProvider enabled={process.env.NODE_ENV === 'development'} />
-    </>
-  );
-}
+```typescript
+I18N.app.title;
+// → "应用标题" (纯字符串)
 ```
 
-**推荐：** 使用自闭合标签，代码更简洁，调试功能独立。
+- 所有调试代码被完全移除
+- 零额外开销
 
-或者使用包裹方式（兼容）：
+</details>
 
-```tsx
-function App() {
-  return (
-    <I18nDebugProvider enabled={process.env.NODE_ENV === 'development'}>
-      <div>{I18N.app.title}</div>
-    </I18nDebugProvider>
-  );
-}
-```
+## ⚙️ 环境变量
 
-## 使用方式
+- `NODE_ENV` - 自动检测开发/生产环境
+- `OPENROUTER_API_KEY` - （可选）配置后可使用 AI 翻译功能
 
-### 基础用法
+---
 
-```tsx
-// 直接使用
-<div>{I18N.components.title}</div>
-
-// 开发环境渲染：<span data-i18n-key="components.title">标题</span>
-// 生产环境渲染：标题
-```
-
-### Template 插值
-
-```tsx
-<div>{I18N.template(I18N.common.welcome, { name: 'User' })}</div>
-```
-
-### 在属性中使用
-
-```tsx
-<Input placeholder={I18N.common.placeholder} />
-```
-
-### 字符串操作
-
-```tsx
-const message = `Hello, ${I18N.user.name}`;
-```
-
-## 调试功能
-
-### 编辑翻译
-
-1. 启动开发服务器 `pnpm dev`
-2. 按住 **Ctrl + Shift** (Mac: **Cmd + Shift**)
-3. 点击页面上的文案
-4. 在弹出的 Modal 中编辑翻译
-5. 保存后自动更新源文件并刷新页面
-
-### API 端点
-
-开发模式下可用的 API：
-
-- `GET /api/i18n/health` - 健康检查
-- `GET /api/i18n/read?key=xxx` - 读取翻译
-- `POST /api/i18n/update` - 更新翻译
-- `POST /api/i18n/translate` - AI 翻译（待实现）
-
-## 文件结构
-
-```
-src/
-├── locales/
-│   ├── zh-CN/         # 中文翻译文件
-│   │   ├── app.ts
-│   │   ├── button.ts
-│   │   ├── features.ts
-│   │   └── welcome.ts
-│   ├── en-US/         # 英文翻译文件
-│   │   └── ...
-│   ├── I18N.ts        # I18N 实例（使用 Proxy 包装）
-│   └── index.ts
-├── components/        # 示例组件
-├── styles/
-└── App.tsx           # 主应用（添加 I18nDebugProvider）
-```
-
-## 技术栈
-
-- **React 18**: UI 框架
-- **Kiwi-Intl**: i18n 解决方案
-- **@i18nflow/kiwi**: 调试增强
-- **Rspack 1.x**: 构建工具
-- **TypeScript**: 类型支持
-- **Ant Design**: UI 组件库
-
-## 环境变量
-
-- `NODE_ENV=development`: 启用调试功能
-- `NODE_ENV=production`: 禁用调试功能，返回纯字符串
-
-## 注意事项
-
-1. **仅开发环境**: 调试功能仅在开发环境启用
-2. **性能**: 生产环境无额外开销（直接返回字符串）
-3. **类型安全**: 完全支持 TypeScript 类型推导
-4. **HMR**: 支持热模块替换，编辑翻译无需刷新页面
-
-## License
-
-MIT
+**技术栈：** React 18 · Kiwi-Intl · Rspack · TypeScript  
+**文档：** [主项目](../../README.md) · [完整文档](../../doc/README.md) · [Auto Proxy 原理](../../packages/kiwi/AUTO_PROXY.md)  
+**License:** MIT
