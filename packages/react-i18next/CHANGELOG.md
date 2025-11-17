@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.0
+
+### Minor Changes
+
+- e0ffddc: init
+
+### Patch Changes
+
+- Updated dependencies [e0ffddc]
+- Updated dependencies [57c4b7a]
+  - @i18nflow/core@0.2.0
+  - @i18nflow/shared@0.2.0
+  - @i18nflow/ui-react@0.2.0
+
 All notable changes to this project will be documented in this file.
 
 ## [0.1.0-beta.0] - 2024-01-XX
