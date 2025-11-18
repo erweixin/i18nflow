@@ -10,11 +10,29 @@
 
 一个通用化的 I18N 可视化调试工具，支持主流 i18n 库和构建工具，提供 **点击编辑** + **AI 翻译** + **即时生效** 的极致开发体验。
 
+## 📺 视频演示
+
+https://github.com/user-attachments/assets/cbe668be-2380-4e37-b97e-34dfbd9e27c7
+
 ## 🚀 在线体验
 
 立即在浏览器中体验完整功能，无需安装：
 
+#### kiwi-intl + rspack
+
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-kiwi-rspack?file=src/App.tsx)
+
+#### kiwi-intl + vite
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-kiwi-vite?file=src/App.tsx)
+
+#### react-i18next + next.js
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/nextjs-react-i18next?file=src/App.tsx)
+
+#### react-i18next + rspack
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-i18next-rspack?file=src/App.tsx)
 
 > 💡 **使用说明：**
 >

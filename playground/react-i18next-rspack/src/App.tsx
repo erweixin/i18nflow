@@ -11,7 +11,7 @@ import './styles/app.css';
  * 展示所有 react-i18next 的功能示例
  */
 function App() {
-  const [activeTab, setActiveTab] = useState<'basic' | 'advanced' | 'api' | 'form'>('basic');
+  const [activeTab, setActiveTab] = useState<'basic' | 'advanced' | 'api' | 'form'>('form');
 
   const tabStyle = (tab: typeof activeTab): React.CSSProperties => ({
     padding: '12px 24px',

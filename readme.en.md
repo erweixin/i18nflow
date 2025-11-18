@@ -10,11 +10,29 @@ English | [简体中文](./readme.md)
 
 A universal I18N visual debugging tool that supports mainstream i18n libraries and build tools, providing the ultimate development experience with **Click-to-Edit** + **AI Translation** + **Instant Updates**.
 
+## 📺 video demo
+
+https://github.com/user-attachments/assets/cbe668be-2380-4e37-b97e-34dfbd9e27c7
+
 ## 🚀 Try it Online
 
 Experience the full functionality instantly in your browser, no installation required:
 
+#### kiwi-intl + rspack
+
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-kiwi-rspack?file=src/App.tsx)
+
+#### kiwi-intl + vite
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-kiwi-vite?file=src/App.tsx)
+
+#### react-i18next + next.js
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/nextjs-react-i18next?file=src/App.tsx)
+
+#### react-i18next + rspack
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-i18next-rspack?file=src/App.tsx)
 
 > 💡 **How to use:**
 >

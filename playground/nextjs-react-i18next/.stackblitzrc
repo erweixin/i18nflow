@@ -1,5 +1,5 @@
 {
   "installDependencies": false,
-  "startCommand": "npm pkg set devDependencies.@i18nflow/kiwi=latest && npm install && npm run dev"
+  "startCommand": "npm pkg set devDependencies.@i18nflow/react-i18next=latest && npm install && npm run dev"
 }
 
