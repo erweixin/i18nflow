@@ -1,5 +1,11 @@
 # @i18nflow/core
 
+## 0.2.1
+
+### Patch Changes
+
+- 6f50e4e: support file spread import
+
 ## 0.2.0
 
 ### Minor Changes

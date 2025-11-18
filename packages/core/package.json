@@ -1,6 +1,6 @@
 {
   "name": "@i18nflow/core",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Core interfaces and types for i18nflow",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
