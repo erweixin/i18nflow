@@ -57,16 +57,10 @@ export function KiwiVitePlugin(options: KiwiVitePluginOptions = {}): Plugin {
     name: 'vite-plugin-kiwi-i18n',
 
     // 配置模式
-    config(config) {
-      // 确保 @i18nflow/ui-vanilla 被 Vite 正确处理
-      if (autoInjectDebugUI) {
-        config.optimizeDeps = config.optimizeDeps || {};
-        config.optimizeDeps.include = config.optimizeDeps.include || [];
-        if (!config.optimizeDeps.include.includes('@i18nflow/ui-vanilla')) {
-          config.optimizeDeps.include.push('@i18nflow/ui-vanilla');
-        }
-      }
-    },
+    // config(config) {
+    //   // @i18nflow/ui-vanilla 已经被打包进 runtime/debug-ui-injector 中
+    //   // 不再需要额外的优化配置
+    // },
 
     // 配置开发服务器
     configureServer(server: ViteDevServer) {
@@ -111,37 +105,12 @@ export function KiwiVitePlugin(options: KiwiVitePluginOptions = {}): Plugin {
       // 检查是否是应用入口文件（通常是 src/index 或 src/main）
       const isEntryFile = /[/\\]src[/\\](index|main)\.(tsx?|jsx?)$/.test(id);
 
-      // 如果启用了自动注入调试 UI，在入口文件顶部注入初始化代码
+      // 如果启用了自动注入调试 UI，在入口文件顶部注入导入语句
       if (isEntryFile && autoInjectDebugUI) {
+        // 使用预打包的 runtime/debug-ui-injector，它已经包含了 @i18nflow/ui-vanilla
         const debugUICode = `
 // Auto-injected by @i18nflow/kiwi Vite plugin
-import { I18nDebugUI } from '@i18nflow/ui-vanilla';
-
-if (typeof window !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      try {
-        new I18nDebugUI({
-          enabled: true,
-          apiBase: '/api/i18n',
-        });
-        console.log('✨ I18nDebugUI auto-injected by Vite plugin');
-      } catch (error) {
-        console.error('❌ Failed to inject I18nDebugUI:', error);
-      }
-    });
-  } else {
-    try {
-      new I18nDebugUI({
-        enabled: true,
-        apiBase: '/api/i18n',
-      });
-      console.log('✨ I18nDebugUI auto-injected by Vite plugin');
-    } catch (error) {
-      console.error('❌ Failed to inject I18nDebugUI:', error);
-    }
-  }
-}
+import '@i18nflow/kiwi/runtime/debug-ui-injector';
 
 `;
         code = debugUICode + code;
