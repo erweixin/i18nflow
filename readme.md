@@ -12,13 +12,27 @@
 
 ## 📺 视频演示
 
-https://github.com/user-attachments/assets/8cffe7cf-1e7c-4990-a588-351618e73268
+https://github.com/user-attachments/assets/15e14439-8a14-4054-80b0-f07ccbcea1b1
 
 ## 🚀 在线体验
 
 立即在浏览器中体验完整功能，无需安装：
 
+#### kiwi-intl + rspack
+
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-kiwi-rspack?file=src/App.tsx)
+
+#### kiwi-intl + vite
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-kiwi-vite?file=src/App.tsx)
+
+#### react-i18next + next.js
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/nextjs-react-i18next?file=src/App.tsx)
+
+#### react-i18next + rspack
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-i18next-rspack?file=src/App.tsx)
 
 > 💡 **使用说明：**
 >

@@ -12,13 +12,27 @@ A universal I18N visual debugging tool that supports mainstream i18n libraries a
 
 ## 📺 video demo
 
-https://github.com/user-attachments/assets/8cffe7cf-1e7c-4990-a588-351618e73268
+https://github.com/user-attachments/assets/15e14439-8a14-4054-80b0-f07ccbcea1b1
 
 ## 🚀 Try it Online
 
 Experience the full functionality instantly in your browser, no installation required:
 
+#### kiwi-intl + rspack
+
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-kiwi-rspack?file=src/App.tsx)
+
+#### kiwi-intl + vite
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-kiwi-vite?file=src/App.tsx)
+
+#### react-i18next + next.js
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/nextjs-react-i18next?file=src/App.tsx)
+
+#### react-i18next + rspack
+
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/erweixin/i18nflow/tree/main/playground/react-i18next-rspack?file=src/App.tsx)
 
 > 💡 **How to use:**
 >
