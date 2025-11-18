@@ -1,6 +1,6 @@
 {
   "name": "nextjs-react-i18next-demo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "Next.js demo using react-i18next with SSR support and i18nflow debugging",
   "scripts": {

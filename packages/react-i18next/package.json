@@ -1,6 +1,6 @@
 {
   "name": "@i18nflow/react-i18next",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Complete react-i18next solution for i18nflow",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

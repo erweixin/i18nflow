@@ -1,6 +1,6 @@
 {
   "name": "@i18nflow/kiwi",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Complete Kiwi-Intl solution for i18nflow",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
