@@ -10,6 +10,16 @@
 
 一个通用化的 I18N 可视化调试工具，支持主流 i18n 库和构建工具，提供 **点击编辑** + **AI 翻译** + **即时生效** 的极致开发体验。
 
+## 📺 视频演示
+
+```HTML
+<video width="320" height="240" controls>
+    <source src="./assets/demo.mp4" type="video/mp4">
+</video>
+```
+
+[![i18nflow 视频演示](./assets/demo.mp4)](./assets/demo.mp4)
+
 ## 🚀 在线体验
 
 立即在浏览器中体验完整功能，无需安装：
