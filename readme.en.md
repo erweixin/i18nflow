@@ -10,6 +10,10 @@ English | [简体中文](./readme.md)
 
 A universal I18N visual debugging tool that supports mainstream i18n libraries and build tools, providing the ultimate development experience with **Click-to-Edit** + **AI Translation** + **Instant Updates**.
 
+## 📺 video demo
+
+https://github.com/user-attachments/assets/8cffe7cf-1e7c-4990-a588-351618e73268
+
 ## 🚀 Try it Online
 
 Experience the full functionality instantly in your browser, no installation required:

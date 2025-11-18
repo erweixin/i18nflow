@@ -12,13 +12,7 @@
 
 ## 📺 视频演示
 
-```HTML
-<video width="320" height="240" controls>
-    <source src="./assets/demo.mp4" type="video/mp4">
-</video>
-```
-
-[![i18nflow 视频演示](./assets/demo.mp4)](./assets/demo.mp4)
+https://github.com/user-attachments/assets/8cffe7cf-1e7c-4990-a588-351618e73268
 
 ## 🚀 在线体验
 
