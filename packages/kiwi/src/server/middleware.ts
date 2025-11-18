@@ -13,7 +13,10 @@ import {
   sendError,
   handleOptions,
 } from '@i18nflow/shared/server';
+import { readFile } from '@i18nflow/shared/server';
+import { parseCode, traverse, t } from '@i18nflow/shared';
 import { KiwiTypeScriptFileAdapter } from '../file/typescript';
+import * as path from 'path';
 
 /**
  * AI 翻译配置
@@ -152,6 +155,221 @@ export function createKiwiMiddleware(
 }
 
 /**
+ * 模块导入信息
+ */
+interface ModuleImport {
+  /** 导入的变量名 */
+  localName: string;
+  /** 导入的源路径 */
+  sourcePath: string;
+  /** 是否在导出对象中被展开 */
+  isSpread: boolean;
+}
+
+/**
+ * 文件解析结果
+ */
+interface FileResolveResult {
+  /** 实际的文件路径 */
+  filePath: string;
+  /** 属性路径（可能需要调整） */
+  propertyPath: string[];
+}
+
+/**
+ * 解析 index.ts 的导入和展开，找到 key 实际定义的文件
+ */
+async function resolveFileForKey(
+  indexFilePath: string,
+  propertyPath: string[]
+): Promise<FileResolveResult> {
+  try {
+    const content = await readFile(indexFilePath);
+    const ast = parseCode(content);
+
+    // 收集导入信息
+    const imports: ModuleImport[] = [];
+
+    // 第一步：收集所有 import 语句
+    traverse(ast, {
+      ImportDeclaration(importPath: any) {
+        const node = importPath.node;
+        const sourcePath = node.source.value;
+
+        // 只处理 default import
+        for (const specifier of node.specifiers) {
+          if (t.isImportDefaultSpecifier(specifier)) {
+            imports.push({
+              localName: specifier.local.name,
+              sourcePath,
+              isSpread: false, // 稍后在 ExportDefaultDeclaration 中标记
+            });
+          }
+        }
+      },
+    });
+
+    // 第二步：查找 export default 中被展开的模块
+    const spreadModules = new Set<string>();
+
+    traverse(ast, {
+      ExportDefaultDeclaration(exportPath: any) {
+        const declaration = exportPath.node.declaration;
+        if (t.isObjectExpression(declaration)) {
+          // 查找所有的 SpreadElement
+          for (const prop of declaration.properties) {
+            if (t.isSpreadElement(prop)) {
+              if (t.isIdentifier(prop.argument)) {
+                spreadModules.add(prop.argument.name);
+              }
+            }
+          }
+        }
+      },
+    });
+
+    // 标记被展开的导入
+    for (const imp of imports) {
+      if (spreadModules.has(imp.localName)) {
+        imp.isSpread = true;
+      }
+    }
+
+    // 第三步：检查 key 的第一部分是否在 index.ts 的导出中
+    const firstKey = propertyPath[0];
+    let isDirectExport = false;
+    let importedModule: string | null = null;
+
+    traverse(ast, {
+      ExportDefaultDeclaration(exportPath: any) {
+        const declaration = exportPath.node.declaration;
+        if (t.isObjectExpression(declaration)) {
+          for (const prop of declaration.properties) {
+            if (t.isObjectProperty(prop)) {
+              const key = t.isIdentifier(prop.key)
+                ? prop.key.name
+                : t.isStringLiteral(prop.key)
+                  ? prop.key.value
+                  : null;
+
+              if (key === firstKey) {
+                // 检查值是否是 Identifier（即：examples 而不是 { ... }）
+                if (t.isIdentifier(prop.value)) {
+                  // 这是一个导入的模块引用，例如 examples: examples
+                  importedModule = prop.value.name;
+                } else {
+                  // 这是直接定义的对象，例如 app: { title: '...' }
+                  isDirectExport = true;
+                }
+                break;
+              }
+            }
+          }
+        }
+      },
+    });
+
+    // 如果找到了导入的模块引用（如 examples）
+    if (importedModule) {
+      const moduleImport = imports.find(imp => imp.localName === importedModule);
+      if (moduleImport) {
+        const dir = path.dirname(indexFilePath);
+        const modulePath = path.resolve(dir, moduleImport.sourcePath);
+        const moduleFilePath = modulePath.endsWith('.ts') ? modulePath : `${modulePath}.ts`;
+
+        try {
+          await readFile(moduleFilePath); // 验证文件存在
+
+          // 移除第一个 key（模块名），剩余的是模块内的路径
+          const modulePropertyPath = propertyPath.slice(1);
+
+          console.log(`🔗 Found module reference: ${firstKey} -> ${moduleImport.sourcePath}`);
+
+          return {
+            filePath: moduleFilePath,
+            propertyPath: modulePropertyPath,
+          };
+        } catch {
+          console.warn(`⚠️  Module file not found: ${moduleFilePath}, falling back to index.ts`);
+        }
+      }
+    }
+
+    // 如果是直接导出，使用 index.ts
+    if (isDirectExport) {
+      return {
+        filePath: indexFilePath,
+        propertyPath,
+      };
+    }
+
+    // 第四步：在被展开的模块中查找
+    for (const imp of imports) {
+      if (!imp.isSpread) continue;
+
+      // 解析模块文件路径
+      const dir = path.dirname(indexFilePath);
+      const modulePath = path.resolve(dir, imp.sourcePath);
+
+      // 尝试 .ts 扩展名
+      const moduleFilePath = modulePath.endsWith('.ts') ? modulePath : `${modulePath}.ts`;
+
+      // 检查这个模块文件中是否有该 key
+      try {
+        const moduleContent = await readFile(moduleFilePath);
+        const moduleAst = parseCode(moduleContent);
+
+        let hasKey = false;
+        traverse(moduleAst, {
+          ExportDefaultDeclaration(exportPath: any) {
+            const declaration = exportPath.node.declaration;
+            if (t.isObjectExpression(declaration)) {
+              for (const prop of declaration.properties) {
+                if (t.isObjectProperty(prop)) {
+                  const key = t.isIdentifier(prop.key)
+                    ? prop.key.name
+                    : t.isStringLiteral(prop.key)
+                      ? prop.key.value
+                      : null;
+
+                  if (key === firstKey) {
+                    hasKey = true;
+                    break;
+                  }
+                }
+              }
+            }
+          },
+        });
+
+        if (hasKey) {
+          return {
+            filePath: moduleFilePath,
+            propertyPath,
+          };
+        }
+      } catch {
+        // 模块文件不存在或无法读取，继续尝试下一个
+        console.warn(`⚠️  无法读取模块文件: ${moduleFilePath}`);
+      }
+    }
+
+    // 默认返回 index.ts
+    return {
+      filePath: indexFilePath,
+      propertyPath,
+    };
+  } catch (error) {
+    console.error('❌ 解析文件错误:', error);
+    // 出错时返回原始路径
+    return {
+      filePath: indexFilePath,
+      propertyPath,
+    };
+  }
+}
+
+/**
  * 批量更新多个语言的翻译
  */
 async function batchUpdateI18n(
@@ -174,12 +392,24 @@ async function batchUpdateI18n(
   const results: BatchUpdateResult = {};
 
   for (const locale of locales) {
-    // 统一读取 index.ts 文件
-    const filePath = `${process.cwd()}/${localeDir}/${locale}/index${fileExtension}`;
+    // index.ts 文件路径
+    const indexFilePath = `${process.cwd()}/${localeDir}/${locale}/index${fileExtension}`;
 
     try {
-      const success = await fileAdapter.update(filePath, propertyPath, values[locale] || '');
-      results[locale] = { success, filePath };
+      // 解析实际应该更新的文件
+      const resolved = await resolveFileForKey(indexFilePath, propertyPath);
+
+      console.log(
+        `📍 [${locale}] Key '${key}' resolved to: ${path.relative(process.cwd(), resolved.filePath)}`
+      );
+
+      const success = await fileAdapter.update(
+        resolved.filePath,
+        resolved.propertyPath,
+        values[locale] || ''
+      );
+
+      results[locale] = { success, filePath: resolved.filePath };
     } catch (error) {
       results[locale] = {
         success: false,
@@ -213,14 +443,21 @@ async function readI18nValue(
   const values: TranslationValues = {};
 
   for (const locale of locales) {
-    // 统一读取 index.ts 文件
-    const filePath = `${process.cwd()}/${localeDir}/${locale}/index${fileExtension}`;
+    // index.ts 文件路径
+    const indexFilePath = `${process.cwd()}/${localeDir}/${locale}/index${fileExtension}`;
 
     try {
-      const value = await fileAdapter.extractValue(filePath, propertyPath);
+      // 解析实际应该读取的文件
+      const resolved = await resolveFileForKey(indexFilePath, propertyPath);
+
+      console.log(
+        `📍 [${locale}] Key '${key}' resolved to: ${path.relative(process.cwd(), resolved.filePath)}`
+      );
+
+      const value = await fileAdapter.extractValue(resolved.filePath, resolved.propertyPath);
       values[locale] = value || '';
     } catch (error) {
-      console.error(`Error reading ${locale}:`, error);
+      console.error(`❌ Error reading ${locale}:`, error);
       values[locale] = '';
     }
   }
