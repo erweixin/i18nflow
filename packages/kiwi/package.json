@@ -16,6 +16,11 @@
       "import": "./dist/plugin-rspack.mjs",
       "require": "./dist/plugin-rspack.js"
     },
+    "./plugin-rsbuild": {
+      "types": "./dist/plugin-rsbuild.d.ts",
+      "import": "./dist/plugin-rsbuild.mjs",
+      "require": "./dist/plugin-rsbuild.js"
+    },
     "./plugin-vite": {
       "types": "./dist/plugin-vite.d.ts",
       "import": "./dist/plugin-vite.mjs",

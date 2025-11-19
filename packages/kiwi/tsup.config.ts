@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     'plugin-rspack': 'src/plugin-rspack.ts',
+    'plugin-rsbuild': 'src/plugin-rsbuild.ts',
     'plugin-vite': 'src/plugin-vite.ts',
     'runtime/debug-ui-injector': 'src/runtime/debug-ui-injector.ts',
   },

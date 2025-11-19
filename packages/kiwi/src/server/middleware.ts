@@ -36,6 +36,8 @@ export interface KiwiMiddlewareConfig {
   locales?: string[];
   /** 文件扩展名 */
   fileExtension?: string;
+  /** API 路径前缀 */
+  pathPrefix?: string;
   /** AI 翻译配置 */
   aiTranslate?: {
     enabled: boolean;
@@ -51,13 +53,31 @@ export function createKiwiMiddleware(
   config: KiwiMiddlewareConfig = {},
   context?: MiddlewareContext
 ) {
-  const { localeDir = 'src/lang', locales = ['zh-CN', 'en-US'], fileExtension = '.ts' } = config;
+  const {
+    localeDir = 'src/lang',
+    locales = ['zh-CN', 'en-US'],
+    fileExtension = '.ts',
+    pathPrefix, // 可选，如果提供则在中间件内部检查路径
+  } = config;
 
   const fileAdapter = new KiwiTypeScriptFileAdapter();
   const { sockWrite } = context || {};
 
-  return async (req: IncomingMessage, res: ServerResponse, _next: () => void): Promise<void> => {
-    console.log(`🔍 I18N Middleware: ${req.method} ${req.url}`);
+  return async (req: IncomingMessage, res: ServerResponse, next: () => void): Promise<void> => {
+    // 如果提供了 pathPrefix，检查路径是否匹配
+    // 如果没有提供，说明外层已经过滤了（如 Rspack/Vite），直接处理
+    let apiPath = req.url || '/';
+
+    if (pathPrefix) {
+      if (!req.url?.startsWith(pathPrefix)) {
+        // 不匹配，交给下一个中间件处理
+        return next();
+      }
+      // 去掉路径前缀，得到实际的 API 路径
+      apiPath = req.url.slice(pathPrefix.length) || '/';
+    }
+
+    console.log(`🔍 I18N Middleware: ${req.method} ${apiPath}`);
 
     setCorsHeaders(res);
 
@@ -67,7 +87,7 @@ export function createKiwiMiddleware(
 
     try {
       // 更新翻译
-      if (req.method === 'POST' && req.url === '/update') {
+      if (req.method === 'POST' && apiPath === '/update') {
         const data = await parseBody(req);
         const { key, values } = data as { key: string; values: TranslationValues };
 
@@ -92,8 +112,8 @@ export function createKiwiMiddleware(
       }
 
       // 读取翻译
-      if (req.method === 'GET' && req.url?.startsWith('/read?key=')) {
-        const key = decodeURIComponent(req.url.split('key=')[1]);
+      if (req.method === 'GET' && apiPath.startsWith('/read?key=')) {
+        const key = decodeURIComponent(apiPath.split('key=')[1]);
 
         console.log(`📖 Reading I18N key: ${key}`);
 
@@ -104,7 +124,7 @@ export function createKiwiMiddleware(
       }
 
       // AI 翻译接口
-      if (req.method === 'POST' && req.url === '/translate') {
+      if (req.method === 'POST' && apiPath === '/translate') {
         const data = await parseBody(req);
         const { text } = data as {
           text: string;
@@ -119,7 +139,7 @@ export function createKiwiMiddleware(
       }
 
       // 健康检查
-      if (req.method === 'GET' && req.url === '/health') {
+      if (req.method === 'GET' && apiPath === '/health') {
         const aiConfig: AIConfig = {
           enabled: false,
           message: 'AI translation not configured',
@@ -140,15 +160,18 @@ export function createKiwiMiddleware(
       return;
     }
 
-    // 未匹配的路由
-    console.warn(`⚠️  未匹配的 I18N API 路由: ${req.url}`);
+    // 未匹配的 API 路由，返回 404
+    const fullPath = pathPrefix ? `${pathPrefix}${apiPath}` : apiPath;
+    console.warn(`⚠️  未匹配的 I18N API 路由: ${fullPath}`);
+
+    const endpointPrefix = pathPrefix || '';
     sendError(res, 404, 'API endpoint not found', {
-      path: req.url,
+      path: fullPath,
       availableEndpoints: [
-        'GET /api/i18n/health',
-        'GET /api/i18n/read?key=xxx',
-        'POST /api/i18n/update',
-        'POST /api/i18n/translate',
+        `GET ${endpointPrefix}/health`,
+        `GET ${endpointPrefix}/read?key=xxx`,
+        `POST ${endpointPrefix}/update`,
+        `POST ${endpointPrefix}/translate`,
       ],
     });
   };
