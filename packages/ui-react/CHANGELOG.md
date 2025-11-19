@@ -1,5 +1,12 @@
 # @i18nflow/ui-react
 
+## 0.2.2-beta.0
+
+### Patch Changes
+
+- @i18nflow/core@0.2.2-beta.0
+- @i18nflow/shared@0.2.2-beta.0
+
 ## 0.2.1
 
 ### Patch Changes
