@@ -1,5 +1,11 @@
 # nextjs-react-i18next-demo
 
+## 1.0.3
+
+### Patch Changes
+
+- @i18nflow/react-i18next@0.1.2
+
 ## 1.0.2
 
 ### Patch Changes

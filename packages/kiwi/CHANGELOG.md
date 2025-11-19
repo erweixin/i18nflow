@@ -1,5 +1,15 @@
 # @i18nflow/kiwi
 
+## 0.2.2
+
+### Patch Changes
+
+- b551981: support rsbuild (beta)
+  - @i18nflow/core@0.2.2
+  - @i18nflow/shared@0.2.2
+  - @i18nflow/ui-react@0.2.2
+  - @i18nflow/ui-vanilla@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes
