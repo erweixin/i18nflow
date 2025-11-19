@@ -56,13 +56,13 @@ https://github.com/user-attachments/assets/cbe668be-2380-4e37-b97e-34dfbd9e27c7
 
 ### I18N 库支持
 
-| 库                | 状态 | 包名                      | 说明               |
-| ----------------- | ---- | ------------------------- | ------------------ |
-| **kiwi-intl**     | ✅   | `@i18nflow/kiwi`          | 完整支持，生产可用 |
-| **react-i18next** | 🚧   | `@i18nflow/react-i18next` | 基础实现，测试中   |
-| **react-intl**    | 📋   | `@i18nflow/react-intl`    | 计划中             |
-| **i18next**       | 📋   | `@i18nflow/i18next`       | 计划中             |
-| **vue-i18n**      | 📋   | `@i18nflow/vue-i18n`      | 计划中             |
+| 库                | 状态 | 包名                      | 说明                  |
+| ----------------- | ---- | ------------------------- | --------------------- |
+| **kiwi-intl**     | ✅   | `@i18nflow/kiwi`          | 完整支持，生产可用    |
+| **react-i18next** | 🚧   | `@i18nflow/react-i18next` | Beta 版本，功能完善中 |
+| **react-intl**    | 📋   | `@i18nflow/react-intl`    | 计划中                |
+| **i18next**       | 📋   | `@i18nflow/i18next`       | 计划中                |
+| **vue-i18n**      | 📋   | `@i18nflow/vue-i18n`      | 计划中                |
 
 ### 构建工具支持
 

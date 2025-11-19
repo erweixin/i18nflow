@@ -11,7 +11,7 @@ React UI 组件包，提供可视化调试功能。
 ## 安装
 
 ```bash
-pnpm add @i18nflow/ui-react antd @ant-design/icons
+pnpm add @i18nflow/ui-react
 ```
 
 ## 使用

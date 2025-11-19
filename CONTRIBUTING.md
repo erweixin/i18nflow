@@ -5,7 +5,7 @@
 ## 🚀 开始之前
 
 1. Fork 这个仓库
-2. 克隆你的 fork：`git clone https://github.com/your-username/i18nflow.git`
+2. 克隆你的 fork：`git clone https://github.com/erweixin/i18nflow.git`
 3. 安装依赖：`pnpm install`
 4. 创建新分支：`git checkout -b feature/your-feature-name`
 
@@ -77,7 +77,7 @@ git push origin feature/your-feature-name
 
 ## 🐛 报告 Bug
 
-在 [GitHub Issues](https://github.com/your-username/i18nflow/issues) 中创建 issue，包含：
+在 [GitHub Issues](https://github.com/erweixin/i18nflow/issues) 中创建 issue，包含：
 
 1. Bug 描述
 2. 重现步骤
@@ -87,7 +87,7 @@ git push origin feature/your-feature-name
 
 ## 💡 功能建议
 
-欢迎在 [GitHub Discussions](https://github.com/your-username/i18nflow/discussions) 中讨论新功能。
+欢迎在 [GitHub Discussions](https://github.com/erweixin/i18nflow/discussions) 中讨论新功能。
 
 ## 📄 许可证
 

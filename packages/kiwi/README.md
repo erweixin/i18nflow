@@ -17,7 +17,7 @@ Complete Kiwi-Intl solution for i18nflow。
 
 ```bash
 pnpm add -D @i18nflow/kiwi
-pnpm add kiwi-intl antd @ant-design/icons
+pnpm add kiwi-intl
 ```
 
 ## 使用
@@ -50,9 +50,12 @@ module.exports = {
 import { KiwiIntl } from 'kiwi-intl';
 import { createKiwiProxy } from '@i18nflow/kiwi';
 
+import zhCN from './zh-CN';
+import enUS from './en-US';
+
 const kiwiIntl = KiwiIntl.init('zh-CN', {
-  'zh-CN': require('./zh-CN'),
-  'en-US': require('./en-US'),
+  'zh-CN': zhCN,
+  'en-US': enUS,
 });
 
 // 使用 Proxy 包装，开发环境自动添加 data-i18n-key
